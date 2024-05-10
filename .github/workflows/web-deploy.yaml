@@ -1,0 +1,37 @@
+name: Deploy Flutter Web App
+
+on:
+  push:
+    branches: [ main ]  # Trigger on pushes to the main branch
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest  # Run on Ubuntu virtual machines
+
+    steps:
+      - uses: actions/checkout@v3  # Checkout your code from GitHub
+
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'  # Use the stable Flutter channel
+
+      - name: 'Install dependencies'
+        run: flutter pub get
+
+      - name: 'Enable web support'
+        run: flutter config --enable-web
+
+      - name: 'Build web app (release mode)'
+        run: flutter build web --release --base-ref my-quotes-app
+
+      - name: 'Deploy to GitHub Pages'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.MY_QUOTES_WEB_DEPLOY_GITHUB_TOKEN }}
+          publish_dir: ./build/web  # Path to the built web files
+
+          # Optional: Set a custom base URL (if using a project site)
+          # base_url: '/your-username/your-repository-name'
+
+      - name: 'Clear cache (optional)'
+        run: flutter clean  # Optional step to clear the Flutter cache
