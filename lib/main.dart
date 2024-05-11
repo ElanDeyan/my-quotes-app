@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotes/routes/routes_config.dart';
 
 void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+final class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp.router(
+      routerConfig: routesConfig,
+      builder: (context, child) => Scaffold(
+        appBar: AppBar(),
+        body: child,
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
