@@ -22,7 +22,7 @@ jobs:
         run: flutter config --enable-web
 
       - name: 'Build web app (release mode)'
-        run: flutter build web --release --base-ref my-quotes-app
+        run: flutter build web --release --base-ref ${{ github.event.repository.name }}
 
       - name: 'Deploy to GitHub Pages'
         uses: peaceiris/actions-gh-pages@v3
