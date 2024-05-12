@@ -1,41 +1,27 @@
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/screens/all_quotes_screen.dart';
-import 'package:my_quotes/screens/home_screen.dart';
+import 'package:my_quotes/main.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/screens/settings_screen.dart';
 
 final routesConfig = GoRouter(
   initialLocation: '/',
-  routes: <GoRoute>[
+  routes: <RouteBase>[
     GoRoute(
       path: '/',
-      name: 'Home',
-      builder: (context, state) => HomeScreen(
-        routerState: state,
-      ),
+      name: 'mainScreen',
+      builder: (context, state) => const MainAppScreen(),
     ),
     GoRoute(
       path: '/settings',
-      name: 'Settings',
-      builder: (context, state) => SettingsScreen(
-        routerState: state,
-      ),
+      name: 'settings',
+      builder: (context, state) => const SettingsScreen(),
     ),
     GoRoute(
-      path: '/quotes',
-      name: 'Quotes',
-      builder: (context, state) => AllQuotesScreen(
-        routerState: state,
+      path: '/quotes/:id',
+      name: 'quote',
+      builder: (context, state) => QuoteScreen(
+        quoteId: int.parse(state.pathParameters['id']!),
       ),
-      routes: <GoRoute>[
-        GoRoute(
-          path: ':id',
-          name: 'Quote',
-          builder: (context, state) => QuoteScreen(
-            routerState: state,
-          ),
-        ),
-      ],
     ),
   ],
 );

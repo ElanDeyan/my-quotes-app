@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart' show GoRouterState;
 
 final class QuoteScreen extends StatelessWidget {
   const QuoteScreen({
     super.key,
-    required this.routerState,
+    required this.quoteId,
   });
 
-  final GoRouterState routerState;
+  final int quoteId;
+
+  static const screenName = 'Quote';
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'Page ${routerState.name} with ${routerState.pathParameters} parameters',
+    return Scaffold(
+      body: Center(
+        child: Text('$screenName with $quoteId id'),
+      ),
     );
   }
 }
