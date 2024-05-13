@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_quotes/screens/settings/color_pallete_radio_list.dart';
+import 'package:my_quotes/screens/settings/language_radio_list.dart';
+import 'package:my_quotes/screens/settings/theme_mode_radio_list.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,7 +34,12 @@ class SettingsScreen extends StatelessWidget {
               subtitle: Text(
                 value.themeMode.name,
               ),
-              // onTap: ,
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (_) => const Dialog(
+                  child: ThemeModeRadioList(),
+                ),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.palette),
@@ -48,12 +56,23 @@ class SettingsScreen extends StatelessWidget {
                   Text(value.colorPallete.name),
                 ],
               ),
-              // onTap: ,
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (_) => const Dialog(
+                  child: ColorPalleteRadioList(),
+                ),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.translate),
               title: const Text('App language'),
               subtitle: Text(value.language),
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (_) => const Dialog(
+                  child: LanguageRadioList(),
+                ),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.info),

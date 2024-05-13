@@ -9,10 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // TODO: find a better place to run it
   SharedPreferences.setPrefix('myQuotesPreferences');
-  
+
   const userPreferencesHandler = UserPreferences();
   final appPreferences =
       AppPreferences(userPreferencesRepository: userPreferencesHandler);
@@ -55,7 +55,19 @@ final class MyApp extends StatelessWidget {
         routerConfig: routesConfig,
         debugShowCheckedModeBanner: false,
         themeMode: value.themeMode,
-        color: value.colorPallete.color,
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: value.colorPallete.color,
+          ),
+        ),
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: value.colorPallete.color,
+            brightness: Brightness.dark,
+          ),
+        ),
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

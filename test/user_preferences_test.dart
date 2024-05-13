@@ -101,7 +101,7 @@ void main() async {
           .where((element) => element.name != localColorPallete);
       expect(
         colorPalleteValuesExceptLocal,
-        hasLength(ColorPallete.values.length - 1),
+        hasLength(ThemeMode.values.length - 1),
       );
 
       for (final colorPalleteToAssign in colorPalleteValuesExceptLocal) {

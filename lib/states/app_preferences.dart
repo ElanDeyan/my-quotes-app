@@ -33,9 +33,11 @@ final class AppPreferences extends ChangeNotifier {
 
   set themeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
+
     scheduleMicrotask(() {
       _userPreferencesRepository.setThemeMode(_themeMode.name);
     });
+
     notifyListeners();
   }
 
