@@ -9,7 +9,7 @@ final class UserPreferences
   String get _defaultColorPallete =>
       ColorPalleteRepository.defaultColorPallete.name;
   String get _defaultThemeMode => ThemeModeRepository.defaultThemeMode.name;
-  String get _defaultLanguage => LanguageRepository.defaultLanguage;
+  String get _defaultLanguage => LanguageRepository.defaultLanguage.toString();
 
   @override
   Future<String> get colorPallete async {

@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final mockPreferences = <String, String>{
   ColorPalleteRepository.colorPalleteKey: ColorPallete.amber.name,
   ThemeModeRepository.themeModeKey: ThemeMode.light.name,
-  LanguageRepository.languageKey: 'pt-BR',
+  LanguageRepository.languageKey: 'pt_BR',
 };
 
 void main() async {
@@ -57,7 +57,7 @@ void main() async {
       }
     });
     group('Language', () {
-      for (final language in const <String>['en', 'pt-BR']) {
+      for (final language in const <String>['en', 'pt_BR']) {
         test('Setting $language', () {
           appPreferences.language = language;
           expect(appPreferences.language, language);
@@ -129,7 +129,7 @@ void main() async {
     test('Language', () async {
       const languagesSample = <String>[
         'en',
-        'pt-BR',
+        'pt_BR',
         'es',
         'fr',
       ];

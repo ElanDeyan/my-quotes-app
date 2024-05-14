@@ -11,7 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // TODO: find a better place to run it
-  SharedPreferences.setPrefix('myQuotesPreferences');
+  SharedPreferences.setPrefix('myQuotes');
 
   const userPreferencesHandler = UserPreferences();
   final appPreferences =
@@ -51,31 +51,45 @@ final class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppPreferences>(
-      builder: (context, value, child) => MaterialApp.router(
-        routerConfig: routesConfig,
-        debugShowCheckedModeBanner: false,
-        themeMode: value.themeMode,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: value.colorPallete.color,
+      builder: (context, appPreferences, child) {
+        final language = appPreferences.language.split('_');
+        late final String scriptCode;
+        late final String? countryCode;
+
+        if (language.length != 1) {
+          scriptCode = language.first;
+          countryCode = language.last;
+        } else {
+          scriptCode = language.single;
+          countryCode = null;
+        }
+
+        return MaterialApp.router(
+          routerConfig: routesConfig,
+          debugShowCheckedModeBanner: false,
+          themeMode: appPreferences.themeMode,
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: appPreferences.colorPallete.color,
+            ),
           ),
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: value.colorPallete.color,
-            brightness: Brightness.dark,
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: appPreferences.colorPallete.color,
+              brightness: Brightness.dark,
+            ),
           ),
-        ),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: Locale(value.language),
-        title: 'My Quotes',
-      ),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: Locale(scriptCode, countryCode),
+          title: 'My Quotes',
+        );
+      },
     );
   }
 }

@@ -11,7 +11,7 @@ final class AppPreferences extends ChangeNotifier {
       : _userPreferencesRepository = userPreferencesRepository,
         _themeMode = ThemeModeRepository.defaultThemeMode,
         _colorPallete = ColorPalleteRepository.defaultColorPallete,
-        _language = LanguageRepository.defaultLanguage {
+        _language = LanguageRepository.defaultLanguage.toString() {
     scheduleMicrotask(loadLocalPreferences);
   }
 

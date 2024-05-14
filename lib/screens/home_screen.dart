@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -9,8 +10,8 @@ final class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(screenName),
+    return Center(
+      child: Text(AppLocalizations.of(context)!.helloWorld),
     );
   }
 }

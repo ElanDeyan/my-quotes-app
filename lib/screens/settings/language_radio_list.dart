@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,8 @@ final class _LanguageRadioListState extends State<LanguageRadioList> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Text('Choose a language:'),
-        for (final language in ['en', 'pt-BR'])
+        for (final language
+            in AppLocalizations.supportedLocales.map((e) => e.toString()))
           RadioListTile(
             value: language,
             groupValue: _languageGroupValue,

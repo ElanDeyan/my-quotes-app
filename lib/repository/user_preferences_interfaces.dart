@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/constants/color_pallete.dart';
 
 abstract interface class UserPreferencesRepository
@@ -20,7 +21,9 @@ abstract interface class ColorPalleteRepository {
 abstract interface class LanguageRepository {
   static const languageKey = 'language';
 
-  static const defaultLanguage = 'en';
+  static final defaultLanguage = AppLocalizations.supportedLocales
+      .where((element) => element == const Locale('en'))
+      .single;
 
   Future<String> get language;
 
