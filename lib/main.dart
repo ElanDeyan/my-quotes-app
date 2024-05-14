@@ -1,21 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
-import 'package:my_quotes/screens/all_quotes_screen.dart';
-import 'package:my_quotes/screens/home_screen.dart';
+import 'package:my_quotes/states/app_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyAppProvider());
+
+  // TODO: find a better place to run it
+  SharedPreferences.setPrefix('myQuotes');
+
+  const userPreferencesHandler = UserPreferences();
+  final appPreferences =
+      AppPreferences(userPreferencesRepository: userPreferencesHandler);
+
+  await appPreferences.loadLocalPreferences();
+
+  runApp(
+    MyAppProvider(
+      appPreferencesProvider: appPreferences,
+    ),
+  );
 }
 
 final class MyAppProvider extends StatelessWidget {
-  const MyAppProvider({super.key});
+  const MyAppProvider({
+    super.key,
+    required AppPreferences appPreferencesProvider,
+  }) : _appPreferences = appPreferencesProvider;
+
+  final AppPreferences _appPreferences;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: add provider dependencies
-    return const MyApp();
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => _appPreferences),
+      ],
+      child: const MyApp(),
+    );
   }
 }
 
@@ -24,76 +50,46 @@ final class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: define theme and appearance
-    return MaterialApp.router(
-      routerConfig: routesConfig,
-      debugShowCheckedModeBanner: false,
-      title: 'My Quotes',
-    );
-  }
-}
+    return Consumer<AppPreferences>(
+      builder: (context, appPreferences, child) {
+        final language = appPreferences.language.split('_');
+        late final String scriptCode;
+        late final String? countryCode;
 
-final class MainAppScreen extends StatefulWidget {
-  const MainAppScreen({super.key});
+        if (language.length != 1) {
+          scriptCode = language.first;
+          countryCode = language.last;
+        } else {
+          scriptCode = language.single;
+          countryCode = null;
+        }
 
-  @override
-  State<MainAppScreen> createState() => _MainAppScreenState();
-}
-
-class _MainAppScreenState extends State<MainAppScreen> {
-  int _selectedIndex = 0;
-
-  void _updateIndex(int value) => setState(() {
-        _selectedIndex = value;
-      });
-
-  Widget get bodyContent => switch (_selectedIndex) {
-        0 => const HomeScreen(),
-        1 => const AllQuotesScreen(),
-        _ => throw UnimplementedError(),
-      };
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My quotes'),
-        actions: <IconButton>[
-          IconButton(
-            onPressed: () => context.goNamed('settings'),
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          bodyContent,
-          ElevatedButton(
-            onPressed: () => context.goNamed(
-              'quote',
-              pathParameters: <String, String>{'id': '1'},
+        return MaterialApp.router(
+          routerConfig: routesConfig,
+          debugShowCheckedModeBanner: false,
+          themeMode: appPreferences.themeMode,
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: appPreferences.colorPallete.color,
             ),
-            child: const Text('Go to quote 1'),
           ),
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-            selectedIcon: Icon(Icons.home),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: appPreferences.colorPallete.color,
+              brightness: Brightness.dark,
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.format_quote_outlined),
-            label: 'All quotes',
-            selectedIcon: Icon(Icons.format_quote),
-          ),
-        ],
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _updateIndex,
-      ),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: Locale(scriptCode, countryCode),
+          title: 'My Quotes',
+        );
+      },
     );
   }
 }
