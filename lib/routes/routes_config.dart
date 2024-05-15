@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/screens/main_app_screen.dart';
+import 'package:my_quotes/screens/main/main_app_screen.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/screens/settings/settings_screen.dart';
 
