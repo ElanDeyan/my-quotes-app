@@ -20,7 +20,7 @@ mixin DestinationsMixin {
     settingsNavigationKey: (
       index: 2,
       selectedIcon: Icon(Icons.settings),
-      outlinedIcon: null,
+      outlinedIcon: Icon(Icons.settings_outlined),
       label: 'Settings',
       debugLabel: 'settings'
     ),

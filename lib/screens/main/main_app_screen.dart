@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
-import 'package:my_quotes/screens/main/scaffold_with_drawer.dart';
+import 'package:my_quotes/screens/main/scaffold_with_navigation_bar.dart';
+import 'package:my_quotes/screens/main/scaffold_with_rail.dart';
 
 final class MainAppScreen extends StatelessWidget with DestinationsMixin {
   const MainAppScreen({super.key});
@@ -9,16 +10,14 @@ final class MainAppScreen extends StatelessWidget with DestinationsMixin {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return const ScaffoldWithDrawer(
-          destinations: DestinationsMixin.destinationsData,
-        );
-        // return constraints.maxWidth > constraints.maxHeight
-        //     ? const ScaffoldWithDrawer(
-        //         destinations: DestinationsMixin.destinationsData,
-        //       )
-        //     : const ScaffoldWithNavigationBar(
-        //       destinations: DestinationsMixin.destinationsData,
-        //     );
+        // TODO: try to fix when the screen transition 'reset' the initial index
+        return constraints.maxWidth > constraints.maxHeight
+            ? const ScaffoldWithRail(
+                destinations: DestinationsMixin.destinationsData,
+              )
+            : const ScaffoldWithNavigationBar(
+                destinations: DestinationsMixin.destinationsData,
+              );
       },
     );
   }
