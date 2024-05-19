@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:my_quotes/data/tables/tag_table.dart';
 
 @DataClassName('Quote')
 class QuoteTable extends Table {
@@ -13,9 +12,11 @@ class QuoteTable extends Table {
 
   TextColumn get sourceUri => text().nullable()();
 
-  BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
+  BoolColumn get isFavorite =>
+      boolean().nullable().withDefault(const Constant(false))();
 
-  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get createdAt =>
+      dateTime().nullable().withDefault(Constant(DateTime.now()))();
 
-  IntColumn get tags => integer().nullable().references(TagTable, #id)();
+  TextColumn get tags => text().nullable()();
 }
