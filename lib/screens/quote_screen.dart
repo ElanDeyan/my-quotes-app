@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotes/states/database_notifier.dart';
+import 'package:provider/provider.dart';
 
 final class QuoteScreen extends StatelessWidget {
   const QuoteScreen({
@@ -12,9 +14,30 @@ final class QuoteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Quote id: $quoteId');
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
-        child: Text('$screenName with $quoteId id'),
+        child: Consumer<DatabaseNotifier>(
+          builder: (context, database, child) => FutureBuilder(
+            future: database.getQuoteById(quoteId),
+            builder: (context, snapshot) {
+              print(snapshot.data);
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData) {
+                final data = snapshot.data!;
+                return Column(
+                  children: [
+                    const Text('Quote data'),
+                    Text(data.toString()),
+                  ],
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
       ),
     );
   }
