@@ -60,9 +60,28 @@ final class _ScaffoldWithRailState extends State<ScaffoldWithRail> {
               selectedIndex: _selectedIndex,
             ),
             const VerticalDivider(),
-            bodyContent,
+            Expanded(child: bodyContent),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showDialog<Dialog>(
+          context: context,
+          builder: (context) => Dialog.fullscreen(
+            child: Scaffold(
+              appBar: AppBar(
+                actions: [
+                  IconButton(
+                    onPressed: () => context.pop(),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
+              body: const Text('oiee'),
+            ),
+          ),
+        ),
+        child: const Icon(Icons.add),
       ),
     );
   }
