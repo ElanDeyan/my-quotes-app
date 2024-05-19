@@ -5,25 +5,12 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
 import 'package:my_quotes/states/app_preferences.dart';
+import 'package:my_quotes/states/database_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final database = AppDatabase();
-
-  // await database.addQuote(
-  //   Quote(
-  //     content: 'Deyan',
-  //     id: 0,
-  //     author: 'Deyan',
-  //     createdAt: DateTime.now(),
-  //     isFavorite: true,
-  //   ),
-  // );
-
-  print(await database.select(database.quoteTable).get());
 
   // TODO: find a better place to run it
   SharedPreferences.setPrefix('myQuotes');
@@ -37,6 +24,7 @@ void main() async {
   runApp(
     MyAppProvider(
       appPreferencesProvider: appPreferences,
+      databaseNotitfier: DatabaseNotifier(quotesRepository: AppDatabase()),
     ),
   );
 }
@@ -45,15 +33,20 @@ final class MyAppProvider extends StatelessWidget {
   const MyAppProvider({
     super.key,
     required AppPreferences appPreferencesProvider,
-  }) : _appPreferences = appPreferencesProvider;
+    required DatabaseNotifier databaseNotitfier,
+  })  : _appPreferences = appPreferencesProvider,
+        _databaseNotifier = databaseNotitfier;
 
   final AppPreferences _appPreferences;
+
+  final DatabaseNotifier _databaseNotifier;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => _appPreferences),
+        ChangeNotifierProvider(create: (context) => _databaseNotifier),
       ],
       child: const MyApp(),
     );
