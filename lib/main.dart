@@ -5,7 +5,7 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
 import 'package:my_quotes/states/app_preferences.dart';
-import 'package:my_quotes/states/database_notifier.dart';
+import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +24,7 @@ void main() async {
   runApp(
     MyAppProvider(
       appPreferencesProvider: appPreferences,
-      databaseNotitfier: DatabaseNotifier(quotesRepository: AppDatabase()),
+      databaseNotitfier: DatabaseProvider(appRepository: AppDatabase()),
     ),
   );
 }
@@ -33,13 +33,13 @@ final class MyAppProvider extends StatelessWidget {
   const MyAppProvider({
     super.key,
     required AppPreferences appPreferencesProvider,
-    required DatabaseNotifier databaseNotitfier,
+    required DatabaseProvider databaseNotitfier,
   })  : _appPreferences = appPreferencesProvider,
         _databaseNotifier = databaseNotitfier;
 
   final AppPreferences _appPreferences;
 
-  final DatabaseNotifier _databaseNotifier;
+  final DatabaseProvider _databaseNotifier;
 
   @override
   Widget build(BuildContext context) {
