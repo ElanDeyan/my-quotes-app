@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 
 @DataClassName('Quote')
 class QuoteTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  IntColumn get id => integer().nullable().autoIncrement()();
 
   TextColumn get content => text().withLength(min: 1)();
 
