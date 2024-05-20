@@ -65,22 +65,7 @@ final class _ScaffoldWithRailState extends State<ScaffoldWithRail> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showDialog<Dialog>(
-          context: context,
-          builder: (context) => Dialog.fullscreen(
-            child: Scaffold(
-              appBar: AppBar(
-                actions: [
-                  IconButton(
-                    onPressed: () => context.pop(),
-                    icon: const Icon(Icons.close),
-                  ),
-                ],
-              ),
-              body: const Text('oiee'),
-            ),
-          ),
-        ),
+        onPressed: () => context.goNamed('add'),
         child: const Icon(Icons.add),
       ),
     );
