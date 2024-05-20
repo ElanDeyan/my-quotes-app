@@ -3,12 +3,12 @@ import 'package:my_quotes/data/local/db/connection/connection.dart' as impl;
 import 'package:my_quotes/data/tables/quote_table.dart';
 import 'package:my_quotes/data/tables/tag_table.dart';
 import 'package:my_quotes/helpers/iterable_extension.dart';
-import 'package:my_quotes/repository/quotes_repository.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 
 part 'quotes_drift_database.g.dart';
 
 @DriftDatabase(tables: [QuoteTable, TagTable])
-final class AppDatabase extends _$AppDatabase implements QuotesRepository {
+final class AppDatabase extends _$AppDatabase implements AppRepository {
   AppDatabase() : super(impl.connect());
 
   @override
@@ -68,6 +68,39 @@ final class AppDatabase extends _$AppDatabase implements QuotesRepository {
         source: Value(quote.source),
         sourceUri: Value(quote.sourceUri),
         tags: Value(quote.tags),
+      ),
+    );
+  }
+
+  @override
+  Future<List<Tag>> get allTags async => select(tagTable).get();
+
+  @override
+  Future<int> createTag(Tag tag) {
+    return into(tagTable).insert(
+      TagTableCompanion.insert(name: tag.name),
+      mode: InsertMode.insertOrReplace,
+      onConflict: DoNothing(),
+    );
+  }
+
+  @override
+  Future<Tag?> getTagById(int id) {
+    return (select(tagTable)..where((row) => row.id.equals(id)))
+        .getSingleOrNull();
+  }
+
+  @override
+  Future<int> removeTag(int id) {
+    return delete(tagTable).delete(TagTableCompanion(id: Value(id)));
+  }
+
+  @override
+  Future<bool> updateTag(Tag tag) {
+    return update(tagTable).replace(
+      TagTableCompanion.insert(
+        id: Value(tag.id),
+        name: tag.name,
       ),
     );
   }

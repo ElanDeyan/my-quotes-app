@@ -426,32 +426,23 @@ class $TagTableTable extends TagTable with TableInfo<$TagTableTable, Tag> {
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
+      'id', aliasedName, true,
       hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _tagNameMeta =
-      const VerificationMeta('tagName');
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> tagName =
-      GeneratedColumn<String>('tag_name', aliasedName, false,
+  late final GeneratedColumn<String> name =
+      GeneratedColumn<String>('name', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
             minTextLength: 1,
           ),
           type: DriftSqlType.string,
           requiredDuringInsert: true);
-  static const VerificationMeta _quotesMeta = const VerificationMeta('quotes');
   @override
-  late final GeneratedColumn<int> quotes = GeneratedColumn<int>(
-      'quotes', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES quote_table (id)'));
-  @override
-  List<GeneratedColumn> get $columns => [id, tagName, quotes];
+  List<GeneratedColumn> get $columns => [id, name];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -465,15 +456,11 @@ class $TagTableTable extends TagTable with TableInfo<$TagTableTable, Tag> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('tag_name')) {
-      context.handle(_tagNameMeta,
-          tagName.isAcceptableOrUnknown(data['tag_name']!, _tagNameMeta));
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_tagNameMeta);
-    }
-    if (data.containsKey('quotes')) {
-      context.handle(_quotesMeta,
-          quotes.isAcceptableOrUnknown(data['quotes']!, _quotesMeta));
+      context.missing(_nameMeta);
     }
     return context;
   }
@@ -485,11 +472,9 @@ class $TagTableTable extends TagTable with TableInfo<$TagTableTable, Tag> {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Tag(
       id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      tagName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}tag_name'])!,
-      quotes: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}quotes']),
+          .read(DriftSqlType.int, data['${effectivePrefix}id']),
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
     );
   }
 
@@ -500,27 +485,23 @@ class $TagTableTable extends TagTable with TableInfo<$TagTableTable, Tag> {
 }
 
 class Tag extends DataClass implements Insertable<Tag> {
-  final int id;
-  final String tagName;
-  final int? quotes;
-  const Tag({required this.id, required this.tagName, this.quotes});
+  final int? id;
+  final String name;
+  const Tag({this.id, required this.name});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['tag_name'] = Variable<String>(tagName);
-    if (!nullToAbsent || quotes != null) {
-      map['quotes'] = Variable<int>(quotes);
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
     }
+    map['name'] = Variable<String>(name);
     return map;
   }
 
   TagTableCompanion toCompanion(bool nullToAbsent) {
     return TagTableCompanion(
-      id: Value(id),
-      tagName: Value(tagName),
-      quotes:
-          quotes == null && nullToAbsent ? const Value.absent() : Value(quotes),
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      name: Value(name),
     );
   }
 
@@ -528,83 +509,65 @@ class Tag extends DataClass implements Insertable<Tag> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Tag(
-      id: serializer.fromJson<int>(json['id']),
-      tagName: serializer.fromJson<String>(json['tagName']),
-      quotes: serializer.fromJson<int?>(json['quotes']),
+      id: serializer.fromJson<int?>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'tagName': serializer.toJson<String>(tagName),
-      'quotes': serializer.toJson<int?>(quotes),
+      'id': serializer.toJson<int?>(id),
+      'name': serializer.toJson<String>(name),
     };
   }
 
-  Tag copyWith(
-          {int? id,
-          String? tagName,
-          Value<int?> quotes = const Value.absent()}) =>
-      Tag(
-        id: id ?? this.id,
-        tagName: tagName ?? this.tagName,
-        quotes: quotes.present ? quotes.value : this.quotes,
+  Tag copyWith({Value<int?> id = const Value.absent(), String? name}) => Tag(
+        id: id.present ? id.value : this.id,
+        name: name ?? this.name,
       );
   @override
   String toString() {
     return (StringBuffer('Tag(')
           ..write('id: $id, ')
-          ..write('tagName: $tagName, ')
-          ..write('quotes: $quotes')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, tagName, quotes);
+  int get hashCode => Object.hash(id, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Tag &&
-          other.id == this.id &&
-          other.tagName == this.tagName &&
-          other.quotes == this.quotes);
+      (other is Tag && other.id == this.id && other.name == this.name);
 }
 
 class TagTableCompanion extends UpdateCompanion<Tag> {
-  final Value<int> id;
-  final Value<String> tagName;
-  final Value<int?> quotes;
+  final Value<int?> id;
+  final Value<String> name;
   const TagTableCompanion({
     this.id = const Value.absent(),
-    this.tagName = const Value.absent(),
-    this.quotes = const Value.absent(),
+    this.name = const Value.absent(),
   });
   TagTableCompanion.insert({
     this.id = const Value.absent(),
-    required String tagName,
-    this.quotes = const Value.absent(),
-  }) : tagName = Value(tagName);
+    required String name,
+  }) : name = Value(name);
   static Insertable<Tag> custom({
     Expression<int>? id,
-    Expression<String>? tagName,
-    Expression<int>? quotes,
+    Expression<String>? name,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (tagName != null) 'tag_name': tagName,
-      if (quotes != null) 'quotes': quotes,
+      if (name != null) 'name': name,
     });
   }
 
-  TagTableCompanion copyWith(
-      {Value<int>? id, Value<String>? tagName, Value<int?>? quotes}) {
+  TagTableCompanion copyWith({Value<int?>? id, Value<String>? name}) {
     return TagTableCompanion(
       id: id ?? this.id,
-      tagName: tagName ?? this.tagName,
-      quotes: quotes ?? this.quotes,
+      name: name ?? this.name,
     );
   }
 
@@ -614,11 +577,8 @@ class TagTableCompanion extends UpdateCompanion<Tag> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (tagName.present) {
-      map['tag_name'] = Variable<String>(tagName.value);
-    }
-    if (quotes.present) {
-      map['quotes'] = Variable<int>(quotes.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
     return map;
   }
@@ -627,8 +587,7 @@ class TagTableCompanion extends UpdateCompanion<Tag> {
   String toString() {
     return (StringBuffer('TagTableCompanion(')
           ..write('id: $id, ')
-          ..write('tagName: $tagName, ')
-          ..write('quotes: $quotes')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
@@ -783,19 +742,6 @@ class $$QuoteTableTableFilterComposer
       column: $state.table.tags,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ComposableFilter tagTableRefs(
-      ComposableFilter Function($$TagTableTableFilterComposer f) f) {
-    final $$TagTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.tagTable,
-        getReferencedColumn: (t) => t.quotes,
-        builder: (joinBuilder, parentComposers) =>
-            $$TagTableTableFilterComposer(ComposerState(
-                $state.db, $state.db.tagTable, joinBuilder, parentComposers)));
-    return f(composer);
-  }
 }
 
 class $$QuoteTableTableOrderingComposer
@@ -843,14 +789,12 @@ class $$QuoteTableTableOrderingComposer
 }
 
 typedef $$TagTableTableInsertCompanionBuilder = TagTableCompanion Function({
-  Value<int> id,
-  required String tagName,
-  Value<int?> quotes,
+  Value<int?> id,
+  required String name,
 });
 typedef $$TagTableTableUpdateCompanionBuilder = TagTableCompanion Function({
-  Value<int> id,
-  Value<String> tagName,
-  Value<int?> quotes,
+  Value<int?> id,
+  Value<String> name,
 });
 
 class $$TagTableTableTableManager extends RootTableManager<
@@ -873,24 +817,20 @@ class $$TagTableTableTableManager extends RootTableManager<
           getChildManagerBuilder: (p) =>
               $$TagTableTableProcessedTableManager(p),
           getUpdateCompanionBuilder: ({
-            Value<int> id = const Value.absent(),
-            Value<String> tagName = const Value.absent(),
-            Value<int?> quotes = const Value.absent(),
+            Value<int?> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
           }) =>
               TagTableCompanion(
             id: id,
-            tagName: tagName,
-            quotes: quotes,
+            name: name,
           ),
           getInsertCompanionBuilder: ({
-            Value<int> id = const Value.absent(),
-            required String tagName,
-            Value<int?> quotes = const Value.absent(),
+            Value<int?> id = const Value.absent(),
+            required String name,
           }) =>
               TagTableCompanion.insert(
             id: id,
-            tagName: tagName,
-            quotes: quotes,
+            name: name,
           ),
         ));
 }
@@ -915,22 +855,10 @@ class $$TagTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<String> get tagName => $state.composableBuilder(
-      column: $state.table.tagName,
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$QuoteTableTableFilterComposer get quotes {
-    final $$QuoteTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.quotes,
-        referencedTable: $state.db.quoteTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$QuoteTableTableFilterComposer(ComposerState($state.db,
-                $state.db.quoteTable, joinBuilder, parentComposers)));
-    return composer;
-  }
 }
 
 class $$TagTableTableOrderingComposer
@@ -941,22 +869,10 @@ class $$TagTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<String> get tagName => $state.composableBuilder(
-      column: $state.table.tagName,
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$QuoteTableTableOrderingComposer get quotes {
-    final $$QuoteTableTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.quotes,
-        referencedTable: $state.db.quoteTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$QuoteTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.quoteTable, joinBuilder, parentComposers)));
-    return composer;
-  }
 }
 
 class _$AppDatabaseManager {
