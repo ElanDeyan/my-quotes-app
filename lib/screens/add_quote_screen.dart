@@ -179,24 +179,3 @@ class _AddQuoteFormState extends State<AddQuoteForm> {
     );
   }
 }
-
-final class CheckBoxFormField extends FormField<bool> {
-  CheckBoxFormField({
-    Widget? title,
-    super.onSaved,
-    super.validator,
-    bool super.initialValue = false,
-    super.autovalidateMode,
-    super.enabled,
-    super.key,
-    super.restorationId,
-  }) : super(
-          builder: (state) => CheckboxListTile(
-            value: state.value,
-            onChanged: state.didChange,
-            dense: state.hasError,
-            title: title,
-            subtitle: state.hasError ? Text(state.errorText ?? '') : null,
-          ),
-        );
-}
