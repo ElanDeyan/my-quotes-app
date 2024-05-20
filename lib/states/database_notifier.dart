@@ -25,7 +25,6 @@ final class DatabaseNotifier extends ChangeNotifier
 
   @override
   Future<Quote?> getQuoteById(int id) async {
-    print(await allQuotes);
     final quoteOrNull = _quotesRepository.getQuoteById(id);
     
     return quoteOrNull;
