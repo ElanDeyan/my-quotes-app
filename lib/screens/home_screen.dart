@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/states/database_notifier.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,13 @@ final class HomeScreen extends StatelessWidget {
                           Text(author),
                           Text(content),
                           Text('Created at: ${createdAt!.toLocal()}'),
+                          ElevatedButton(
+                            onPressed: () => context.goNamed(
+                              'update',
+                              pathParameters: {'id': '${id!}'},
+                            ),
+                            child: const Text('Update'),
+                          ),
                         ],
                       ),
                     ),
