@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/states/database_notifier.dart';
+import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
 final class HomeScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ final class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<DatabaseNotifier>(
+      child: Consumer<DatabaseProvider>(
         builder: (context, database, child) => FutureBuilder(
           future: database.randomQuote,
           builder: (context, snapshot) {

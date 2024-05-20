@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/states/database_notifier.dart';
+import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
 final class QuoteScreen extends StatelessWidget {
@@ -25,7 +25,7 @@ final class QuoteScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Consumer<DatabaseNotifier>(
+        child: Consumer<DatabaseProvider>(
           builder: (context, database, child) => FutureBuilder(
             future: database.getQuoteById(quoteId),
             builder: (context, snapshot) {

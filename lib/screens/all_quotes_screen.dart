@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/states/database_notifier.dart';
+import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
 final class AllQuotesScreen extends StatelessWidget {
@@ -12,7 +12,7 @@ final class AllQuotesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DatabaseNotifier>(
+    return Consumer<DatabaseProvider>(
       builder: (context, database, child) => FutureBuilder(
         future: database.allQuotes,
         builder: (context, snapshot) {

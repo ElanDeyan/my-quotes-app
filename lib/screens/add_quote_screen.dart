@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/states/database_notifier.dart';
+import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
 final class AddQuoteScreen extends StatelessWidget {
@@ -135,7 +135,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                Consumer<DatabaseNotifier>(
+                Consumer<DatabaseProvider>(
                   builder: (context, database, child) => ElevatedButton(
                     child: const Text('Save'),
                     onPressed: () {
