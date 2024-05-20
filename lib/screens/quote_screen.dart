@@ -14,7 +14,6 @@ final class QuoteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Quote id: $quoteId');
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -22,7 +21,6 @@ final class QuoteScreen extends StatelessWidget {
           builder: (context, database, child) => FutureBuilder(
             future: database.getQuoteById(quoteId),
             builder: (context, snapshot) {
-              print(snapshot.data);
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
                 final data = snapshot.data!;
