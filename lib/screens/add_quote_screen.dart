@@ -158,13 +158,6 @@ class _AddQuoteFormState extends State<AddQuoteForm> {
                     child: const Text('Create tag'),
                   ),
                 ),
-                // FormBuilderFilterChip(
-                //   name: 'tags',
-                //   options: const [
-                //     FormBuilderChipOption(value: 'jw'),
-                //     FormBuilderChipOption(value: 'tech'),
-                //   ],
-                // ),
                 const SizedBox(
                   height: 10,
                 ),
