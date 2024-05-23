@@ -12,7 +12,20 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   AppDatabase() : super(impl.connect());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (m) async => await m.createAll(),
+      onUpgrade: (m, from, to) async {
+        if (from < 3) {
+          await m.deleteTable('tag_table');
+          await m.createTable(tagTable);
+        }
+      },
+    );
+  }
 
   @override
   Future<int> addQuote(Quote quote) async {
@@ -76,7 +89,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   Future<List<Tag>> get allTags async => select(tagTable).get();
 
   @override
-  Future<int> createTag(Tag tag) {
+  Future<int> createTag(Tag tag) async {
     return into(tagTable).insert(
       TagTableCompanion.insert(name: tag.name),
       mode: InsertMode.insertOrReplace,

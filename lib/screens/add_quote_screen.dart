@@ -51,7 +51,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> {
           FormBuilder(
             key: _formKey,
             onChanged: _formKey.currentState?.validate,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            autovalidateMode: AutovalidateMode.always,
             child: Column(
               children: [
                 FormBuilderTextField(
@@ -125,13 +125,46 @@ class _AddQuoteFormState extends State<AddQuoteForm> {
                 const SizedBox(
                   height: 10,
                 ),
-                FormBuilderFilterChip(
-                  name: 'tags',
-                  options: const [
-                    FormBuilderChipOption(value: 'jw'),
-                    FormBuilderChipOption(value: 'tech'),
-                  ],
+                Consumer<DatabaseProvider>(
+                  builder: (context, value, child) {
+                    return FutureBuilder(
+                      future: value.allTags,
+                      initialData: const <Tag>[],
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            return FormBuilderFilterChip(
+                              name: 'tags',
+                              options: [
+                                for (final tag in snapshot.data!)
+                                  FormBuilderChipOption(value: tag.name),
+                              ],
+                            );
+                          } else {
+                            return const Text('No data');
+                          }
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    );
+                  },
                 ),
+                Consumer<DatabaseProvider>(
+                  builder: (context, value, child) => ElevatedButton(
+                    onPressed: () => value.createTag(const Tag(name: 'name')),
+                    child: const Text('Create tag'),
+                  ),
+                ),
+                // FormBuilderFilterChip(
+                //   name: 'tags',
+                //   options: const [
+                //     FormBuilderChipOption(value: 'jw'),
+                //     FormBuilderChipOption(value: 'tech'),
+                //   ],
+                // ),
                 const SizedBox(
                   height: 10,
                 ),
