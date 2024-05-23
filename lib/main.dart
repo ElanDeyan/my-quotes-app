@@ -45,8 +45,8 @@ final class MyAppProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => _appPreferences),
-        ChangeNotifierProvider(create: (context) => _databaseNotifier),
+        ChangeNotifierProvider(create: (_) => _appPreferences),
+        ChangeNotifierProvider(create: (_) => _databaseNotifier),
       ],
       child: const MyApp(),
     );
