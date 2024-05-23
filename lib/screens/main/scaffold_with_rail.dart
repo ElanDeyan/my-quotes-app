@@ -60,9 +60,13 @@ final class _ScaffoldWithRailState extends State<ScaffoldWithRail> {
               selectedIndex: _selectedIndex,
             ),
             const VerticalDivider(),
-            bodyContent,
+            Expanded(child: bodyContent),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.goNamed('add'),
+        child: const Icon(Icons.add),
       ),
     );
   }
