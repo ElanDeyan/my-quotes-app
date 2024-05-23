@@ -38,35 +38,47 @@ final class _ScaffoldWithRailState extends State<ScaffoldWithRail> {
       appBar: AppBar(
         title: const Text('My quotes'),
       ),
-      body: SafeArea(
-        child: Row(
-          children: [
-            NavigationRail(
-              labelType: NavigationRailLabelType.selected,
-              onDestinationSelected: _updateIndex,
-              destinations: <NavigationRailDestination>[
-                for (final destination in mainDestinations)
-                  NavigationRailDestination(
-                    icon: destination.outlinedIcon,
-                    label: Text(destination.label),
-                    selectedIcon: destination.selectedIcon,
-                  ),
-              ],
-              trailing: IconButton(
-                onPressed: () => context.goNamed('settings'),
-                icon: settingsDestination.selectedIcon,
-                tooltip: settingsDestination.label,
-              ),
-              selectedIndex: _selectedIndex,
-            ),
-            const VerticalDivider(),
-            Expanded(child: bodyContent),
-          ],
-        ),
+      body: notCompactWindowSizeBody(
+        mainDestinations,
+        context,
+        settingsDestination,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.goNamed('add'),
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  SafeArea notCompactWindowSizeBody(
+    Iterable<DestinationData> mainDestinations,
+    BuildContext context,
+    DestinationData settingsDestination,
+  ) {
+    return SafeArea(
+      child: Row(
+        children: [
+          NavigationRail(
+            labelType: NavigationRailLabelType.selected,
+            onDestinationSelected: _updateIndex,
+            destinations: <NavigationRailDestination>[
+              for (final destination in mainDestinations)
+                NavigationRailDestination(
+                  icon: destination.outlinedIcon,
+                  label: Text(destination.label),
+                  selectedIcon: destination.selectedIcon,
+                ),
+            ],
+            trailing: IconButton(
+              onPressed: () => context.goNamed('settings'),
+              icon: settingsDestination.selectedIcon,
+              tooltip: settingsDestination.label,
+            ),
+            selectedIndex: _selectedIndex,
+          ),
+          const VerticalDivider(),
+          Expanded(child: bodyContent),
+        ],
       ),
     );
   }
