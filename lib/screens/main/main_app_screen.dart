@@ -39,12 +39,18 @@ final class _MainAppScreenState extends State<MainAppScreen> {
         actions: isCompactWindowSize ? _actionsForCompactWindow(context) : null,
       ),
       body: isCompactWindowSize
-          ? bodyContent
+          ? ColoredBox(
+              color: _primaryContainerOf(context),
+              child: bodyContent,
+            )
           : _notCompactWindowSizeBody(context),
       bottomNavigationBar:
           isCompactWindowSize ? _myBottomNavigationBar() : null,
     );
   }
+
+  Color _primaryContainerOf(BuildContext context) =>
+      Theme.of(context).colorScheme.primaryContainer;
 
   List<IconButton> _actionsForCompactWindow(BuildContext context) {
     return <IconButton>[
@@ -83,8 +89,15 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             ),
             selectedIndex: _selectedIndex,
           ),
-          const VerticalDivider(),
-          Expanded(child: bodyContent),
+          const VerticalDivider(
+            width: 0.0,
+          ),
+          Expanded(
+            child: ColoredBox(
+              color: _primaryContainerOf(context),
+              child: bodyContent,
+            ),
+          ),
         ],
       ),
     );
