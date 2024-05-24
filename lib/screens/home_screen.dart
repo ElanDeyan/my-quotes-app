@@ -12,14 +12,12 @@ final class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Spacer(),
           RandomQuoteContainer(),
-          Spacer(),
           Placeholder(
             child: Text('Favorites history'),
           ),
-          Spacer(),
         ],
       ),
     );
