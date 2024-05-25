@@ -44,6 +44,7 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
+      icon: const Icon(Icons.info),
       actions: [
         ElevatedButton(
           onPressed: () {
@@ -53,7 +54,10 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
           child: const Text('Edit'),
         ),
       ],
-      content: QuoteScreenBody(quoteId: quote.id!),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: QuoteScreenBody(quoteId: quote.id!),
+      ),
     ),
   );
 }
