@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/url_pattern.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -29,19 +30,15 @@ final class AddQuoteScreen extends StatelessWidget {
   }
 }
 
-class AddQuoteForm extends StatefulWidget {
+final class AddQuoteForm extends StatefulWidget {
   const AddQuoteForm({super.key});
 
   @override
   State<AddQuoteForm> createState() => _AddQuoteFormState();
 }
 
-class _AddQuoteFormState extends State<AddQuoteForm> {
+class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
   final _formKey = GlobalKey<FormBuilderState>();
-
-  final urlPattern = RegExp(
-    r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)',
-  );
 
   @override
   Widget build(BuildContext context) {
