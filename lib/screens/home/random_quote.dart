@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
@@ -97,12 +98,12 @@ class RandomQuoteCard extends StatelessWidget {
           ],
         ),
       ),
-      if (quote.hasSourceUri)
+      if (quote.hasSourceUri) ...[
         PopupMenuItem<Quote>(
           onTap: () => launchUrl(Uri.parse(quote.sourceUri!)),
           child: const Row(
             children: [
-              Icon(Icons.link),
+              Icon(Icons.open_in_new),
               SizedBox(
                 width: 10,
               ),
@@ -110,6 +111,25 @@ class RandomQuoteCard extends StatelessWidget {
             ],
           ),
         ),
+        PopupMenuItem<Quote>(
+          onTap: () async {
+            await Clipboard.setData(ClipboardData(text: quote.sourceUri!)).then(
+              (_) => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Link copied to clipboard!')),
+              ),
+            );
+          },
+          child: const Row(
+            children: [
+              Icon(Icons.link),
+              SizedBox(
+                width: 10,
+              ),
+              Text('Copy link'),
+            ],
+          ),
+        ),
+      ],
     ];
   }
 }
