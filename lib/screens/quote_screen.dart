@@ -24,32 +24,46 @@ final class QuoteScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Consumer<DatabaseProvider>(
-          builder: (context, database, child) => FutureBuilder(
-            future: database.getQuoteById(quoteId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                final data = snapshot.data!;
-                return Column(
-                  children: [
-                    const Text('Quote data'),
-                    Text(data.toString()),
-                    ElevatedButton(
-                      onPressed: () => context.goNamed(
-                        'update',
-                        pathParameters: {'id': '$quoteId'},
-                      ),
-                      child: const Text('Update'),
+      body: QuoteScreenBody(quoteId: quoteId),
+    );
+  }
+}
+
+class QuoteScreenBody extends StatelessWidget {
+  const QuoteScreenBody({
+    super.key,
+    required this.quoteId,
+  });
+
+  final int quoteId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Consumer<DatabaseProvider>(
+        builder: (context, database, child) => FutureBuilder(
+          future: database.getQuoteById(quoteId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              final data = snapshot.data!;
+              return Column(
+                children: [
+                  const Text('Quote data'),
+                  Text(data.toString()),
+                  ElevatedButton(
+                    onPressed: () => context.goNamed(
+                      'update',
+                      pathParameters: {'id': '$quoteId'},
                     ),
-                  ],
-                );
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
+                    child: const Text('Update'),
+                  ),
+                ],
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );
