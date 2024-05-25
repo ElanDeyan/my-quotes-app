@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/destinations.dart';
+import 'package:my_quotes/screens/add_quote_screen.dart';
 import 'package:my_quotes/screens/all_quotes_screen.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
@@ -47,6 +48,16 @@ final class _MainAppScreenState extends State<MainAppScreen> {
               ),
             )
           : _notCompactWindowSizeBody(context),
+      floatingActionButton: isCompactWindowSize
+          ? FloatingActionButton(
+              onPressed: () => showAddQuoteModal(context),
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            )
+          : null,
       bottomNavigationBar:
           isCompactWindowSize ? _myBottomNavigationBar() : null,
     );
@@ -71,12 +82,27 @@ final class _MainAppScreenState extends State<MainAppScreen> {
 
     final settingsDestination = widget.destinations[settingsNavigationKey]!;
 
+    final windowSize = MediaQuery.sizeOf(context);
+
+    final isCompactWindowSize = windowSize.width < 600;
+
     return SafeArea(
       child: Row(
         children: [
           NavigationRail(
             labelType: NavigationRailLabelType.selected,
             onDestinationSelected: _updateIndex,
+            leading: !isCompactWindowSize
+                ? FloatingActionButton(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
+                    onPressed: () => showAddQuoteModal(context),
+                    child: Icon(
+                      Icons.add,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  )
+                : null,
             destinations: <NavigationRailDestination>[
               for (final destination in mainDestinations)
                 NavigationRailDestination(
