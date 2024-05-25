@@ -30,6 +30,16 @@ final class AddQuoteScreen extends StatelessWidget {
   }
 }
 
+Future<void> showAddQuoteModal(BuildContext context) {
+  return showModalBottomSheet<void>(
+    context: context,
+    builder: (context) => const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      child: AddQuoteForm(),
+    ),
+  );
+}
+
 final class AddQuoteForm extends StatefulWidget {
   const AddQuoteForm({super.key});
 
@@ -45,6 +55,10 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
     return SingleChildScrollView(
       child: Column(
         children: [
+          Text(
+            'Add',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
           FormBuilder(
             key: _formKey,
             onChanged: _formKey.currentState?.validate,
@@ -169,6 +183,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
                       final formValueMapped = formValue.map(
                         (key, value) {
                           if (key == 'tags') {
+                            value ??= <String>[];
                             final newValue = (value as List<String>).join(',');
                             return MapEntry(key, newValue);
                           } else {
@@ -190,7 +205,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
                         rethrow;
                       }
 
-                      context.goNamed('mainScreen');
+                      Navigator.pop(context);
                     },
                   ),
                 ),
