@@ -32,6 +32,13 @@ final class UpdateQuoteScreen extends StatelessWidget {
   }
 }
 
+Future<void> showUpdateQuoteModal(BuildContext context, Quote quote) {
+  return showModalBottomSheet<void>(
+    context: context,
+    builder: (context) => UpdateQuoteScreenBody(quoteId: quote.id!),
+  );
+}
+
 class UpdateQuoteScreenBody extends StatelessWidget {
   const UpdateQuoteScreenBody({
     super.key,
