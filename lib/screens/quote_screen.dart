@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,13 @@ final class QuoteScreen extends StatelessWidget {
   }
 }
 
+Future<void> showQuoteInfoModal(BuildContext context, Quote quote) {
+  return showModalBottomSheet<void>(
+    context: context,
+    builder: (context) => QuoteScreenBody(quoteId: quote.id!),
+  );
+}
+
 class QuoteScreenBody extends StatelessWidget {
   const QuoteScreenBody({
     super.key,
@@ -39,31 +47,34 @@ class QuoteScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Consumer<DatabaseProvider>(
-        builder: (context, database, child) => FutureBuilder(
-          future: database.getQuoteById(quoteId),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              final data = snapshot.data!;
-              return Column(
-                children: [
-                  const Text('Quote data'),
-                  Text(data.toString()),
-                  ElevatedButton(
-                    onPressed: () => context.goNamed(
-                      'update',
-                      pathParameters: {'id': '$quoteId'},
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: Consumer<DatabaseProvider>(
+          builder: (context, database, child) => FutureBuilder(
+            future: database.getQuoteById(quoteId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData) {
+                final data = snapshot.data!;
+                return Column(
+                  children: [
+                    const Text('Quote data'),
+                    Text(data.toString()),
+                    ElevatedButton(
+                      onPressed: () => context.goNamed(
+                        'update',
+                        pathParameters: {'id': '$quoteId'},
+                      ),
+                      child: const Text('Update'),
                     ),
-                    child: const Text('Update'),
-                  ),
-                ],
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+                  ],
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ),
       ),
     );
