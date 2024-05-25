@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
@@ -55,19 +55,51 @@ final class AllQuotesScreen extends StatelessWidget {
             case ConnectionState.done:
               final data = snapshot.data!;
               return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: data.length,
                 itemBuilder: (context, index) => ListTile(
                   title: Text(data[index].content),
                   subtitle: Text(data[index].author),
-                  onTap: () => context.goNamed(
-                    'quote',
-                    pathParameters: {"id": "${data[index].id}"},
-                  ),
+                  onTap: () => showQuoteInfoDialog(context, data[index]),
                   trailing: IconButton(
-                    onPressed: () => database.removeQuote(data[index].id!),
-                    icon: const Icon(Icons.delete_forever),
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => showDialog<void>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        icon: const Icon(Icons.warning),
+                        title: const Text('Are you sure?'),
+                        content: const Text("This can't be undone."),
+                        actions: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.resolveWith(
+                                (states) => Theme.of(context)
+                                    .colorScheme
+                                    .errorContainer,
+                              ),
+                            ),
+                            onPressed: () {
+                              database.removeQuote(data[index].id!);
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'Yes, I want to delete this quote',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onErrorContainer,
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancel'),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                itemCount: data.length,
               );
           }
         },
