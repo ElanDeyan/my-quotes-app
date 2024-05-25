@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/url_pattern.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,35 +27,56 @@ final class UpdateQuoteScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Consumer<DatabaseProvider>(
-                builder: (context, database, child) => FutureBuilder(
-                  future: database.getQuoteById(quoteId),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.hasData) {
-                      final maybeQuote = snapshot.data;
-                      if (maybeQuote == null) {
-                        return Text(
-                          'Quote not found with this id: $quoteId',
-                        );
-                      } else {
-                        return UpdateQuoteForm(quote: maybeQuote);
-                      }
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
+      body: UpdateQuoteScreenBody(quoteId: quoteId),
+    );
+  }
+}
+
+class UpdateQuoteScreenBody extends StatelessWidget {
+  const UpdateQuoteScreenBody({
+    super.key,
+    required this.quoteId,
+  });
+
+  final int quoteId;
+
+  @override
+  Widget build(BuildContext context) {
+    final database = Provider.of<DatabaseProvider>(context, listen: false);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(
+              'Update',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            FutureBuilder(
+              future: database.getQuoteById(quoteId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData) {
+                  final maybeQuote = snapshot.data;
+                  if (maybeQuote == null) {
+                    return Text(
+                      'Quote not found with this id: $quoteId',
+                    );
+                  } else {
+                    return UpdateQuoteForm(quote: maybeQuote);
+                  }
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -73,15 +95,12 @@ class UpdateQuoteForm extends StatefulWidget {
   State<UpdateQuoteForm> createState() => _UpdateQuoteFormState();
 }
 
-class _UpdateQuoteFormState extends State<UpdateQuoteForm> {
+class _UpdateQuoteFormState extends State<UpdateQuoteForm> with UrlPattern {
   final _formKey = GlobalKey<FormBuilderState>();
-
-  final urlPattern = RegExp(
-    r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)',
-  );
 
   @override
   Widget build(BuildContext context) {
+    final database = Provider.of<DatabaseProvider>(context, listen: false);
     return FormBuilder(
       key: _formKey,
       onChanged: _formKey.currentState?.validate,
@@ -177,53 +196,50 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm> {
           const SizedBox(
             height: 10,
           ),
-          Consumer<DatabaseProvider>(
-            builder: (context, database, child) => ElevatedButton(
-              child: const Text('Save'),
-              onPressed: () {
-                _formKey.currentState!.saveAndValidate();
+          ElevatedButton(
+            child: const Text('Save'),
+            onPressed: () {
+              _formKey.currentState!.saveAndValidate();
 
-                final formValue = _formKey.currentState!.value;
+              final formValue = _formKey.currentState!.value;
 
-                final formValueMapped = formValue.map(
-                  (key, value) {
-                    if (key == 'tags') {
-                      final newValue = (value as List<String>).join(',');
-                      return MapEntry(key, newValue);
-                    } else {
-                      return MapEntry(key, value);
-                    }
-                  },
+              final formValueMapped = formValue.map(
+                (key, value) {
+                  if (key == 'tags') {
+                    final newValue = (value as List<String>).join(',');
+                    return MapEntry(key, newValue);
+                  } else {
+                    return MapEntry(key, value);
+                  }
+                },
+              );
+
+              formValueMapped.update(
+                'id',
+                (value) => value,
+                ifAbsent: () => widget.quote.id,
+              );
+
+              formValueMapped.update(
+                'createdAt',
+                (value) => value,
+                ifAbsent: () => widget.quote.createdAt,
+              );
+
+              try {
+                final quoteToUpdate = Quote.fromJson(formValueMapped);
+                scheduleMicrotask(() => database.updateQuote(quoteToUpdate));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Succesfully updated!")),
                 );
-
-                formValueMapped.update(
-                  'id',
-                  (value) => value,
-                  ifAbsent: () => widget.quote.id,
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Can't parse to Quote")),
                 );
-
-                formValueMapped.update(
-                  'createdAt',
-                  (value) => value,
-                  ifAbsent: () => widget.quote.createdAt,
-                );
-
-                try {
-                  final quoteToUpdate = Quote.fromJson(formValueMapped);
-                  scheduleMicrotask(() => database.updateQuote(quoteToUpdate));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Succesfully updated!")),
-                  );
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Can't parse to Quote")),
-                  );
-                  rethrow;
-                }
-
-                context.goNamed('mainScreen');
-              },
-            ),
+                rethrow;
+              }
+              Navigator.pop(context);
+            },
           ),
         ],
       ),
