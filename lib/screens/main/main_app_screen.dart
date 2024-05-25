@@ -41,7 +41,10 @@ final class _MainAppScreenState extends State<MainAppScreen> {
       body: isCompactWindowSize
           ? ColoredBox(
               color: _primaryContainerOf(context),
-              child: bodyContent,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: bodyContent,
+              ),
             )
           : _notCompactWindowSizeBody(context),
       bottomNavigationBar:
@@ -95,7 +98,10 @@ final class _MainAppScreenState extends State<MainAppScreen> {
           Expanded(
             child: ColoredBox(
               color: _primaryContainerOf(context),
-              child: bodyContent,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: bodyContent,
+              ),
             ),
           ),
         ],
