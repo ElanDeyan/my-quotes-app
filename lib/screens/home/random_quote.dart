@@ -75,7 +75,7 @@ class RandomQuoteCard extends StatelessWidget {
   List<PopupMenuItem<Quote>> _actions(BuildContext context, Quote quote) {
     return <PopupMenuItem<Quote>>[
       PopupMenuItem<Quote>(
-        onTap: () => showQuoteInfoModal(context, quote),
+        onTap: () => showQuoteInfoDialog(context, quote),
         child: const Row(
           children: [
             Icon(Icons.info),
