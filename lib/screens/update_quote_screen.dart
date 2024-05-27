@@ -35,6 +35,7 @@ final class UpdateQuoteScreen extends StatelessWidget {
 Future<void> showUpdateQuoteModal(BuildContext context, Quote quote) {
   return showModalBottomSheet<void>(
     context: context,
+    useSafeArea: true,
     builder: (context) => UpdateQuoteScreenBody(quoteId: quote.id!),
   );
 }
