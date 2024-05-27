@@ -15,7 +15,7 @@ class RandomQuoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 500, maxHeight: 350),
+      constraints: const BoxConstraints(maxWidth: 500, maxHeight: 300),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
