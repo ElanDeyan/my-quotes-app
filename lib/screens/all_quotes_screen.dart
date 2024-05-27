@@ -32,23 +32,18 @@ final class AllQuotesScreen extends StatelessWidget {
               final parentWidth = MediaQuery.of(context).size.width;
 
               return Center(
-                child: ShimmerPro.generated(
-                  light: isDarkTheme ? ShimmerProLight.lighter : null,
-                  scaffoldBackgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        for (var i = 0; i < 10; i++)
-                          ShimmerPro.sized(
-                            scaffoldBackgroundColor: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            height: 50,
-                            width: parentWidth,
-                          ),
-                      ],
-                    ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (var i = 0; i < 10; i++)
+                        ShimmerPro.sized(
+                          light: isDarkTheme ? ShimmerProLight.lighter : null,
+                          scaffoldBackgroundColor:
+                              Theme.of(context).colorScheme.primaryContainer,
+                          height: 50,
+                          width: parentWidth,
+                        ),
+                    ],
                   ),
                 ),
               );
@@ -58,8 +53,17 @@ final class AllQuotesScreen extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 itemCount: data.length,
                 itemBuilder: (context, index) => ListTile(
-                  title: Text(data[index].content),
-                  subtitle: Text(data[index].author),
+                  iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                  title: Text(
+                    data[index].content,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: Text(
+                    data[index].author,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   onTap: () => showQuoteInfoDialog(context, data[index]),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
@@ -83,7 +87,7 @@ final class AllQuotesScreen extends StatelessWidget {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              'Yes, I want to delete this quote',
+                              'Delete',
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
