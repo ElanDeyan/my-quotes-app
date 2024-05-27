@@ -117,27 +117,29 @@ class QuoteScreenBody extends StatelessWidget {
                     return const Text('Quote not found');
                   } else {
                     final quote = data!;
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'Quote info',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        Text('Id: ${quote.id!}'),
-                        Text('Content: ${quote.content}'),
-                        Text('Author: ${quote.author}'),
-                        if (quote.source.isNotNull)
-                          Text('Source: ${quote.source!}'),
-                        if (quote.sourceUri.isNotNull)
-                          Text('Link: ${quote.sourceUri}'),
-                        Text('Created at: ${quote.createdAt!.toLocal()}'),
-                        Text('Tags: ${quote.tags ?? 'No tags added'}'),
-                        Text(
-                          'Is favorite? ${quote.isFavorite! ? 'Yes' : 'No'}',
-                        ),
-                      ],
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            'Quote info',
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                          Text('Id: ${quote.id!}'),
+                          Text('Content: ${quote.content}'),
+                          Text('Author: ${quote.author}'),
+                          if (quote.source.isNotNull)
+                            Text('Source: ${quote.source!}'),
+                          if (quote.sourceUri.isNotNull)
+                            Text('Link: ${quote.sourceUri}'),
+                          Text('Created at: ${quote.createdAt!.toLocal()}'),
+                          Text('Tags: ${quote.tags ?? 'No tags added'}'),
+                          Text(
+                            'Is favorite? ${quote.isFavorite! ? 'Yes' : 'No'}',
+                          ),
+                        ],
+                      ),
                     );
                   }
               }

@@ -15,7 +15,7 @@ class RandomQuoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 500),
+      constraints: const BoxConstraints(maxWidth: 500, maxHeight: 350),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -26,13 +26,19 @@ class RandomQuoteCard extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    quote.content,
-                    softWrap: true,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                  Flexible(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Text(
+                        quote.content,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyLarge!.fontSize,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(
