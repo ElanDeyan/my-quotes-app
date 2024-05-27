@@ -48,6 +48,8 @@ class RandomQuoteCard extends StatelessWidget {
                     '- ${quote.author}'
                     '${quote.hasSource ? ', ${quote.source}.' : ''}',
                     softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
                     ),
