@@ -15,9 +15,10 @@ final class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           RandomQuoteContainer(),
-          Placeholder(
-            child: Text('Favorites history'),
-          ),
+          // TODO: decide if will show this element
+          // Placeholder(
+          //   child: Text('Favorites history'),
+          // ),
         ],
       ),
     );
