@@ -45,6 +45,10 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
     context: context,
     builder: (context) => AlertDialog(
       icon: const Icon(Icons.info),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: QuoteScreenBody(quoteId: quote.id!),
+      ),
       actions: [
         ElevatedButton(
           onPressed: () {
@@ -53,11 +57,8 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
           },
           child: const Text('Edit'),
         ),
+        ElevatedButton(onPressed: () => context.pop(), child: const Text('Ok')),
       ],
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 500),
-        child: QuoteScreenBody(quoteId: quote.id!),
-      ),
     ),
   );
 }
@@ -119,6 +120,7 @@ class QuoteScreenBody extends StatelessWidget {
                     final quote = data!;
                     return SingleChildScrollView(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
