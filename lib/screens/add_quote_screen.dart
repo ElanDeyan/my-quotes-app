@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/url_pattern.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -166,8 +167,40 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
                   },
                 ),
                 Consumer<DatabaseProvider>(
-                  builder: (context, value, child) => ElevatedButton(
-                    onPressed: () => value.createTag(const Tag(name: 'name')),
+                  builder: (context, database, child) => ElevatedButton(
+                    onPressed: () async {
+                      final tagToAdd = await showDialog<String?>(
+                        context: context,
+                        builder: (context) {
+                          final textEditingController = TextEditingController();
+                          return AlertDialog(
+                            title: const Text('Create tag'),
+                            content: TextField(
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder()),
+                              autofocus: true,
+                              onSubmitted: (value) => textEditingController.text = value,
+                              controller: textEditingController,
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, textEditingController.text),
+                                child: const Text('Save'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      if (tagToAdd.isNotNull) {
+                        database.createTag(Tag(name: tagToAdd!));
+                      }
+                    },
                     child: const Text('Create tag'),
                   ),
                 ),
