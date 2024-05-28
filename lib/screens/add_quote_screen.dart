@@ -132,6 +132,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
                 ),
                 FormBuilderCheckbox(
                   name: 'isFavorite',
+                  initialValue: false,
                   title: const Text('Is favorite?'),
                 ),
                 const SizedBox(
