@@ -151,7 +151,10 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
                               name: 'tags',
                               options: [
                                 for (final tag in snapshot.data!)
-                                  FormBuilderChipOption(value: tag.name),
+                                  FormBuilderChipOption(
+                                    value: tag.id!.toString(),
+                                    child: Text(tag.name),
+                                  ),
                               ],
                             );
                           } else {
@@ -177,9 +180,11 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
                             title: const Text('Create tag'),
                             content: TextField(
                               decoration: const InputDecoration(
-                                  border: OutlineInputBorder()),
+                                border: OutlineInputBorder(),
+                              ),
                               autofocus: true,
-                              onSubmitted: (value) => textEditingController.text = value,
+                              onSubmitted: (value) =>
+                                  textEditingController.text = value,
                               controller: textEditingController,
                             ),
                             actions: [
@@ -188,8 +193,10 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UrlPattern {
                                 child: const Text('Cancel'),
                               ),
                               TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, textEditingController.text),
+                                onPressed: () => Navigator.pop(
+                                  context,
+                                  textEditingController.text,
+                                ),
                                 child: const Text('Save'),
                               ),
                             ],

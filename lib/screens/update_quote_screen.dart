@@ -196,70 +196,77 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm> with UrlPattern {
             height: 10,
           ),
           Consumer<DatabaseProvider>(
-                  builder: (context, value, child) {
-                    return FutureBuilder(
-                      future: value.allTags,
-                      initialData: const <Tag>[],
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          if (snapshot.hasData) {
-                            return FormBuilderFilterChip(
-                              name: 'tags',
-                              options: [
-                                for (final tag in snapshot.data!)
-                                  FormBuilderChipOption(value: tag.name),
-                              ],
-                            );
-                          } else {
-                            return const Text('No tags');
-                          }
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
+            builder: (context, value, child) {
+              return FutureBuilder(
+                future: value.allTags,
+                initialData: const <Tag>[],
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      return FormBuilderFilterChip(
+                        name: 'tags',
+                        options: [
+                          for (final tag in snapshot.data!)
+                            FormBuilderChipOption(
+                              value: tag.id!.toString(),
+                              child: Text(tag.name),
+                            ),
+                        ],
+                      );
+                    } else {
+                      return const Text('No tags');
+                    }
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              );
+            },
+          ),
+          Consumer<DatabaseProvider>(
+            builder: (context, database, child) => ElevatedButton(
+              onPressed: () async {
+                final tagToAdd = await showDialog<String?>(
+                  context: context,
+                  builder: (context) {
+                    final textEditingController = TextEditingController();
+                    return AlertDialog(
+                      title: const Text('Create tag'),
+                      content: TextField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                        autofocus: true,
+                        onSubmitted: (value) =>
+                            textEditingController.text = value,
+                        controller: textEditingController,
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(
+                            context,
+                            textEditingController.text,
+                          ),
+                          child: const Text('Save'),
+                        ),
+                      ],
                     );
                   },
-                ),
-                Consumer<DatabaseProvider>(
-                  builder: (context, database, child) => ElevatedButton(
-                    onPressed: () async {
-                      final tagToAdd = await showDialog<String?>(
-                        context: context,
-                        builder: (context) {
-                          final textEditingController = TextEditingController();
-                          return AlertDialog(
-                            title: const Text('Create tag'),
-                            content: TextField(
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder()),
-                              autofocus: true,
-                              onSubmitted: (value) => textEditingController.text = value,
-                              controller: textEditingController,
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, textEditingController.text),
-                                child: const Text('Save'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                );
 
-                      if (tagToAdd.isNotNull) {
-                        database.createTag(Tag(name: tagToAdd!));
-                      }
-                    },
-                    child: const Text('Create tag'),
-                  ),
-                ),
+                if (tagToAdd.isNotNull) {
+                  database.createTag(Tag(name: tagToAdd!));
+                }
+              },
+              child: const Text('Create tag'),
+            ),
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -273,6 +280,7 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm> with UrlPattern {
               final formValueMapped = formValue.map(
                 (key, value) {
                   if (key == 'tags') {
+                    value ??= <String>[];
                     final newValue = (value as List<String>).join(',');
                     return MapEntry(key, newValue);
                   } else {
