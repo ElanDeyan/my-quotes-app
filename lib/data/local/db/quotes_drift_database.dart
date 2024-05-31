@@ -104,6 +104,11 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
+  Future<List<Tag>> getTagsByIds(Iterable<int> ids) {
+    return (select(tagTable)..where((row) => row.id.isIn(ids))).get();
+  }
+
+  @override
   Future<int> removeTag(int id) {
     return delete(tagTable).delete(TagTableCompanion(id: Value(id)));
   }
