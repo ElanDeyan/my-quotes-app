@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +50,9 @@ final class MyQuotesScreen extends StatelessWidget {
               );
             case ConnectionState.done:
               final data = snapshot.data!;
+              if (data case <Quote>[]) {
+                return const Center(child: Text("You don't have any quotes yet"));
+              }
               return ListView.builder(
                 physics: const BouncingScrollPhysics(),
                 itemCount: data.length,
