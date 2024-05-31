@@ -45,6 +45,8 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
     context: context,
     builder: (context) => AlertDialog(
       icon: const Icon(Icons.info),
+      scrollable: true,
+      title: const Text('Quote info'),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
         child: QuoteScreenBody(quoteId: quote.id!),
@@ -118,30 +120,28 @@ class QuoteScreenBody extends StatelessWidget {
                     return const Text('Quote not found');
                   } else {
                     final quote = data!;
-                    return SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'Quote info',
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                          Text('Id: ${quote.id!}'),
-                          Text('Content: ${quote.content}'),
-                          Text('Author: ${quote.author}'),
-                          if (quote.source.isNotNull)
-                            Text('Source: ${quote.source!}'),
-                          if (quote.sourceUri.isNotNull)
-                            Text('Link: ${quote.sourceUri}'),
-                          Text('Created at: ${quote.createdAt!.toLocal()}'),
-                          Text('Tags: ${quote.tags ?? 'No tags added'}'),
-                          Text(
-                            'Is favorite? ${quote.isFavorite! ? 'Yes' : 'No'}',
-                          ),
-                        ],
-                      ),
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          'Quote info',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        Text('Id: ${quote.id!}'),
+                        Text('Content: ${quote.content}'),
+                        Text('Author: ${quote.author}'),
+                        if (quote.source.isNotNull)
+                          Text('Source: ${quote.source!}'),
+                        if (quote.sourceUri.isNotNull)
+                          Text('Link: ${quote.sourceUri}'),
+                        Text('Created at: ${quote.createdAt!.toLocal()}'),
+                        Text('Tags: ${quote.tags ?? 'No tags added'}'),
+                        Text(
+                          'Is favorite? ${quote.isFavorite! ? 'Yes' : 'No'}',
+                        ),
+                      ],
                     );
                   }
               }
