@@ -59,6 +59,10 @@ final class DatabaseProvider extends ChangeNotifier
   Future<Tag?> getTagById(int id) => _appRepository.getTagById(id);
 
   @override
+  Future<List<Tag>> getTagsByIds(Iterable<int> ids) =>
+      _appRepository.getTagsByIds(ids);
+
+  @override
   Future<int> removeTag(int id) {
     final oldId = _appRepository.removeTag(id);
     notifyListeners();
