@@ -36,6 +36,8 @@ Future<void> showUpdateQuoteModal(BuildContext context, Quote quote) {
   return showModalBottomSheet<void>(
     context: context,
     useSafeArea: true,
+    isScrollControlled: true,
+    showDragHandle: true,
     builder: (context) => UpdateQuoteScreenBody(quoteId: quote.id!),
   );
 }

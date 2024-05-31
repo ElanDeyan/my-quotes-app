@@ -31,6 +31,8 @@ Future<void> showAddQuoteModal(BuildContext context) {
   return showModalBottomSheet<void>(
     context: context,
     useSafeArea: true,
+    isScrollControlled: true,
+    showDragHandle: true,
     builder: (context) => const Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
       child: AddQuoteForm(),
