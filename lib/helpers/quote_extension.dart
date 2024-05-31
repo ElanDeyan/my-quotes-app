@@ -7,4 +7,7 @@ extension QuoteExtension on Quote {
   bool get hasSource => source is String && source != '';
 
   bool get hasSourceUri => sourceUri.isNotNull;
+
+  Iterable<int> get tagsId =>
+      tags?.split(',').map(int.tryParse).nonNulls ?? const <int>[];
 }
