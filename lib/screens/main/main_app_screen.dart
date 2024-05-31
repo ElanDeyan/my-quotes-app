@@ -43,8 +43,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
               icon: const Icon(Icons.label),
               onPressed: () => context.pushNamed('tags'),
             ),
-          if (isCompactWindowSize)
-            ..._actionsForCompactWindow(context),
+          if (isCompactWindowSize) ..._actionsForCompactWindow(context),
         ],
       ),
       body: isCompactWindowSize
