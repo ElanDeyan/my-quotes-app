@@ -36,6 +36,7 @@ mixin QuoteFormMixin {
             labelText: 'Content',
           ),
           maxLines: null,
+          smartQuotesType: SmartQuotesType.enabled,
           validator: (value) {
             if (value.isNullOrBlank) {
               return "Can't be empty.";
@@ -53,6 +54,7 @@ mixin QuoteFormMixin {
             labelText: 'Author',
           ),
           initialValue: 'Anonym',
+          smartQuotesType: SmartQuotesType.enabled,
           validator: (value) {
             if (value.isNullOrBlank) {
               return "Can't be empty.";
