@@ -4,8 +4,8 @@ import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
 
-final class AllQuotesScreen extends StatelessWidget {
-  const AllQuotesScreen({
+final class MyQuotesScreen extends StatelessWidget {
+  const MyQuotesScreen({
     super.key,
   });
 

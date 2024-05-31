@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/destinations.dart';
 import 'package:my_quotes/screens/add_quote_screen.dart';
-import 'package:my_quotes/screens/all_quotes_screen.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
+import 'package:my_quotes/screens/my_quotes_screen.dart';
 
 final class MainAppScreen extends StatefulWidget with DestinationsMixin {
   const MainAppScreen({super.key, required this.destinations});
@@ -20,7 +20,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
 
   Widget get bodyContent => switch (_selectedIndex) {
         0 => const HomeScreen(),
-        1 => const AllQuotesScreen(),
+        1 => const MyQuotesScreen(),
         _ => throw UnimplementedError(),
       };
 
