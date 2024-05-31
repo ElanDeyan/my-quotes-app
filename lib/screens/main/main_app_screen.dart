@@ -37,7 +37,15 @@ final class _MainAppScreenState extends State<MainAppScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My quotes'),
-        actions: isCompactWindowSize ? _actionsForCompactWindow(context) : null,
+        actions: [
+          if (bodyContent is MyQuotesScreen)
+            IconButton(
+              icon: const Icon(Icons.label),
+              onPressed: () => context.pushNamed('tags'),
+            ),
+          if (isCompactWindowSize)
+            ..._actionsForCompactWindow(context),
+        ],
       ),
       body: isCompactWindowSize
           ? ColoredBox(
