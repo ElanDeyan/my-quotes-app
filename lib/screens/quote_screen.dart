@@ -157,9 +157,8 @@ class QuoteScreenBody extends StatelessWidget {
                                   if (tags.isEmpty) {
                                     return const Text('No tags found');
                                   } else {
-                                    final tagsNames = tags
-                                        .map((tag) => tag.name)
-                                        .join(', ');
+                                    final tagsNames =
+                                        tags.map((tag) => tag.name).join(', ');
                                     return Text(
                                       'Tags: $tagsNames',
                                     );
