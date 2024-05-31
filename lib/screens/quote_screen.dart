@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
+import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/screens/update_quote_screen.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -73,6 +75,9 @@ class QuoteScreenBody extends StatelessWidget {
 
   final int quoteId;
 
+  // TODO: apply locale format
+  DateFormat get _dateFormat => DateFormat('dd/MM/yyyy HH:mm:ss');
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -136,8 +141,37 @@ class QuoteScreenBody extends StatelessWidget {
                           Text('Source: ${quote.source!}'),
                         if (quote.sourceUri.isNotNull)
                           Text('Link: ${quote.sourceUri}'),
-                        Text('Created at: ${quote.createdAt!.toLocal()}'),
-                        Text('Tags: ${quote.tags ?? 'No tags added'}'),
+                        Text(
+                          'Created at: ${_dateFormat.format(quote.createdAt!)}',
+                        ),
+                        if (quote.tagsId.isEmpty)
+                          const Text('Tags: No tags added')
+                        else
+                          FutureBuilder(
+                            future: database.getTagsByIds(quote.tagsId),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                if (snapshot.hasData) {
+                                  final tags = snapshot.data!;
+                                  if (tags.isEmpty) {
+                                    return const Text('No tags found');
+                                  } else {
+                                    final tagsNames = tags
+                                        .map((tag) => tag.name)
+                                        .join(', ');
+                                    return Text(
+                                      'Tags: $tagsNames',
+                                    );
+                                  }
+                                } else {
+                                  return const Text('No tags found');
+                                }
+                              } else {
+                                return const Text('Loading tags...');
+                              }
+                            },
+                          ),
                         Text(
                           'Is favorite? ${quote.isFavorite! ? 'Yes' : 'No'}',
                         ),
