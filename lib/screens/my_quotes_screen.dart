@@ -51,7 +51,9 @@ final class MyQuotesScreen extends StatelessWidget {
             case ConnectionState.done:
               final data = snapshot.data!;
               if (data case <Quote>[]) {
-                return const Center(child: Text("You don't have any quotes yet"));
+                return const Center(
+                  child: Text("You don't have any quotes yet"),
+                );
               }
               return ListView.builder(
                 physics: const BouncingScrollPhysics(),
