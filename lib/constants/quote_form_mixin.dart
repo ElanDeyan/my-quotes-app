@@ -155,59 +155,57 @@ mixin QuoteFormMixin {
     );
   }
 
-  Consumer<DatabaseProvider> createTagButton() {
-    return Consumer<DatabaseProvider>(
-      builder: (context, database, child) => ElevatedButton(
-        onPressed: () async {
-          final tagToAdd = await showDialog<String?>(
-            context: context,
-            builder: (context) {
-              final textEditingController = TextEditingController();
-              final createTagFormKey = GlobalKey<FormState>();
-              return AlertDialog(
-                title: const Text('Create tag'),
-                content: Form(
-                  key: createTagFormKey,
-                  autovalidateMode: AutovalidateMode.always,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Tag name',
+  Consumer<DatabaseProvider> createTagButton() => Consumer<DatabaseProvider>(
+        builder: (context, database, child) => ElevatedButton(
+          onPressed: () async {
+            final tagToAdd = await showDialog<String?>(
+              context: context,
+              builder: (context) {
+                final textEditingController = TextEditingController();
+                final createTagFormKey = GlobalKey<FormState>();
+                return AlertDialog(
+                  title: const Text('Create tag'),
+                  content: Form(
+                    key: createTagFormKey,
+                    autovalidateMode: AutovalidateMode.always,
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Tag name',
+                      ),
+                      controller: textEditingController,
+                      validator: (value) {
+                        if (value.isNullOrBlank) {
+                          return "Can't be empty";
+                        }
+                        return null;
+                      },
                     ),
-                    controller: textEditingController,
-                    validator: (value) {
-                      if (value.isNullOrBlank) {
-                        return "Can't be empty";
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(
-                      context,
-                      textEditingController.text,
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
                     ),
-                    child: const Text('Save'),
-                  ),
-                ],
-              );
-            },
-          );
+                    TextButton(
+                      onPressed: () => Navigator.pop(
+                        context,
+                        textEditingController.text,
+                      ),
+                      child: const Text('Save'),
+                    ),
+                  ],
+                );
+              },
+            );
 
-          if (tagToAdd.isNotNullOrBlank) {
-            database.createTag(Tag(name: tagToAdd!));
-          }
-        },
-        child: const Text('Create tag'),
-      ),
-    );
-  }
+            if (tagToAdd.isNotNullOrBlank) {
+              database.createTag(Tag(name: tagToAdd!));
+            }
+          },
+          child: const Text('Create tag'),
+        ),
+      );
 
   Consumer<DatabaseProvider> createQuoteButton() {
     return Consumer<DatabaseProvider>(
