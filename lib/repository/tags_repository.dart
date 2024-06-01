@@ -11,5 +11,5 @@ abstract interface class TagsRepository {
 
   Future<bool> updateTag(Tag tag);
 
-  Future<int> removeTag(int id);
+  Future<int> deleteTag(int id);
 }

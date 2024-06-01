@@ -1,8 +1,10 @@
+import 'package:basics/basics.dart';
 import 'package:drift/drift.dart';
 import 'package:my_quotes/data/local/db/connection/connection.dart' as impl;
 import 'package:my_quotes/data/tables/quote_table.dart';
 import 'package:my_quotes/data/tables/tag_table.dart';
 import 'package:my_quotes/helpers/iterable_extension.dart';
+import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/repository/app_repository.dart';
 
 part 'quotes_drift_database.g.dart';
@@ -109,8 +111,21 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<int> removeTag(int id) {
-    return delete(tagTable).delete(TagTableCompanion(id: Value(id)));
+  Future<int> deleteTag(int id) async {
+    delete(tagTable).delete(TagTableCompanion(id: Value(id)));
+
+    final quotesWithThisTag =
+        (await allQuotes).where((quote) => quote.tagsId.contains(id));
+
+    for (final quote in quotesWithThisTag) {
+      if (quote.tags.isNotNullOrBlank) {
+        final newIdsString = quote.tags!.split(',')..remove('$id');
+
+        updateQuote(quote.copyWith(tags: Value(newIdsString.join(','))));
+      }
+    }
+
+    return id;
   }
 
   @override
