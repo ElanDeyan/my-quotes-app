@@ -2,6 +2,8 @@ import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/screens/widgets/create_tag_dialog.dart';
+import 'package:my_quotes/shared/delete_tag.dart';
+import 'package:my_quotes/shared/update_tag.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -46,55 +48,7 @@ class TagsScreen extends StatelessWidget {
                     ? const Center(
                         child: Text('Error'),
                       )
-                    : Expanded(
-                        child: Wrap(
-                          spacing: 5,
-                          alignment: WrapAlignment.spaceAround,
-                          children: [
-                            for (final tag in snapshot.data!)
-                              ListTile(
-                                title: Text(tag.name),
-                                trailing: PopupMenuButton<Tag>(
-                                  itemBuilder: (context) => [
-                                    PopupMenuItem(
-                                      value: tag,
-                                      onTap: () async {
-                                        final newTagName =
-                                            await showUpdateTagDialog(
-                                          context,
-                                          tag,
-                                        );
-
-                                        if (newTagName.isNotNullOrBlank) {
-                                          database
-                                              .updateTag(
-                                                tag.copyWith(name: newTagName),
-                                              )
-                                              .then(
-                                                (value) => ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  const SnackBar(
-                                                    content: Text(
-                                                      'Successfully updated!',
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                        }
-                                      },
-                                      child: const Text('Update'),
-                                    ),
-                                    PopupMenuItem(
-                                      value: tag,
-                                      child: const Text('Delete'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
+                    : _tagsList(snapshot.data!),
               };
             },
           ),
@@ -103,36 +57,39 @@ class TagsScreen extends StatelessWidget {
     );
   }
 
-  Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
-    final textEditingController =
-        TextEditingController.fromValue(TextEditingValue(text: tag.name));
-    final updateTagFormKey = GlobalKey<FormState>();
-    return showDialog<String?>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Update tag'),
-        content: Form(
-          key: updateTagFormKey,
-          autovalidateMode: AutovalidateMode.always,
-          child: TextFormField(
-            controller: textEditingController,
-            decoration: const InputDecoration(
-              labelText: 'New tag name',
-              border: OutlineInputBorder(),
+  Widget _tagsList(List<Tag> tags) {
+    return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemCount: tags.length,
+      prototypeItem: ListTile(
+        title: const Text('Tag name'),
+        trailing: PopupMenuButton<Tag>(
+          itemBuilder: (context) => [
+            const PopupMenuItem<Tag>(
+              value: Tag(name: 'name'),
+              child: Text('Action'),
             ),
-            validator: (value) => value.isNullOrBlank ? 'Invalid value' : null,
+          ],
+        ),
+      ),
+      itemBuilder: (context, index) => ListTile(
+        title: Text(tags[index].name),
+        trailing: Consumer<DatabaseProvider>(
+          builder: (context, database, child) => PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem<Tag>(
+                value: tags[index],
+                onTap: () => updateTag(context, tags[index]),
+                child: const Text('Update'),
+              ),
+              PopupMenuItem<Tag>(
+                value: tags[index],
+                onTap: () => deleteTag(context, tags[index]),
+                child: const Text('Delete'),
+              ),
+            ],
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, textEditingController.text),
-            child: const Text('Update'),
-          ),
-        ],
       ),
     );
   }
