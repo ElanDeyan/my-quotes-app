@@ -19,7 +19,17 @@ Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
             labelText: 'New tag name',
             border: OutlineInputBorder(),
           ),
-          validator: (value) => value.isNullOrBlank ? 'Invalid value' : null,
+          validator: (value) {
+            if (value.isNullOrBlank) {
+              return "Can't be empty";
+            }
+
+            if (value.isNotNullOrBlank && value!.contains(',')) {
+              return 'Commas are disallowed';
+            }
+
+            return null;
+          },
         ),
       ),
       actions: [
