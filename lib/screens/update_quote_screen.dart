@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/constants/quote_form_mixin.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/shared/quote_form_mixin.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -124,7 +124,7 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm> with QuoteFormMixin {
           },
           ifAbsent: () => <String>[],
         ),
-      child: quoteFormBody(quoteForUpdate: widget.quote),
+      child: quoteFormBody(context, quoteForUpdate: widget.quote),
     );
   }
 }

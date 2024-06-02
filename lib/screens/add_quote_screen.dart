@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/constants/quote_form_mixin.dart';
+import 'package:my_quotes/shared/quote_form_mixin.dart';
 
 final class AddQuoteScreen extends StatelessWidget {
   const AddQuoteScreen({super.key});
@@ -61,7 +61,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> with QuoteFormMixin {
             key: formKey,
             onChanged: formKey.currentState?.validate,
             autovalidateMode: AutovalidateMode.always,
-            child: quoteFormBody(),
+            child: quoteFormBody(context),
           ),
         ],
       ),
