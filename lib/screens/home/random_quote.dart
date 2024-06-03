@@ -21,8 +21,10 @@ class RandomQuoteCard extends StatelessWidget {
         children: [
           Card(
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 26.0, vertical: 22.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 26.0,
+                vertical: 22.0,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -103,6 +105,25 @@ class RandomQuoteCard extends StatelessWidget {
               width: 10,
             ),
             Text('Edit'),
+          ],
+        ),
+      ),
+      PopupMenuItem<Quote>(
+        onTap: () async {
+          await Clipboard.setData(ClipboardData(text: quote.shareableFormat))
+              .then(
+            (_) => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Copied to clipboard!')),
+            ),
+          );
+        },
+        child: const Row(
+          children: [
+            Icon(Icons.copy),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Copy'),
           ],
         ),
       ),

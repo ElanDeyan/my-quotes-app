@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 
@@ -10,4 +11,10 @@ extension QuoteExtension on Quote {
 
   Iterable<int> get tagsId =>
       tags?.split(',').map(int.tryParse).nonNulls ?? const <int>[];
+
+  String get shareableFormat => '''
+Take a look in this quote:
+"$content"
+- $author${source.isNotNullOrBlank ? ", $source" : ''}.${sourceUri.isNotNullOrBlank ? '\nSee more in: $sourceUri' : ''}
+''';
 }

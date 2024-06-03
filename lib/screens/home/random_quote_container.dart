@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/screens/home/random_quote.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
 
 final class RandomQuoteContainer extends StatefulWidget {
@@ -66,7 +68,7 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
                         width: 20,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => Share.share(quote.shareableFormat),
                         child: const Icon(Icons.share),
                       ),
                     ],
