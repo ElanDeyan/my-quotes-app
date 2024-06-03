@@ -4,9 +4,12 @@ import 'package:basics/basics.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:multiple_search_selection/createable/create_options.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
+import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/nullable_extension.dart';
+import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/shared/show_create_tag_dialog.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -41,17 +44,19 @@ mixin QuoteFormMixin {
           ),
           maxLines: null,
           smartQuotesType: SmartQuotesType.enabled,
+          keyboardType: TextInputType.multiline,
           validator: (value) {
             if (value.isNullOrBlank) {
               return "Can't be empty.";
             }
             return null;
           },
+          valueTransformer: (value) => value?.trim(),
         ),
         const SizedBox(
           height: 10,
         ),
-        authorTextField(),
+        _authorTextField(),
         const SizedBox(
           height: 10,
         ),
@@ -62,6 +67,8 @@ mixin QuoteFormMixin {
             labelText: 'Source',
             hintText: 'Like a movie, book, event, place and etc',
           ),
+          keyboardType: TextInputType.text,
+          valueTransformer: (value) => value?.trim(),
         ),
         const SizedBox(
           height: 10,
@@ -74,48 +81,47 @@ mixin QuoteFormMixin {
             hintText: 'Link to the source',
           ),
           validator: sourceUriValidator,
+          keyboardType: TextInputType.url,
+          valueTransformer: (value) => value?.trim(),
         ),
         const SizedBox(
           height: 10,
         ),
-        if (isUpdateForm)
-          FormBuilderCheckbox(
-            name: 'isFavorite',
-            title: const Text('Is favorite?'),
-          )
-        else
-          FormBuilderCheckbox(
-            name: 'isFavorite',
-            initialValue: false,
-            title: const Text('Is favorite?'),
-          ),
+        FormBuilderCheckbox(
+          name: 'isFavorite',
+          title: const Text('Is favorite?'),
+          valueTransformer: (value) => value ?? false,
+        ),
         const SizedBox(
           height: 10,
         ),
-        selectTags(context, _multipleTagSearchController),
-        const SizedBox(
-          height: 10,
-        ),
+        // selectTags(context, _multipleTagSearchController),
+        // const SizedBox(
+        //   height: 10,
+        // ),
         Row(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: tagsChipFilter()),
+            Expanded(
+              child: _selectTags(
+                context,
+                _multipleTagSearchController,
+                quoteForUpdate: quoteForUpdate,
+              ),
+            ),
             createTagButton(),
           ],
         ),
         const SizedBox(
           height: 10,
         ),
-        if (isUpdateForm)
-          updateQuoteButton(quoteForUpdate!)
-        else
-          createQuoteButton(),
+        actionButton(quoteForUpdate),
       ],
     );
   }
 
-  FormBuilderTextField authorTextField() {
+  FormBuilderTextField _authorTextField() {
     return isUpdateForm
         ? FormBuilderTextField(
             name: 'author',
@@ -124,12 +130,14 @@ mixin QuoteFormMixin {
               labelText: 'Author',
             ),
             smartQuotesType: SmartQuotesType.enabled,
+            keyboardType: TextInputType.name,
             validator: (value) {
               if (value.isNullOrBlank) {
                 return "Can't be empty.";
               }
               return null;
             },
+            valueTransformer: (value) => value?.trim(),
           )
         : FormBuilderTextField(
             name: 'author',
@@ -139,29 +147,38 @@ mixin QuoteFormMixin {
             ),
             initialValue: 'Anonym',
             smartQuotesType: SmartQuotesType.enabled,
+            keyboardType: TextInputType.name,
             validator: (value) {
               if (value.isNullOrBlank) {
                 return "Can't be empty.";
               }
               return null;
             },
+            valueTransformer: (value) => value?.trim(),
           );
   }
 
-  FutureBuilder<List<Tag>> selectTags(
+  Consumer<DatabaseProvider> _selectTags(
     BuildContext context,
-    MultipleSearchController<Tag> controller,
-  ) {
-    final database = Provider.of<DatabaseProvider>(context, listen: false);
-    return FutureBuilder(
-      future: database.allTags,
-      initialData: const <Tag>[],
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (!snapshot.hasError) {
-            final tags = snapshot.data!;
-            return FormBuilderField<MultipleSearchSelection<Tag>>(
-              builder: (builder) => MultipleSearchSelection.creatable(
+    MultipleSearchController<Tag> controller, {
+    Quote? quoteForUpdate,
+  }) {
+    Future<List<Tag>>? tagsForThisQuote;
+    if (quoteForUpdate.isNotNull) {
+      tagsForThisQuote = Provider.of<DatabaseProvider>(context, listen: false).getTagsByIds(quoteForUpdate!.tagsId);
+    }
+
+    return Consumer<DatabaseProvider>(
+      builder: (context, database, child) => FutureBuilder(
+        future: Future.wait<List<Tag>?>(
+          [database.allTags, Future.value(tagsForThisQuote)],
+        ),
+        initialData: const <Tag>[],
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (!snapshot.hasError) {
+              final allTags = snapshot.data!.first! as List<Tag>;
+              return MultipleSearchSelection(
                 searchField: const TextField(
                   decoration: InputDecoration(
                     labelText: 'Tags',
@@ -169,120 +186,50 @@ mixin QuoteFormMixin {
                     border: OutlineInputBorder(),
                   ),
                 ),
-                items: tags,
+                items: allTags,
                 fieldToCheck: (tag) => tag.name,
-                // initialPickedItems:
-                //     isUpdateForm ? controller.getPickedItems() : <Tag>[],
+                showSelectAllButton: false,
                 pickedItemBuilder: (tag) => Chip(
-                  label: Text(tag.name),
-                  deleteIcon: const Icon(Icons.close),
+                  label: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(tag.name),
+                      const SizedBox(
+                        width: 2.5,
+                      ),
+                      const Icon(
+                        Icons.close,
+                        size: 16,
+                      ),
+                    ],
+                  ),
                 ),
+                clearSearchFieldOnSelect: true,
+                initialPickedItems:
+                    isUpdateForm ? snapshot.data!.last as List<Tag>? : <Tag>[],
                 controller: controller,
                 itemsVisibility: ShowedItemsVisibility.onType,
                 itemBuilder: (tag, i) => Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(tag.name),
                 ),
-                createOptions: CreateOptions(
-                  create: (text) => Tag(name: text),
-                  onCreated: (tag) async => await database.createTag(tag),
-                  pickCreated: true,
-                  createBuilder: (text) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Create tag: $text'),
-                  ),
-                ),
-              ),
-              name: 'newTags',
-              valueTransformer: (field) => controller.getPickedItems(),
-            );
-          } else {
-            return const Text('Error');
-          }
-        }
-
-        return const CircularProgressIndicator();
-      },
-    );
-  }
-
-  Consumer<DatabaseProvider> tagsChipFilter() {
-    return Consumer<DatabaseProvider>(
-      builder: (context, value, child) {
-        return FutureBuilder(
-          future: value.allTags,
-          initialData: const <Tag>[],
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                return FormBuilderFilterChip(
-                  name: 'tags',
-                  spacing: 10,
-                  options: [
-                    for (final tag in snapshot.data!)
-                      FormBuilderChipOption(
-                        value: tag.id!.toString(),
-                        child: Text(tag.name),
-                      ),
-                  ],
-                );
-              } else {
-                return const Text('No data');
-              }
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
               );
+            } else {
+              return const Text('Error');
             }
-          },
-        );
-      },
+          }
+
+          return const CircularProgressIndicator();
+        },
+      ),
     );
   }
 
   Consumer<DatabaseProvider> createTagButton() => Consumer<DatabaseProvider>(
         builder: (context, database, child) => ElevatedButton(
           onPressed: () async {
-            final tagToAdd = await showDialog<String?>(
-              context: context,
-              builder: (context) {
-                final textEditingController = TextEditingController();
-                final createTagFormKey = GlobalKey<FormState>();
-                return AlertDialog(
-                  title: const Text('Create tag'),
-                  content: Form(
-                    key: createTagFormKey,
-                    autovalidateMode: AutovalidateMode.always,
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Tag name',
-                      ),
-                      controller: textEditingController,
-                      validator: (value) {
-                        if (value.isNullOrBlank) {
-                          return "Can't be empty";
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(
-                        context,
-                        textEditingController.text,
-                      ),
-                      child: const Text('Save'),
-                    ),
-                  ],
-                );
-              },
-            );
+            final tagToAdd = await showCreateTagDialog(context);
 
             if (tagToAdd.isNotNullOrBlank) {
               database.createTag(Tag(name: tagToAdd!));
@@ -292,144 +239,58 @@ mixin QuoteFormMixin {
         ),
       );
 
-  Consumer<DatabaseProvider> createQuoteButton() {
+  Consumer<DatabaseProvider> actionButton(Quote? quoteForUpdate) {
     return Consumer<DatabaseProvider>(
       builder: (context, database, child) => ElevatedButton(
-        child: const Text('Save'),
+        child: isUpdateForm ? const Text('Update') : const Text('Create'),
         onPressed: () {
-          formKey.currentState!.saveAndValidate();
-
-          var actualFormValue = formKey.currentState!.value;
-
-          List<String>? newTagsValue(List<String>? tagsField) {
-            final tagsValue = tagsField ?? const <String>[];
-            if (tagsValue.isEmpty) {
-              return null;
-            } else {
-              final tagsValueAsIntList = tagsValue
-                  .map((tagsValue) => int.tryParse(tagsValue))
-                  .nonNulls;
-
-              return tagsValueAsIntList.isEmpty
-                  ? null
-                  : tagsValueAsIntList
-                      .map((value) => value.toString())
-                      .toList();
-            }
-          }
-
-          formKey.currentState!.patchValue({
-            'tags': newTagsValue(
-              actualFormValue['tags'] as List<String>?,
-            ),
-          });
-
-          actualFormValue = formKey.currentState!.value;
-
-          final newFormValue = actualFormValue.map(
-            (key, value) => MapEntry(key, value),
-          )..update(
-              'tags',
-              (value) => switch (value) {
-                final List<String> a when a.isNotEmpty => a.join(','),
-                _ => null,
-              },
-              ifAbsent: () => null,
+          final isValid = formKey.currentState?.saveAndValidate() ?? false;
+          if (isValid) {
+            final formValue = formKey.currentState!.value.map(
+              (key, value) => MapEntry(key, value),
             );
 
-          print(newFormValue);
-
-          final quoteFromForm = Quote.fromJson(newFormValue);
-          scheduleMicrotask(
-            () {
-              database.addQuote(quoteFromForm).then(
-                    (value) => ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Success fully added!'),
-                      ),
-                    ),
-                    onError: (error) =>
-                        ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('An error occurred.'),
-                      ),
-                    ),
-                  );
-            },
-          );
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
-
-  Consumer<DatabaseProvider> updateQuoteButton(Quote quote) {
-    return Consumer<DatabaseProvider>(
-      builder: (context, database, child) => ElevatedButton(
-        child: const Text('Save'),
-        onPressed: () {
-          formKey.currentState!.saveAndValidate();
-
-          var actualFormValue = formKey.currentState!.value;
-
-          List<String>? newTagsValue(List<String>? tagsField) {
-            final tagsValue = tagsField ?? const <String>[];
-            if (tagsValue.isEmpty) {
-              return null;
-            } else {
-              final tagsValueAsIntList = tagsValue
-                  .map((tagsValue) => int.tryParse(tagsValue))
-                  .nonNulls;
-
-              return tagsValueAsIntList.isEmpty
-                  ? null
-                  : tagsValueAsIntList
-                      .map((value) => value.toString())
-                      .toList();
-            }
-          }
-
-          formKey.currentState!.patchValue({
-            'tags': newTagsValue(
-              actualFormValue['tags'] as List<String>?,
-            ),
-          });
-
-          actualFormValue = formKey.currentState!.value;
-
-          final newFormValue = actualFormValue.map(
-            (key, value) => MapEntry(key, value),
-          )..update(
+            formValue.putIfAbsent(
               'tags',
-              (value) => switch (value) {
-                final List<String> a when a.isNotEmpty => a.join(','),
-                _ => null,
-              },
-              ifAbsent: () => null,
+              () => _multipleTagSearchController
+                  .getPickedItems()
+                  .map((tag) => tag.id)
+                  .nonNulls
+                  .join(idSeparatorChar),
             );
 
-          final quoteFromForm = Quote.fromJson(newFormValue).copyWith(
-            id: Value(quote.id),
-            createdAt: Value(quote.createdAt),
-          );
-          scheduleMicrotask(
-            () {
-              database.updateQuote(quoteFromForm).then(
-                    (value) => ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Successfully updated!'),
-                      ),
-                    ),
-                    onError: (error) =>
-                        ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('An error occurred.'),
-                      ),
-                    ),
-                  );
-            },
-          );
-          Navigator.pop(context);
+            final Quote quoteFromForm;
+
+            if (isUpdateForm) {
+              quoteFromForm = Quote.fromJson(formValue).copyWith(
+                id: Value(quoteForUpdate!.id),
+                createdAt: Value(quoteForUpdate.createdAt),
+              );
+            } else {
+              quoteFromForm = Quote.fromJson(formValue);
+            }
+
+            scheduleMicrotask(
+              () {
+                final result = isUpdateForm
+                    ? database.updateQuote(quoteFromForm)
+                    : database.addQuote(quoteFromForm);
+
+                result.then((value) {
+                  if (value case true || int _) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Successful operation')),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text('Error')));
+                  }
+                });
+              },
+            );
+
+            Navigator.pop(context);
+          }
         },
       ),
     );
