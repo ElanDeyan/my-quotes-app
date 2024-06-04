@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/screens/quote_screen.dart';
+import 'package:my_quotes/shared/quote_actions_popup_menu.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
@@ -56,55 +56,50 @@ final class MyQuotesScreen extends StatelessWidget {
                 );
               }
               return ListView.builder(
-                physics: const BouncingScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: data.length,
-                itemBuilder: (context, index) => ListTile(
-                  iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
-                  title: Text(
-                    data[index].content,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    data[index].author,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  onTap: () => showQuoteInfoDialog(context, data[index]),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => showDialog<void>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        icon: const Icon(Icons.warning),
-                        title: const Text('Are you sure?'),
-                        content: const Text("This can't be undone."),
-                        actions: [
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.resolveWith(
-                                (states) => Theme.of(context)
-                                    .colorScheme
-                                    .errorContainer,
+                semanticChildCount: data.length,
+                itemBuilder: (context, index) => Card(
+                  child: Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                data[index].content,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
-                            ),
-                            onPressed: () {
-                              database.removeQuote(data[index].id!);
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              'Delete',
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onErrorContainer,
+                              Text(
+                                data[index].author,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .fontSize,
+                                  fontWeight: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .fontWeight,
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Cancel'),
-                          ),
+                          quoteActionsMenu(context, data[index]),
                         ],
                       ),
                     ),
