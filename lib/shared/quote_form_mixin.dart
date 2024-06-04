@@ -106,19 +106,10 @@ mixin QuoteFormMixin {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: _selectTags(
-                context,
-                _multipleTagSearchController,
-                quoteForUpdate: quoteForUpdate,
-              ),
-            ),
-            _createTagButton(),
-          ],
+        _selectTags(
+          context,
+          _multipleTagSearchController,
+          quoteForUpdate: quoteForUpdate,
         ),
         const SizedBox(
           height: 10,
@@ -206,6 +197,7 @@ mixin QuoteFormMixin {
                 fieldToCheck: (tag) => tag.name,
                 clearSearchFieldOnSelect: true,
                 showSelectAllButton: false,
+                showClearAllButton: false,
                 initialPickedItems: !isUpdateForm
                     ? <Tag>[]
                     : <Tag>[...?snapshot.data!.last, ..._pickedItems]

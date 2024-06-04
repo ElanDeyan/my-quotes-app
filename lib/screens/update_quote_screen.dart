@@ -1,9 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/shared/quote_form_mixin.dart';
+import 'package:my_quotes/shared/show_create_tag_dialog.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +19,13 @@ final class UpdateQuoteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Update'),
+        actions: [
+          IconButton(
+            onPressed: () => showCreateTagDialog(context),
+            icon: const Icon(Icons.new_label),
+            tooltip: 'Create tag',
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
@@ -27,15 +33,6 @@ final class UpdateQuoteScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<void> showUpdateQuoteDialog(BuildContext context, Quote quote) {
-  return showDialog<void>(
-    context: context,
-    builder: (context) => Dialog.fullscreen(
-      child: UpdateQuoteScreen(quoteId: quote.id!),
-    ),
-  );
 }
 
 class UpdateQuoteScreenBody extends StatelessWidget {
