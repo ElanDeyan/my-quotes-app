@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/screens/quote_screen.dart';
-import 'package:my_quotes/screens/update_quote_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:my_quotes/shared/quote_actions_popup_menu.dart';
 
 class RandomQuoteCard extends StatelessWidget {
   const RandomQuoteCard({super.key, required this.quote});
@@ -30,7 +27,7 @@ class RandomQuoteCard extends StatelessWidget {
                 children: [
                   Flexible(
                     child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       child: Text(
                         quote.content,
                         softWrap: true,
@@ -62,12 +59,7 @@ class RandomQuoteCard extends StatelessWidget {
           ),
           Positioned(
             right: 0,
-            child: PopupMenuButton<Quote>(
-              icon: const Icon(Icons.more_vert),
-              tooltip: 'More actions',
-              position: PopupMenuPosition.under,
-              itemBuilder: (context) => _actions(context, quote),
-            ),
+            child: quoteActionsMenu(context, quote),
           ),
           const Positioned(
             top: -15,
@@ -80,85 +72,5 @@ class RandomQuoteCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  List<PopupMenuItem<Quote>> _actions(BuildContext context, Quote quote) {
-    return <PopupMenuItem<Quote>>[
-      PopupMenuItem<Quote>(
-        onTap: () => showQuoteInfoDialog(context, quote),
-        child: const Row(
-          children: [
-            Icon(Icons.info),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Info'),
-          ],
-        ),
-      ),
-      PopupMenuItem<Quote>(
-        onTap: () => showUpdateQuoteDialog(context, quote),
-        child: const Row(
-          children: [
-            Icon(Icons.edit),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Edit'),
-          ],
-        ),
-      ),
-      PopupMenuItem<Quote>(
-        onTap: () async {
-          await Clipboard.setData(ClipboardData(text: quote.shareableFormat))
-              .then(
-            (_) => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Copied to clipboard!')),
-            ),
-          );
-        },
-        child: const Row(
-          children: [
-            Icon(Icons.copy),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Copy'),
-          ],
-        ),
-      ),
-      if (quote.hasSourceUri) ...[
-        PopupMenuItem<Quote>(
-          onTap: () => launchUrl(Uri.parse(quote.sourceUri!)),
-          child: const Row(
-            children: [
-              Icon(Icons.open_in_new),
-              SizedBox(
-                width: 10,
-              ),
-              Text('Go to link'),
-            ],
-          ),
-        ),
-        PopupMenuItem<Quote>(
-          onTap: () async {
-            await Clipboard.setData(ClipboardData(text: quote.sourceUri!)).then(
-              (_) => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Link copied to clipboard!')),
-              ),
-            );
-          },
-          child: const Row(
-            children: [
-              Icon(Icons.link),
-              SizedBox(
-                width: 10,
-              ),
-              Text('Copy link'),
-            ],
-          ),
-        ),
-      ],
-    ];
   }
 }
