@@ -45,6 +45,8 @@ mixin QuoteFormMixin {
           maxLines: null,
           smartQuotesType: SmartQuotesType.enabled,
           keyboardType: TextInputType.multiline,
+          enableSuggestions: true,
+          smartDashesType: SmartDashesType.enabled,
           validator: (value) {
             if (value.isNullOrBlank) {
               return "Can't be empty.";
@@ -68,6 +70,9 @@ mixin QuoteFormMixin {
             hintText: 'Like a movie, book, event, place and etc',
           ),
           keyboardType: TextInputType.text,
+          enableSuggestions: true,
+          smartQuotesType: SmartQuotesType.enabled,
+          smartDashesType: SmartDashesType.enabled,
           valueTransformer: (value) => value?.trim(),
         ),
         const SizedBox(
@@ -81,6 +86,9 @@ mixin QuoteFormMixin {
             hintText: 'Link to the source',
           ),
           validator: sourceUriValidator,
+          enableSuggestions: true,
+          smartDashesType: SmartDashesType.enabled,
+          smartQuotesType: SmartQuotesType.enabled,
           keyboardType: TextInputType.url,
           valueTransformer: (value) => value?.trim(),
         ),
@@ -95,10 +103,6 @@ mixin QuoteFormMixin {
         const SizedBox(
           height: 10,
         ),
-        // selectTags(context, _multipleTagSearchController),
-        // const SizedBox(
-        //   height: 10,
-        // ),
         Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -110,13 +114,13 @@ mixin QuoteFormMixin {
                 quoteForUpdate: quoteForUpdate,
               ),
             ),
-            createTagButton(),
+            _createTagButton(),
           ],
         ),
         const SizedBox(
           height: 10,
         ),
-        actionButton(quoteForUpdate),
+        _actionButton(quoteForUpdate),
       ],
     );
   }
@@ -131,6 +135,8 @@ mixin QuoteFormMixin {
             ),
             smartQuotesType: SmartQuotesType.enabled,
             keyboardType: TextInputType.name,
+            enableSuggestions: true,
+            smartDashesType: SmartDashesType.enabled,
             validator: (value) {
               if (value.isNullOrBlank) {
                 return "Can't be empty.";
@@ -147,6 +153,8 @@ mixin QuoteFormMixin {
             ),
             initialValue: 'Anonym',
             smartQuotesType: SmartQuotesType.enabled,
+            enableSuggestions: true,
+            smartDashesType: SmartDashesType.enabled,
             keyboardType: TextInputType.name,
             validator: (value) {
               if (value.isNullOrBlank) {
@@ -165,7 +173,8 @@ mixin QuoteFormMixin {
   }) {
     Future<List<Tag>>? tagsForThisQuote;
     if (quoteForUpdate.isNotNull) {
-      tagsForThisQuote = Provider.of<DatabaseProvider>(context, listen: false).getTagsByIds(quoteForUpdate!.tagsId);
+      tagsForThisQuote = Provider.of<DatabaseProvider>(context, listen: false)
+          .getTagsByIds(quoteForUpdate!.tagsId);
     }
 
     return Consumer<DatabaseProvider>(
@@ -185,6 +194,8 @@ mixin QuoteFormMixin {
                     hintText: 'Tag name',
                     border: OutlineInputBorder(),
                   ),
+                  smartDashesType: SmartDashesType.enabled,
+                  smartQuotesType: SmartQuotesType.enabled,
                 ),
                 items: allTags,
                 fieldToCheck: (tag) => tag.name,
@@ -226,7 +237,7 @@ mixin QuoteFormMixin {
     );
   }
 
-  Consumer<DatabaseProvider> createTagButton() => Consumer<DatabaseProvider>(
+  Consumer<DatabaseProvider> _createTagButton() => Consumer<DatabaseProvider>(
         builder: (context, database, child) => ElevatedButton(
           onPressed: () async {
             final tagToAdd = await showCreateTagDialog(context);
@@ -239,7 +250,7 @@ mixin QuoteFormMixin {
         ),
       );
 
-  Consumer<DatabaseProvider> actionButton(Quote? quoteForUpdate) {
+  Consumer<DatabaseProvider> _actionButton(Quote? quoteForUpdate) {
     return Consumer<DatabaseProvider>(
       builder: (context, database, child) => ElevatedButton(
         child: isUpdateForm ? const Text('Update') : const Text('Create'),
