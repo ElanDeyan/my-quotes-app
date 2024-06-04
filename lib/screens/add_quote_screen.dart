@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:go_router/go_router.dart';
 import 'package:my_quotes/shared/quote_form_mixin.dart';
 
 final class AddQuoteScreen extends StatelessWidget {
@@ -11,59 +10,37 @@ final class AddQuoteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () => context.goNamed('mainScreen'),
-            icon: const Icon(Icons.close),
-          ),
-        ],
-      ),
-      body: const Padding(
-        padding: EdgeInsets.all(8.0),
+      appBar: AppBar(title: const Text('Add'),),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
         child: AddQuoteForm(),
       ),
     );
   }
 }
 
-Future<void> showAddQuoteModal(BuildContext context) {
-  return showModalBottomSheet<void>(
-    context: context,
-    useSafeArea: true,
-    isScrollControlled: true,
-    showDragHandle: true,
-    builder: (context) => const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      child: AddQuoteForm(),
-    ),
-  );
+Future<void> showAddQuoteDialog(BuildContext context) {
+  return showDialog(context: context, builder: (context) => const AddQuoteScreen(),);
 }
 
-final class AddQuoteForm extends StatefulWidget {
-  const AddQuoteForm({super.key});
+final class AddQuoteForm extends StatelessWidget with QuoteFormMixin {
+  AddQuoteForm({super.key});
 
-  @override
-  State<AddQuoteForm> createState() => _AddQuoteFormState();
-}
-
-class _AddQuoteFormState extends State<AddQuoteForm> with QuoteFormMixin {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Text(
-            'Add',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          FormBuilder(
-            key: formKey,
-            onChanged: formKey.currentState?.validate,
-            autovalidateMode: AutovalidateMode.always,
-            child: quoteFormBody(context),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            FormBuilder(
+              key: formKey,
+              onChanged: formKey.currentState?.validate,
+              autovalidateMode: AutovalidateMode.always,
+              child: quoteFormBody(context),
+            ),
+          ],
+        ),
       ),
     );
   }
