@@ -10,7 +10,9 @@ final class AddQuoteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add'),),
+      appBar: AppBar(
+        title: const Text('Add'),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
         child: AddQuoteForm(),
@@ -20,7 +22,10 @@ final class AddQuoteScreen extends StatelessWidget {
 }
 
 Future<void> showAddQuoteDialog(BuildContext context) {
-  return showDialog(context: context, builder: (context) => const AddQuoteScreen(),);
+  return showDialog(
+    context: context,
+    builder: (context) => const AddQuoteScreen(),
+  );
 }
 
 final class AddQuoteForm extends StatelessWidget with QuoteFormMixin {

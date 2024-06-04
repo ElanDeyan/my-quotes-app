@@ -18,7 +18,9 @@ final class UpdateQuoteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Update'),),
+      appBar: AppBar(
+        title: const Text('Update'),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
         child: UpdateQuoteScreenBody(quoteId: quoteId),
