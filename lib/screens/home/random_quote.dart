@@ -97,7 +97,7 @@ class RandomQuoteCard extends StatelessWidget {
         ),
       ),
       PopupMenuItem<Quote>(
-        onTap: () => showUpdateQuoteModal(context, quote),
+        onTap: () => showUpdateQuoteDialog(context, quote),
         child: const Row(
           children: [
             Icon(Icons.edit),

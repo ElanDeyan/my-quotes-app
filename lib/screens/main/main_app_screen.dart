@@ -57,7 +57,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
           : _notCompactWindowSizeBody(context),
       floatingActionButton: isCompactWindowSize
           ? FloatingActionButton(
-              onPressed: () => showAddQuoteModal(context),
+              onPressed: () => showAddQuoteDialog(context),
               backgroundColor: Theme.of(context).colorScheme.secondary,
               child: Icon(
                 Icons.add,
@@ -103,7 +103,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
                 ? FloatingActionButton(
                     backgroundColor:
                         Theme.of(context).colorScheme.surfaceContainerHighest,
-                    onPressed: () => showAddQuoteModal(context),
+                    onPressed: () => showAddQuoteDialog(context),
                     child: Icon(
                       Icons.add,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,

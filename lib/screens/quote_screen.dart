@@ -57,7 +57,7 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
         ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
-            showUpdateQuoteModal(context, quote);
+            showUpdateQuoteDialog(context, quote);
           },
           child: const Text('Edit'),
         ),
