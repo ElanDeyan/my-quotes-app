@@ -7,6 +7,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/iterable_extension.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/shared/show_create_tag_dialog.dart';
@@ -32,6 +33,8 @@ mixin QuoteFormMixin {
     }
     return null;
   }
+
+  final _pickedItems = <Tag>[];
 
   Column quoteFormBody(BuildContext context, {Quote? quoteForUpdate}) {
     return Column(
@@ -177,8 +180,6 @@ mixin QuoteFormMixin {
           .getTagsByIds(quoteForUpdate!.tagsId);
     }
 
-    final _pickedItems = <Tag>[];
-
     return Consumer<DatabaseProvider>(
       builder: (context, database, child) => FutureBuilder(
         future: Future.wait<List<Tag>?>(
@@ -198,15 +199,21 @@ mixin QuoteFormMixin {
                   ),
                   smartDashesType: SmartDashesType.enabled,
                   smartQuotesType: SmartQuotesType.enabled,
+                  keyboardType: TextInputType.name,
                 ),
                 controller: controller,
                 items: allTags,
                 fieldToCheck: (tag) => tag.name,
                 clearSearchFieldOnSelect: true,
                 showSelectAllButton: false,
-                initialPickedItems:
-                    isUpdateForm ? snapshot.data!.last : _pickedItems,
-                onPickedChange: (tags) => _pickedItems..clear()..addAll(tags),
+                initialPickedItems: !isUpdateForm
+                    ? <Tag>[]
+                    : <Tag>[...?snapshot.data!.last, ..._pickedItems]
+                        .uniques
+                        .toList(),
+                onPickedChange: (tags) => _pickedItems
+                  ..clear()
+                  ..addAll(tags),
                 pickedItemBuilder: (tag) => Chip(
                   label: Row(
                     mainAxisSize: MainAxisSize.min,
