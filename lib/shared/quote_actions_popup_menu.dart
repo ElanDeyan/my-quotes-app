@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
-import 'package:my_quotes/screens/update_quote_screen.dart';
+import 'package:my_quotes/shared/show_update_quote_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 PopupMenuButton<Quote> quoteActionsMenu(BuildContext context, Quote quote) {
