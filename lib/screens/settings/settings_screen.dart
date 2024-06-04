@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: Consumer<AppPreferences>(
         builder: (context, value, child) => ListView(
-          physics: const BouncingScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.brightness_medium),
