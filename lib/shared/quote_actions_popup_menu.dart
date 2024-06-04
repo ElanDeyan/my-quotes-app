@@ -41,7 +41,9 @@ PopupMenuButton<Quote> quoteActionsMenu(BuildContext context, Quote quote) {
               .then(
             (_) => ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Copied to clipboard!')),
-            ),onError: (error) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error'))),
+            ),
+            onError: (error) => ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text('Error'))),
           );
         },
         child: const Row(
