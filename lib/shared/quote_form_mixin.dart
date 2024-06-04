@@ -177,16 +177,18 @@ mixin QuoteFormMixin {
           .getTagsByIds(quoteForUpdate!.tagsId);
     }
 
+    final _pickedItems = <Tag>[];
+
     return Consumer<DatabaseProvider>(
       builder: (context, database, child) => FutureBuilder(
         future: Future.wait<List<Tag>?>(
           [database.allTags, Future.value(tagsForThisQuote)],
         ),
-        initialData: const <Tag>[],
+        initialData: const [<Tag>[], null],
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (!snapshot.hasError) {
-              final allTags = snapshot.data!.first! as List<Tag>;
+              final allTags = snapshot.data!.first!;
               return MultipleSearchSelection(
                 searchField: const TextField(
                   decoration: InputDecoration(
@@ -197,9 +199,14 @@ mixin QuoteFormMixin {
                   smartDashesType: SmartDashesType.enabled,
                   smartQuotesType: SmartQuotesType.enabled,
                 ),
+                controller: controller,
                 items: allTags,
                 fieldToCheck: (tag) => tag.name,
+                clearSearchFieldOnSelect: true,
                 showSelectAllButton: false,
+                initialPickedItems:
+                    isUpdateForm ? snapshot.data!.last : _pickedItems,
+                onPickedChange: (tags) => _pickedItems..clear()..addAll(tags),
                 pickedItemBuilder: (tag) => Chip(
                   label: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -216,10 +223,6 @@ mixin QuoteFormMixin {
                     ],
                   ),
                 ),
-                clearSearchFieldOnSelect: true,
-                initialPickedItems:
-                    isUpdateForm ? snapshot.data!.last as List<Tag>? : <Tag>[],
-                controller: controller,
                 itemsVisibility: ShowedItemsVisibility.onType,
                 itemBuilder: (tag, i) => Padding(
                   padding: const EdgeInsets.all(8),
@@ -238,7 +241,7 @@ mixin QuoteFormMixin {
   }
 
   Consumer<DatabaseProvider> _createTagButton() => Consumer<DatabaseProvider>(
-        builder: (context, database, child) => ElevatedButton(
+        builder: (context, database, child) => IconButton.filled(
           onPressed: () async {
             final tagToAdd = await showCreateTagDialog(context);
 
@@ -246,7 +249,7 @@ mixin QuoteFormMixin {
               database.createTag(Tag(name: tagToAdd!));
             }
           },
-          child: const Text('Create tag'),
+          icon: const Icon(Icons.new_label),
         ),
       );
 
