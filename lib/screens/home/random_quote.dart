@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/shared/quote_actions_popup_menu.dart';
+import 'package:my_quotes/shared/quote_actions.dart';
 
 class RandomQuoteCard extends StatelessWidget {
   const RandomQuoteCard({super.key, required this.quote});
@@ -59,7 +59,23 @@ class RandomQuoteCard extends StatelessWidget {
           ),
           Positioned(
             right: 0,
-            child: quoteActionsMenu(context, quote),
+            child: PopupMenuButton(
+              position: PopupMenuPosition.under,
+              itemBuilder: (context) => QuoteActions.popupMenuItems(
+                context,
+                quote,
+                actions: QuoteActions.values
+                  .where(
+                    (action) => switch (action) {
+                      QuoteActions.create ||
+                      QuoteActions.share ||
+                      QuoteActions.delete =>
+                        false,
+                      _ => true
+                    },
+                  ),
+              ),
+            ),
           ),
           const Positioned(
             top: -15,

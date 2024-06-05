@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/shared/quote_actions_popup_menu.dart';
+import 'package:my_quotes/shared/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
@@ -59,7 +59,8 @@ final class MyQuotesScreen extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: data.length,
                 semanticChildCount: data.length,
-                padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+                padding:
+                    const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
                 itemBuilder: (context, index) => Card(
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(
@@ -88,7 +89,19 @@ final class MyQuotesScreen extends StatelessWidget {
                       fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
                       fontWeight: FontWeight.w100,
                     ),
-                    trailing: quoteActionsMenu(context, data[index]),
+                    trailing: PopupMenuButton(
+                      position: PopupMenuPosition.under,
+                      itemBuilder: (context) => QuoteActions.popupMenuItems(
+                        context,
+                        data[index],
+                        actions: QuoteActions.values.where(
+                          (action) => switch (action) {
+                            QuoteActions.create => false,
+                            _ => true,
+                          },
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               );

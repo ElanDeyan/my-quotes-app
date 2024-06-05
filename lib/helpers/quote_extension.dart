@@ -1,6 +1,7 @@
 import 'package:basics/basics.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
+import 'package:my_quotes/shared/quote_actions.dart';
 
 extension QuoteExtension on Quote {
   bool get hasSourceAndUri => source.isNotNull && sourceUri.isNotNull;
@@ -17,4 +18,9 @@ Take a look in this quote:
 "$content"
 - $author${source.isNotNullOrBlank ? ", $source" : ''}.${sourceUri.isNotNullOrBlank ? '\nSee more in: $sourceUri' : ''}
 ''';
+
+  bool can(QuoteActions action) => switch (action) {
+    QuoteActions.copyLink || QuoteActions.goToLink => hasSourceUri,
+    _ => true,
+  };
 }
