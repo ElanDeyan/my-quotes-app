@@ -1,16 +1,16 @@
 import 'package:my_quotes/constants/color_pallete.dart';
 
-extension ColorPalleteExtension on ColorPallete {
-  static ColorPallete colorPalleteFromString(String string) {
-    const colorPalleteValues = ColorPallete.values;
+extension ColorSchemePaletteExtension on ColorSchemePalette {
+  static ColorSchemePalette? colorSchemePaletteFromString(String string) {
+    const colorSchemePaletteValues = ColorSchemePalette.values;
 
-    for (final colorPallete in colorPalleteValues) {
-      if (string.toLowerCase().compareTo(colorPallete.name.toLowerCase()) ==
+    for (final colorSchemePalette in colorSchemePaletteValues) {
+      if (string.toLowerCase().compareTo(colorSchemePalette.storageName.toLowerCase()) ==
           0) {
-        return colorPallete;
+        return colorSchemePalette;
       }
     }
 
-    throw ArgumentError.value(string, null, 'Invalid color pallete value');
+    return null;
   }
 }

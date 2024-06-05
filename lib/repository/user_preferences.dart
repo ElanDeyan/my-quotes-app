@@ -7,22 +7,22 @@ final class UserPreferences
   const UserPreferences();
 
   String get _defaultColorPallete =>
-      ColorPalleteRepository.defaultColorPallete.name;
+      ColorSchemePaletteRepository.defaultColorSchemePalette.uiName;
   String get _defaultThemeMode => ThemeModeRepository.defaultThemeMode.name;
   String get _defaultLanguage => LanguageRepository.defaultLanguage.toString();
 
   @override
-  Future<String> get colorPallete async {
+  Future<String> get colorSchemePalette async {
     return getStringPreference(
-      ColorPalleteRepository.colorPalleteKey,
+      ColorSchemePaletteRepository.colorSchemePaletteKey,
       orElse: _defaultColorPallete,
     );
   }
 
   @override
-  Future<bool> setColorPallete(String colorPallete) async {
+  Future<bool> setColorSchemePalette(String colorPallete) async {
     return setStringPreference(
-      ColorPalleteRepository.colorPalleteKey,
+      ColorSchemePaletteRepository.colorSchemePaletteKey,
       colorPallete,
     );
   }

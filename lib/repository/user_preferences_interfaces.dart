@@ -5,17 +5,17 @@ import 'package:my_quotes/constants/color_pallete.dart';
 abstract interface class UserPreferencesRepository
     implements
         LanguageRepository,
-        ColorPalleteRepository,
+        ColorSchemePaletteRepository,
         ThemeModeRepository {}
 
-abstract interface class ColorPalleteRepository {
-  static const colorPalleteKey = 'colorPallete';
+abstract interface class ColorSchemePaletteRepository {
+  static const colorSchemePaletteKey = 'colorPalette';
 
-  static const defaultColorPallete = ColorPallete.blue;
+  static const defaultColorSchemePalette = ColorSchemePalette.deepBlue;
 
-  Future<String> get colorPallete;
+  Future<String> get colorSchemePalette;
 
-  Future<bool> setColorPallete(String colorPallete);
+  Future<bool> setColorSchemePalette(String colorSchemePalette);
 }
 
 abstract interface class LanguageRepository {
