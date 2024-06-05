@@ -102,6 +102,12 @@ mixin QuoteFormMixin {
           FormBuilderCheckbox(
             name: 'isFavorite',
             title: const Text('Is favorite?'),
+            shape: StarBorder(
+              squash: .5,
+              innerRadiusRatio: .5,
+              side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            checkColor: Colors.transparent,
             valueTransformer: (value) => value ?? false,
           ),
           const SizedBox(
