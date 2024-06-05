@@ -51,6 +51,7 @@ class TagsScreen extends StatelessWidget {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: tags.length,
+      padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
       prototypeItem: ListTile(
         title: const Text('Tag name'),
         trailing: PopupMenuButton<Tag>(
