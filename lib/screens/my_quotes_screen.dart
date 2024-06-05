@@ -59,50 +59,36 @@ final class MyQuotesScreen extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: data.length,
                 semanticChildCount: data.length,
+                padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
                 itemBuilder: (context, index) => Card(
-                  child: Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                data[index].content,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                              Text(
-                                data[index].author,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .fontSize,
-                                  fontWeight: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .fontWeight,
-                                ),
-                              ),
-                            ],
-                          ),
-                          quoteActionsMenu(context, data[index]),
-                        ],
-                      ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
                     ),
+                    tileColor:
+                        Theme.of(context).colorScheme.surfaceContainerLowest,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    title: Text(
+                      data[index].content,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                    ),
+                    titleTextStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    subtitle: Text(data[index].author),
+                    subtitleTextStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
+                      fontWeight: FontWeight.w100,
+                    ),
+                    trailing: quoteActionsMenu(context, data[index]),
                   ),
                 ),
               );
