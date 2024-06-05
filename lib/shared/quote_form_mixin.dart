@@ -4,6 +4,7 @@ import 'package:basics/basics.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
@@ -206,9 +207,10 @@ mixin QuoteFormMixin {
                 clearSearchFieldOnSelect: true,
                 showSelectAllButton: false,
                 showClearAllButton: false,
-                initialPickedItems: <Tag>[...?snapshot.data!.last, ..._pickedItems]
-                        .uniques
-                        .toList(),
+                initialPickedItems: <Tag>[
+                  ...?snapshot.data!.last,
+                  ..._pickedItems,
+                ].uniques.toList(),
                 onPickedChange: (tags) => _pickedItems
                   ..clear()
                   ..addAll(tags),
@@ -285,12 +287,25 @@ mixin QuoteFormMixin {
 
                 result.then((value) {
                   if (value case true || int _) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Successful operation')),
-                    );
+                    FToast().init(context).showToast(
+                          child: Chip(
+                            label: Text(
+                              'Successfully ${isUpdateForm ? 'updated' : 'added'}!',
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(99),
+                            ),
+                          ),
+                        );
                   } else {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text('Error')));
+                    FToast().init(context).showToast(
+                          child: Chip(
+                            label: const Text('Error'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(99),
+                            ),
+                          ),
+                        );
                   }
                 });
               },

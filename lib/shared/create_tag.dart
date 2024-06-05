@@ -14,9 +14,15 @@ void createTag(BuildContext context) {
     result!.then((value) {
       if (value.isNotNullOrBlank) {
         final database = Provider.of<DatabaseProvider>(context, listen: false);
-        database.createTag(Tag(name: value!)).then((value) =>
-            FToast().init(context).showToast(child: const Text('Created!')),
-        );
+        database.createTag(Tag(name: value!));
+        FToast().init(context).showToast(
+              child: Chip(
+                label: const Text('Created!'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(99),
+                ),
+              ),
+            );
       }
     });
   }
