@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/shared/create_tag.dart';
 import 'package:my_quotes/shared/quote_form_mixin.dart';
-import 'package:my_quotes/shared/show_create_tag_dialog.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -21,16 +21,13 @@ final class UpdateQuoteScreen extends StatelessWidget {
         title: const Text('Update'),
         actions: [
           IconButton(
-            onPressed: () => showCreateTagDialog(context),
+            onPressed: () => createTag(context),
             icon: const Icon(Icons.new_label),
             tooltip: 'Create tag',
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-        child: UpdateQuoteScreenBody(quoteId: quoteId),
-      ),
+      body: UpdateQuoteScreenBody(quoteId: quoteId),
     );
   }
 }

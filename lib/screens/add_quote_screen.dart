@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:my_quotes/shared/create_tag.dart';
 import 'package:my_quotes/shared/quote_form_mixin.dart';
-import 'package:my_quotes/shared/show_create_tag_dialog.dart';
 
 final class AddQuoteScreen extends StatelessWidget {
   const AddQuoteScreen({super.key});
@@ -13,16 +13,13 @@ final class AddQuoteScreen extends StatelessWidget {
         title: const Text('Add'),
         actions: [
           IconButton(
-            onPressed: () => showCreateTagDialog(context),
+            onPressed: () => createTag(context),
             icon: const Icon(Icons.new_label),
             tooltip: 'Create tag',
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-        child: AddQuoteForm(),
-      ),
+      body: AddQuoteForm(),
     );
   }
 }
