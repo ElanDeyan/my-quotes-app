@@ -50,7 +50,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
           ? ColoredBox(
               color: _primaryContainerOf(context),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: bodyContent,
               ),
             )
@@ -132,7 +132,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             child: ColoredBox(
               color: _primaryContainerOf(context),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: bodyContent,
               ),
             ),
