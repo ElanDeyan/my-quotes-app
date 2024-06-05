@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -137,9 +138,9 @@ class QuoteScreenBody extends StatelessWidget {
                         Text('Id: ${quote.id!}'),
                         Text('Content: ${quote.content}'),
                         Text('Author: ${quote.author}'),
-                        if (quote.source.isNotNull)
+                        if (quote.source.isNotNullOrBlank)
                           Text('Source: ${quote.source!}'),
-                        if (quote.sourceUri.isNotNull)
+                        if (quote.sourceUri.isNotNullOrBlank)
                           Text('Link: ${quote.sourceUri}'),
                         Text(
                           'Created at: ${_dateFormat.format(quote.createdAt!)}',
