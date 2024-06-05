@@ -38,7 +38,11 @@ Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context, textEditingController.text),
+          onPressed: () {
+            if (updateTagFormKey.currentState?.validate() ?? false) {
+              Navigator.pop(context, textEditingController.text);
+            }
+          },
           child: const Text('Update'),
         ),
       ],

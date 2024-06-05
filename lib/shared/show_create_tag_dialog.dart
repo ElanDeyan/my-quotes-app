@@ -47,10 +47,11 @@ Future<String?>? showCreateTagDialog(
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(
-              context,
-              textEditingController.text,
-            ),
+            onPressed: () {
+            if (createTagFormKey.currentState?.validate() ?? false) {
+              Navigator.pop(context, textEditingController.text);
+            }
+          },
             child: const Text('Save'),
           ),
         ],
