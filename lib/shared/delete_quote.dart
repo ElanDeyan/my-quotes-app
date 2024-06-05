@@ -11,7 +11,14 @@ Future<void> deleteQuote(BuildContext context, Quote quote) async {
   result.then((value) {
     if (value == true) {
       _deleteQuote(context, quote);
-      FToast().init(context).showToast(child: const Text('Deleted'));
+      FToast().init(context).showToast(
+            child: Chip(
+              label: const Text('Deleted'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(99),
+              ),
+            ),
+          );
     }
   });
 }
