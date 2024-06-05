@@ -1,8 +1,7 @@
-import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/shared/create_tag.dart';
 import 'package:my_quotes/shared/delete_tag.dart';
-import 'package:my_quotes/shared/show_create_tag_dialog.dart';
 import 'package:my_quotes/shared/update_tag.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -17,16 +16,7 @@ class TagsScreen extends StatelessWidget {
         title: const Text('Tags'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await showCreateTagDialog(context)?.then(
-            (value) {
-              if (value.isNotNullOrBlank) {
-                Provider.of<DatabaseProvider>(context, listen: false)
-                    .createTag(Tag(name: value!));
-              }
-            },
-          );
-        },
+        onPressed: () => createTag(context),
         child: const Icon(Icons.new_label),
       ),
       body: Padding(
