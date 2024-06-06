@@ -6,8 +6,8 @@ import 'package:my_quotes/shared/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
-class RandomQuoteCard extends StatelessWidget {
-  const RandomQuoteCard({super.key, required this.quote});
+class QuoteCard extends StatelessWidget {
+  const QuoteCard({super.key, required this.quote});
 
   final Quote quote;
 

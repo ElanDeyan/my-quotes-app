@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/screens/home/random_quote.dart';
+import 'package:my_quotes/shared/quote_card.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -53,7 +53,7 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: RandomQuoteCard(
+                    child: QuoteCard(
                       quote: quote,
                     ),
                   ),
