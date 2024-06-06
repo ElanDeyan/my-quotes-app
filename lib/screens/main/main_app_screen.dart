@@ -76,7 +76,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
   List<IconButton> _actionsForCompactWindow(BuildContext context) {
     return <IconButton>[
       IconButton(
-        onPressed: () => context.goNamed(settingsNavigationKey),
+        onPressed: () => context.pushNamed(settingsNavigationKey),
         icon: const Icon(Icons.settings),
       ),
     ];
@@ -119,7 +119,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
                 ),
             ],
             trailing: IconButton(
-              onPressed: () => context.goNamed('settings'),
+              onPressed: () => context.pushNamed('settings'),
               icon: settingsDestination.selectedIcon,
               tooltip: settingsDestination.label,
             ),

@@ -22,7 +22,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () => context.goNamed('mainScreen'),
+          onPressed: () => context.canPop() ? context.pop(context) : context.pushNamed('mainScreen'),
         ),
         title: const Text(screenName),
       ),
