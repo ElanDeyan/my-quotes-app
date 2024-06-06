@@ -14,23 +14,25 @@ final routesConfig = GoRouter(
       builder: (context, state) => const MainAppScreen(
         destinations: DestinationsMixin.destinationsData,
       ),
-    ),
-    GoRoute(
-      path: '/settings',
-      name: 'settings',
-      builder: (context, state) => const SettingsScreen(),
-    ),
-    GoRoute(
-      path: '/quotes/:id',
-      name: 'quote',
-      builder: (context, state) => QuoteScreen(
-        quoteId: int.parse(state.pathParameters['id']!),
-      ),
-    ),
-    GoRoute(
-      path: '/tags',
-      name: 'tags',
-      builder: (context, state) => const TagsScreen(),
+      routes: [
+        GoRoute(
+          path: 'settings',
+          name: 'settings',
+          builder: (context, state) => const SettingsScreen(),
+        ),
+        GoRoute(
+          path: 'quotes/:id',
+          name: 'quote',
+          builder: (context, state) => QuoteScreen(
+            quoteId: int.parse(state.pathParameters['id']!),
+          ),
+        ),
+        GoRoute(
+          path: 'tags',
+          name: 'tags',
+          builder: (context, state) => const TagsScreen(),
+        ),
+      ],
     ),
   ],
 );
