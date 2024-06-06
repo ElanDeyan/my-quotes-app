@@ -79,15 +79,17 @@ final class MyApp extends StatelessWidget {
           themeMode: appPreferences.themeMode,
           theme: ThemeData(
             useMaterial3: true,
+            brightness: Brightness.light,
             colorScheme: ColorSchemePalette.lightColorScheme(
               appPreferences.colorSchemePalette,
-            ).colorScheme,
+            ),
           ),
           darkTheme: ThemeData(
             useMaterial3: true,
+            brightness: Brightness.dark,
             colorScheme: ColorSchemePalette.darkColorScheme(
               appPreferences.colorSchemePalette,
-            ).colorScheme,
+            ),
           ),
           localizationsDelegates: const [
             AppLocalizations.delegate,
