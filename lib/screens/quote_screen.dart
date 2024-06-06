@@ -24,12 +24,7 @@ final class QuoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () => context.goNamed('mainScreen'),
-            icon: const Icon(Icons.close),
-          ),
-        ],
+        title: const Text('Quote info'),
       ),
       body: QuoteScreenBody(quoteId: quoteId),
     );
