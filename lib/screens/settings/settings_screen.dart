@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_quotes/constants/color_pallete.dart';
+import 'package:my_quotes/helpers/string_extension.dart';
 import 'package:my_quotes/screens/settings/color_pallete_radio_list.dart';
 import 'package:my_quotes/screens/settings/language_radio_list.dart';
 import 'package:my_quotes/screens/settings/theme_mode_radio_list.dart';
@@ -20,19 +22,19 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () => context.goNamed('mainScreen'),
+          onPressed: () => context.canPop() ? context.pop(context) : context.pushNamed('mainScreen'),
         ),
         title: const Text(screenName),
       ),
       body: Consumer<AppPreferences>(
         builder: (context, value, child) => ListView(
-          physics: const BouncingScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.brightness_medium),
               title: const Text('Theme mode'),
               subtitle: Text(
-                value.themeMode.name,
+                value.themeMode.name.toTitleCase(),
               ),
               onTap: () => showDialog<void>(
                 context: context,
@@ -47,19 +49,23 @@ class SettingsScreen extends StatelessWidget {
               subtitle: Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: value.colorPallete.color,
+                    backgroundColor: ColorSchemePalette.primaryColor(
+                      context,
+                      value.colorSchemePalette,
+                      MediaQuery.platformBrightnessOf(context),
+                    ),
                     minRadius: 5.0,
                   ),
                   const SizedBox(
                     width: 5.0,
                   ),
-                  Text(value.colorPallete.name),
+                  Text(value.colorSchemePalette.uiName),
                 ],
               ),
               onTap: () => showDialog<void>(
                 context: context,
                 builder: (_) => const Dialog(
-                  child: ColorPalleteRadioList(),
+                  child: ColorSchemePaletteRadioList(),
                 ),
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:my_quotes/constants/color_pallete.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
@@ -45,8 +46,8 @@ final class MyAppProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => _appPreferences),
-        ChangeNotifierProvider(create: (context) => _databaseNotifier),
+        ChangeNotifierProvider(create: (_) => _appPreferences),
+        ChangeNotifierProvider(create: (_) => _databaseNotifier),
       ],
       child: const MyApp(),
     );
@@ -78,15 +79,16 @@ final class MyApp extends StatelessWidget {
           themeMode: appPreferences.themeMode,
           theme: ThemeData(
             useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: appPreferences.colorPallete.color,
+            brightness: Brightness.light,
+            colorScheme: ColorSchemePalette.lightColorScheme(
+              appPreferences.colorSchemePalette,
             ),
           ),
           darkTheme: ThemeData(
             useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: appPreferences.colorPallete.color,
-              brightness: Brightness.dark,
+            brightness: Brightness.dark,
+            colorScheme: ColorSchemePalette.darkColorScheme(
+              appPreferences.colorSchemePalette,
             ),
           ),
           localizationsDelegates: const [

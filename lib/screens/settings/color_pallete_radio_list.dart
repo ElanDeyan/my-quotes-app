@@ -3,35 +3,42 @@ import 'package:my_quotes/constants/color_pallete.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 
-final class ColorPalleteRadioList extends StatefulWidget {
-  const ColorPalleteRadioList({super.key});
+final class ColorSchemePaletteRadioList extends StatefulWidget {
+  const ColorSchemePaletteRadioList({super.key});
 
   @override
-  State<ColorPalleteRadioList> createState() => _ColorPalleteRadioListState();
+  State<ColorSchemePaletteRadioList> createState() => _ColorSchemePaletteRadioListState();
 }
 
-final class _ColorPalleteRadioListState extends State<ColorPalleteRadioList> {
-  late ColorPallete _colorPalleteGroupValue;
+final class _ColorSchemePaletteRadioListState extends State<ColorSchemePaletteRadioList> {
+  late ColorSchemePalette _colorSchemePaletteGroupValue;
   @override
   Widget build(BuildContext context) {
     final preferences = Provider.of<AppPreferences>(context);
-    _colorPalleteGroupValue = preferences.colorPallete;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text('Choose a color pallete:'),
-        for (final colorPallete in ColorPallete.values)
-          RadioListTile(
-            value: colorPallete,
-            groupValue: _colorPalleteGroupValue,
-            onChanged: (value) => setState(() {
-              _colorPalleteGroupValue = value!;
-              preferences.colorPallete = value;
-            }),
-            selected: _colorPalleteGroupValue == colorPallete,
-            title: Text(colorPallete.name),
-          ),
-      ],
+    _colorSchemePaletteGroupValue = preferences.colorSchemePalette;
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Choose a color pallete', style: TextStyle(
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
+            ),),
+            for (final colorSchemePalette in ColorSchemePalette.values)
+              RadioListTile(
+                value: colorSchemePalette,
+                groupValue: _colorSchemePaletteGroupValue,
+                onChanged: (value) => setState(() {
+                  _colorSchemePaletteGroupValue = value!;
+                  preferences.colorSchemePalette = value;
+                }),
+                selected: _colorSchemePaletteGroupValue == colorSchemePalette,
+                title: Text(colorSchemePalette.uiName),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

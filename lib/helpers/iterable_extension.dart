@@ -8,4 +8,6 @@ extension RandomElement<E> on List<E> {
   }
 
   E? get singleSampleOrNull => isEmpty ? null : singleSample;
+
+  Iterable<E> get uniques => toSet();
 }

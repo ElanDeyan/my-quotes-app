@@ -1,24 +1,164 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_quotes/constants/destinations.dart';
+import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
-import 'package:my_quotes/screens/main/scaffold_with_navigation_bar.dart';
-import 'package:my_quotes/screens/main/scaffold_with_rail.dart';
+import 'package:my_quotes/screens/my_quotes_screen.dart';
+import 'package:my_quotes/shared/show_add_quote_dialog.dart';
 
-final class MainAppScreen extends StatelessWidget with DestinationsMixin {
-  const MainAppScreen({super.key});
+final class MainAppScreen extends StatefulWidget with DestinationsMixin {
+  const MainAppScreen({super.key, required this.destinations});
+
+  final Map<String, DestinationData> destinations;
+
+  @override
+  State<MainAppScreen> createState() => _MainAppScreenState();
+}
+
+final class _MainAppScreenState extends State<MainAppScreen> {
+  int _selectedIndex = 0;
+
+  Widget get bodyContent => switch (_selectedIndex) {
+        0 => const HomeScreen(),
+        1 => const MyQuotesScreen(),
+        _ => throw UnimplementedError(),
+      };
+
+  void _updateIndex(int value) => setState(() {
+        _selectedIndex = value;
+      });
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // TODO: try to fix when the screen transition 'reset' the initial index
-        return constraints.maxWidth > constraints.maxHeight
-            ? const ScaffoldWithRail(
-                destinations: DestinationsMixin.destinationsData,
-              )
-            : const ScaffoldWithNavigationBar(
-                destinations: DestinationsMixin.destinationsData,
-              );
-      },
+    final windowSize = MediaQuery.sizeOf(context);
+
+    final isCompactWindowSize = windowSize.width < 600;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My quotes'),
+        actions: [
+          if (bodyContent is MyQuotesScreen)
+            IconButton(
+              icon: const Icon(Icons.label),
+              onPressed: () => context.pushNamed('tags'),
+            ),
+          if (isCompactWindowSize) ..._actionsForCompactWindow(context),
+        ],
+      ),
+      body: isCompactWindowSize
+          ? ColoredBox(
+              color: _primaryContainerOf(context),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: bodyContent,
+              ),
+            )
+          : _notCompactWindowSizeBody(context),
+      floatingActionButton: isCompactWindowSize
+          ? FloatingActionButton(
+              onPressed: () => showAddQuoteDialog(context),
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            )
+          : null,
+      bottomNavigationBar:
+          isCompactWindowSize ? _myBottomNavigationBar() : null,
+    );
+  }
+
+  Color _primaryContainerOf(BuildContext context) =>
+      Theme.of(context).colorScheme.primaryContainer;
+
+  List<IconButton> _actionsForCompactWindow(BuildContext context) {
+    return <IconButton>[
+      IconButton(
+        onPressed: () => context.pushNamed(settingsNavigationKey),
+        icon: const Icon(Icons.settings),
+      ),
+    ];
+  }
+
+  Widget _notCompactWindowSizeBody(BuildContext context) {
+    final mainDestinations = widget.destinations.values.where(
+      (element) => element.debugLabel != 'settings',
+    );
+
+    final settingsDestination = widget.destinations[settingsNavigationKey]!;
+
+    final windowSize = MediaQuery.sizeOf(context);
+
+    final isCompactWindowSize = windowSize.width < 600;
+
+    return SafeArea(
+      child: Row(
+        children: [
+          NavigationRail(
+            labelType: NavigationRailLabelType.selected,
+            onDestinationSelected: _updateIndex,
+            leading: !isCompactWindowSize
+                ? FloatingActionButton(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
+                    onPressed: () => showAddQuoteDialog(context),
+                    child: Icon(
+                      Icons.add,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  )
+                : null,
+            destinations: <NavigationRailDestination>[
+              for (final destination in mainDestinations)
+                NavigationRailDestination(
+                  icon: destination.outlinedIcon,
+                  label: Text(destination.label),
+                  selectedIcon: destination.selectedIcon,
+                ),
+            ],
+            trailing: IconButton(
+              onPressed: () => context.pushNamed('settings'),
+              icon: settingsDestination.selectedIcon,
+              tooltip: settingsDestination.label,
+            ),
+            selectedIndex: _selectedIndex,
+          ),
+          const VerticalDivider(
+            width: 0.0,
+          ),
+          Expanded(
+            child: ColoredBox(
+              color: _primaryContainerOf(context),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: bodyContent,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  NavigationBar _myBottomNavigationBar() {
+    final mainDestinations = widget.destinations.values.where(
+      (element) => element.debugLabel != 'settings',
+    );
+
+    return NavigationBar(
+      selectedIndex: _selectedIndex,
+      onDestinationSelected: _updateIndex,
+      destinations: <NavigationDestination>[
+        for (final destination in mainDestinations)
+          NavigationDestination(
+            icon: destination.outlinedIcon,
+            label: destination.label,
+            selectedIcon: destination.selectedIcon,
+            tooltip: destination.label,
+          ),
+      ],
     );
   }
 }

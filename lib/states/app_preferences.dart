@@ -10,7 +10,8 @@ final class AppPreferences extends ChangeNotifier {
   AppPreferences({required UserPreferencesRepository userPreferencesRepository})
       : _userPreferencesRepository = userPreferencesRepository,
         _themeMode = ThemeModeRepository.defaultThemeMode,
-        _colorPallete = ColorPalleteRepository.defaultColorPallete,
+        _colorSchemePalette =
+            ColorSchemePaletteRepository.defaultColorSchemePalette,
         _language = LanguageRepository.defaultLanguage.toString() {
     scheduleMicrotask(loadLocalPreferences);
   }
@@ -21,9 +22,15 @@ final class AppPreferences extends ChangeNotifier {
     _themeMode = ThemeModeExtension.themeModeFromString(
       await _userPreferencesRepository.themeMode,
     );
-    _colorPallete = ColorPalleteExtension.colorPalleteFromString(
-      await _userPreferencesRepository.colorPallete,
-    );
+    final localColorScheme = ColorSchemePaletteExtension.colorSchemePaletteFromString(
+              await _userPreferencesRepository.colorSchemePalette,
+            );
+    if (localColorScheme != null) {
+      _colorSchemePalette = localColorScheme;
+    } else {
+      _colorSchemePalette = ColorSchemePaletteRepository.defaultColorSchemePalette;
+      colorSchemePalette = _colorSchemePalette;
+    }
     _language = await _userPreferencesRepository.language;
   }
 
@@ -55,15 +62,16 @@ final class AppPreferences extends ChangeNotifier {
     notifyListeners();
   }
 
-  ColorPallete _colorPallete;
+  ColorSchemePalette _colorSchemePalette;
 
-  ColorPallete get colorPallete => _colorPallete;
+  ColorSchemePalette get colorSchemePalette => _colorSchemePalette;
 
-  set colorPallete(ColorPallete colorPallete) {
-    _colorPallete = colorPallete;
+  set colorSchemePalette(ColorSchemePalette colorSchemePalette) {
+    _colorSchemePalette = colorSchemePalette;
 
     scheduleMicrotask(() {
-      _userPreferencesRepository.setColorPallete(_colorPallete.name);
+      _userPreferencesRepository
+          .setColorSchemePalette(_colorSchemePalette.storageName);
     });
 
     notifyListeners();

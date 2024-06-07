@@ -1,9 +1,9 @@
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/screens/add_quote_screen.dart';
+import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/main/main_app_screen.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/screens/settings/settings_screen.dart';
-import 'package:my_quotes/screens/update_quote_screen.dart';
+import 'package:my_quotes/screens/tags_screen.dart';
 
 final routesConfig = GoRouter(
   initialLocation: '/',
@@ -11,30 +11,28 @@ final routesConfig = GoRouter(
     GoRoute(
       path: '/',
       name: 'mainScreen',
-      builder: (context, state) => const MainAppScreen(),
-    ),
-    GoRoute(
-      path: '/settings',
-      name: 'settings',
-      builder: (context, state) => const SettingsScreen(),
-    ),
-    GoRoute(
-      path: '/quotes/:id',
-      name: 'quote',
-      builder: (context, state) => QuoteScreen(
-        quoteId: int.parse(state.pathParameters['id']!),
+      builder: (context, state) => const MainAppScreen(
+        destinations: DestinationsMixin.destinationsData,
       ),
-    ),
-    GoRoute(
-      path: '/add',
-      name: 'add',
-      builder: (context, state) => const AddQuoteScreen(),
-    ),
-    GoRoute(
-      path: '/update/:id',
-      name: 'update',
-      builder: (context, state) =>
-          UpdateQuoteScreen(quoteId: int.parse(state.pathParameters['id']!)),
+      routes: [
+        GoRoute(
+          path: 'settings',
+          name: 'settings',
+          builder: (context, state) => const SettingsScreen(),
+        ),
+        GoRoute(
+          path: 'quotes/:id',
+          name: 'quote',
+          builder: (context, state) => QuoteScreen(
+            quoteId: int.parse(state.pathParameters['id']!),
+          ),
+        ),
+        GoRoute(
+          path: 'tags',
+          name: 'tags',
+          builder: (context, state) => const TagsScreen(),
+        ),
+      ],
     ),
   ],
 );
