@@ -9,6 +9,7 @@ Future<bool?> showDeleteTagDialog(BuildContext context, Tag tag) {
       title: Text('Delete "${tag.name}" tag?'),
       content: const Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("This can't be undone."),
           Text('All quotes with this tag will only loose this tag.'),

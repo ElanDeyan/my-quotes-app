@@ -19,8 +19,8 @@ Take a look in this quote:
 - $author${source.isNotNullOrBlank ? ", $source" : ''}.${sourceUri.isNotNullOrBlank ? '\nSee more in: $sourceUri' : ''}
 ''';
 
-  bool can(QuoteActions action) => switch (action) {
-    QuoteActions.copyLink || QuoteActions.goToLink => hasSourceUri,
-    _ => true,
-  };
+  bool canPerform(QuoteActions action) => switch (action) {
+        QuoteActions.copyLink || QuoteActions.goToLink => hasSourceUri,
+        _ => true,
+      };
 }

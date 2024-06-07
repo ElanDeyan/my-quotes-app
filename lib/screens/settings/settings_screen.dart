@@ -22,7 +22,9 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () => context.canPop() ? context.pop(context) : context.pushNamed('mainScreen'),
+          onPressed: () => context.canPop()
+              ? context.pop(context)
+              : context.pushNamed('mainScreen'),
         ),
         title: const Text(screenName),
       ),
@@ -31,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             ListTile(
-              leading: const Icon(Icons.brightness_medium),
+              leading: const Icon(Icons.brightness_medium_outlined),
               title: const Text('Theme mode'),
               subtitle: Text(
                 value.themeMode.name.toTitleCase(),
@@ -44,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.palette),
+              leading: const Icon(Icons.palette_outlined),
               title: const Text('Color pallete'),
               subtitle: Row(
                 children: [
@@ -70,7 +72,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.translate),
+              leading: const Icon(Icons.translate_outlined),
               title: const Text('App language'),
               subtitle: Text(value.language),
               onTap: () => showDialog<void>(
@@ -81,7 +83,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.info),
+              leading: const Icon(Icons.info_outline),
               title: const Text('App info'),
               onTap: () => showAboutDialog(
                 context: context,
@@ -103,7 +105,7 @@ class SettingsScreen extends StatelessWidget {
                             'https://www.linkedin.com/in/elan-almeida-a3391225b/',
                           ),
                         ),
-                        icon: const FaIcon(FontAwesomeIcons.linkedin),
+                        icon: const FaIcon(FontAwesomeIcons.linkedinIn),
                       ),
                     ],
                   ),

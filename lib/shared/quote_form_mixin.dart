@@ -39,91 +39,97 @@ mixin QuoteFormMixin {
   Widget quoteFormBody(BuildContext context, {Quote? quoteForUpdate}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      child: Column(
-        children: [
-          FormBuilderTextField(
-            name: 'content',
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Content',
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints:
+            BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.8),
+        child: Column(
+          children: [
+            FormBuilderTextField(
+              name: 'content',
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Content',
+              ),
+              maxLines: null,
+              smartQuotesType: SmartQuotesType.enabled,
+              keyboardType: TextInputType.multiline,
+              enableSuggestions: true,
+              smartDashesType: SmartDashesType.enabled,
+              validator: (value) {
+                if (value.isNullOrBlank) {
+                  return "Can't be empty.";
+                }
+                return null;
+              },
+              valueTransformer: (value) => value?.trim(),
             ),
-            maxLines: null,
-            smartQuotesType: SmartQuotesType.enabled,
-            keyboardType: TextInputType.multiline,
-            enableSuggestions: true,
-            smartDashesType: SmartDashesType.enabled,
-            validator: (value) {
-              if (value.isNullOrBlank) {
-                return "Can't be empty.";
-              }
-              return null;
-            },
-            valueTransformer: (value) => value?.trim(),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          _authorTextField(),
-          const SizedBox(
-            height: 10,
-          ),
-          FormBuilderTextField(
-            name: 'source',
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Source',
-              hintText: 'Like a movie, book, event, place and etc',
+            const SizedBox(
+              height: 10,
             ),
-            keyboardType: TextInputType.text,
-            enableSuggestions: true,
-            smartQuotesType: SmartQuotesType.enabled,
-            smartDashesType: SmartDashesType.enabled,
-            valueTransformer: (value) => value?.trim(),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          FormBuilderTextField(
-            name: 'sourceUri',
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Source link',
-              hintText: 'Link to the source',
+            _authorTextField(),
+            const SizedBox(
+              height: 10,
             ),
-            validator: sourceUriValidator,
-            enableSuggestions: true,
-            smartDashesType: SmartDashesType.enabled,
-            smartQuotesType: SmartQuotesType.enabled,
-            keyboardType: TextInputType.url,
-            valueTransformer: (value) => value?.trim(),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          FormBuilderCheckbox(
-            name: 'isFavorite',
-            title: const Text('Is favorite?'),
-            shape: StarBorder(
-              squash: .5,
-              innerRadiusRatio: .5,
-              side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+            FormBuilderTextField(
+              name: 'source',
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Source',
+                hintText: 'Like a movie, book, event, place and etc',
+              ),
+              keyboardType: TextInputType.text,
+              enableSuggestions: true,
+              smartQuotesType: SmartQuotesType.enabled,
+              smartDashesType: SmartDashesType.enabled,
+              valueTransformer: (value) => value?.trim(),
             ),
-            checkColor: Colors.transparent,
-            valueTransformer: (value) => value ?? false,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          _selectTags(
-            context,
-            _multipleTagSearchController,
-            quoteForUpdate: quoteForUpdate,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          _actionButton(quoteForUpdate),
-        ],
+            const SizedBox(
+              height: 10,
+            ),
+            FormBuilderTextField(
+              name: 'sourceUri',
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Source link',
+                hintText: 'Link to the source',
+              ),
+              validator: sourceUriValidator,
+              enableSuggestions: true,
+              smartDashesType: SmartDashesType.enabled,
+              smartQuotesType: SmartQuotesType.enabled,
+              keyboardType: TextInputType.url,
+              valueTransformer: (value) => value?.trim(),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            FormBuilderCheckbox(
+              name: 'isFavorite',
+              title: const Text('Is favorite?'),
+              shape: StarBorder(
+                squash: .5,
+                innerRadiusRatio: .5,
+                side:
+                    BorderSide(color: Theme.of(context).colorScheme.onSurface),
+              ),
+              checkColor: Colors.transparent,
+              valueTransformer: (value) => value ?? false,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            _selectTags(
+              context,
+              _multipleTagSearchController,
+              quoteForUpdate: quoteForUpdate,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            _actionButton(quoteForUpdate),
+          ],
+        ),
       ),
     );
   }
@@ -215,6 +221,7 @@ mixin QuoteFormMixin {
                   ..clear()
                   ..addAll(tags),
                 pickedItemBuilder: (tag) => Chip(
+                  labelPadding: const EdgeInsets.all(1),
                   label: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -225,7 +232,7 @@ mixin QuoteFormMixin {
                       ),
                       const Icon(
                         Icons.close,
-                        size: 16,
+                        size: 14,
                       ),
                     ],
                   ),
@@ -249,7 +256,7 @@ mixin QuoteFormMixin {
 
   Consumer<DatabaseProvider> _actionButton(Quote? quoteForUpdate) {
     return Consumer<DatabaseProvider>(
-      builder: (context, database, child) => ElevatedButton.icon(
+      builder: (context, database, child) => OutlinedButton.icon(
         icon: isUpdateForm ? const Icon(Icons.update) : const Icon(Icons.add),
         label: isUpdateForm ? const Text('Update') : const Text('Create'),
         onPressed: () {
