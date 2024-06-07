@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/screens/search/search_quote_results.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -63,26 +64,10 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
                   child: Text('No results found'),
                 );
               }
-              return ListView.builder(
-                itemCount: searchResults.length,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text(
-                    searchResults[index].content,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    searchResults[index].author,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  onTap: () {
-                    context.goNamed(
-                      'quote',
-                      pathParameters: {'id': '${searchResults[index].id}'},
-                    );
-                  },
-                ),
+              return SearchQuoteResults(searchResults: searchResults);
+            } else {
+              return Center(
+                child: Text(snapshot.error.toString()),
               );
             }
           } else if (snapshot.connectionState == ConnectionState.waiting) {
