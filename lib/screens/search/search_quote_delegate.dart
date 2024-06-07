@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
@@ -80,59 +81,61 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
       );
 
   @override
-  Widget buildSuggestions(BuildContext context) => FutureBuilder(
-        future: allQuotes,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (!snapshot.hasError) {
-              if (snapshot.data!.isEmpty) {
-                return const Center(
-                  child: Text('No quotes found'),
+  Widget buildSuggestions(BuildContext context) => query.isBlank
+      ? const SizedBox.shrink()
+      : FutureBuilder(
+          future: allQuotes,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (!snapshot.hasError) {
+                if (snapshot.data!.isEmpty) {
+                  return const Center(
+                    child: Text('No quotes found'),
+                  );
+                }
+
+                final searchResults = snapshot.data!
+                    .where(
+                      (quote) => quote.dataForQuery
+                          .toLowerCase()
+                          .contains(query.toLowerCase()),
+                    )
+                    .toList();
+
+                if (searchResults.isEmpty) {
+                  return const Center(
+                    child: Text('No results found'),
+                  );
+                }
+
+                return ListView.builder(
+                  itemCount: searchResults.length,
+                  itemBuilder: (context, index) => ListTile(
+                    title: Text(
+                      searchResults[index].content,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      searchResults[index].author,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () {
+                      context.goNamed(
+                        'quote',
+                        pathParameters: {'id': '${searchResults[index].id}'},
+                      );
+                    },
+                  ),
                 );
               }
-
-              final searchResults = snapshot.data!
-                  .where(
-                    (quote) => quote.dataForQuery
-                        .toLowerCase()
-                        .contains(query.toLowerCase()),
-                  )
-                  .toList();
-
-              if (searchResults.isEmpty) {
-                return const Center(
-                  child: Text('No results found'),
-                );
-              }
-
-              return ListView.builder(
-                itemCount: searchResults.length,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text(
-                    searchResults[index].content,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    searchResults[index].author,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  onTap: () {
-                    context.goNamed(
-                      'quote',
-                      pathParameters: {'id': '${searchResults[index].id}'},
-                    );
-                  },
-                ),
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return const SizedBox.shrink();
-        },
-      );
+            return const SizedBox.shrink();
+          },
+        );
 }
