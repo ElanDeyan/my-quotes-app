@@ -4,7 +4,9 @@ import 'package:my_quotes/constants/destinations.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/my_quotes_screen.dart';
+import 'package:my_quotes/screens/search/search_quote_delegate.dart';
 import 'package:my_quotes/shared/show_add_quote_dialog.dart';
+import 'package:my_quotes/shared/show_quote_search.dart';
 
 final class MainAppScreen extends StatefulWidget with DestinationsMixin {
   const MainAppScreen({super.key, required this.destinations});
@@ -45,12 +47,23 @@ final class _MainAppScreenState extends State<MainAppScreen> {
           ),
         ),
         actions: [
-          if (bodyContent is MyQuotesScreen)
+          if (bodyContent is MyQuotesScreen) ...[
+            IconButton(
+              onPressed: () => showQuoteSearch(
+                context,
+                SearchQuoteDelegate(
+                  context: context,
+                  keyboardType: TextInputType.text,
+                ),
+              ),
+              icon: const Icon(Icons.search),
+            ),
             IconButton(
               icon: const Icon(Icons.label),
               tooltip: 'Tags',
               onPressed: () => context.pushNamed('tags'),
             ),
+          ],
           if (isCompactWindowSize) ..._actionsForCompactWindow(context),
         ],
       ),
