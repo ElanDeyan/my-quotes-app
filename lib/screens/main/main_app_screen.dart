@@ -36,27 +36,33 @@ final class _MainAppScreenState extends State<MainAppScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const Icon(Icons.format_quote),
         title: const Text('My quotes'),
+        shape: LinearBorder(
+          bottom: const LinearBorderEdge(),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          ),
+        ),
         actions: [
           if (bodyContent is MyQuotesScreen)
             IconButton(
               icon: const Icon(Icons.label),
+              tooltip: 'Tags',
               onPressed: () => context.pushNamed('tags'),
             ),
           if (isCompactWindowSize) ..._actionsForCompactWindow(context),
         ],
       ),
       body: isCompactWindowSize
-          ? ColoredBox(
-              color: _primaryContainerOf(context),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: bodyContent,
-              ),
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: bodyContent,
             )
           : _notCompactWindowSizeBody(context),
       floatingActionButton: isCompactWindowSize
           ? FloatingActionButton(
+              tooltip: 'Add a new quote',
               onPressed: () => showAddQuoteDialog(context),
               backgroundColor: Theme.of(context).colorScheme.secondary,
               child: Icon(
@@ -70,12 +76,10 @@ final class _MainAppScreenState extends State<MainAppScreen> {
     );
   }
 
-  Color _primaryContainerOf(BuildContext context) =>
-      Theme.of(context).colorScheme.primaryContainer;
-
   List<IconButton> _actionsForCompactWindow(BuildContext context) {
     return <IconButton>[
       IconButton(
+        tooltip: 'Settings',
         onPressed: () => context.pushNamed(settingsNavigationKey),
         icon: const Icon(Icons.settings),
       ),
@@ -101,6 +105,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             onDestinationSelected: _updateIndex,
             leading: !isCompactWindowSize
                 ? FloatingActionButton(
+                    tooltip: 'Add a new quote',
                     backgroundColor:
                         Theme.of(context).colorScheme.surfaceContainerHighest,
                     onPressed: () => showAddQuoteDialog(context),
@@ -129,12 +134,9 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             width: 0.0,
           ),
           Expanded(
-            child: ColoredBox(
-              color: _primaryContainerOf(context),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: bodyContent,
-              ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: bodyContent,
             ),
           ),
         ],
