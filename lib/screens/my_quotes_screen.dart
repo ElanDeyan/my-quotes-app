@@ -59,54 +59,80 @@ final class MyQuotesScreen extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: data.length,
                 semanticChildCount: data.length,
-                padding:
-                    const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
-                itemBuilder: (context, index) => Card(
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 2,
-                    ),
-                    tileColor:
-                        Theme.of(context).colorScheme.surfaceContainerLowest,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    title: Text(
-                      data[index].content,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                    titleTextStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                      fontStyle: FontStyle.italic,
-                    ),
-                    subtitle: Text(data[index].author),
-                    subtitleTextStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
-                      fontWeight: FontWeight.w100,
-                    ),
-                    trailing: PopupMenuButton(
-                      position: PopupMenuPosition.under,
-                      itemBuilder: (context) => QuoteActions.popupMenuItems(
-                        context,
-                        data[index],
-                        actions: QuoteActions.values.where(
-                          (action) => switch (action) {
-                            QuoteActions.create => false,
-                            _ => true,
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                padding: EdgeInsets.only(
+                  bottom: kBottomNavigationBarHeight,
+                  left: MediaQuery.sizeOf(context).width * 0.0125,
+                  right: MediaQuery.sizeOf(context).width * 0.0125,
                 ),
+                itemBuilder: (context, index) =>
+                    QuoteTileCard(data: data[index]),
               );
           }
         },
+      ),
+    );
+  }
+}
+
+class QuoteTileCard extends StatelessWidget {
+  const QuoteTileCard({
+    super.key,
+    required this.data,
+  });
+
+  final Quote data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card.outlined(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusDirectional.circular(10),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      color: Theme.of(context).colorScheme.surfaceContainerLowest,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 2,
+        ),
+        tileColor: Theme.of(context).colorScheme.surfaceContainerLowest,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        leading: const Icon(Icons.format_quote),
+        title: Text(
+          data.content,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+        ),
+        titleTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+          fontStyle: FontStyle.italic,
+        ),
+        subtitle: Text(data.author),
+        subtitleTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+          fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
+          fontWeight: FontWeight.w100,
+        ),
+        trailing: PopupMenuButton(
+          tooltip: 'Actions',
+          position: PopupMenuPosition.under,
+          itemBuilder: (context) => QuoteActions.popupMenuItems(
+            context,
+            data,
+            actions: QuoteActions.values.where(
+              (action) => switch (action) {
+                QuoteActions.create => false,
+                _ => true,
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

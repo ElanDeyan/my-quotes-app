@@ -18,7 +18,14 @@ class QuoteCard extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Card(
+          Card.outlined(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusDirectional.circular(10),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            color: Theme.of(context).colorScheme.surfaceContainerLowest,
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 26.0,
@@ -95,6 +102,7 @@ class QuoteCard extends StatelessWidget {
           Positioned(
             right: 0,
             child: PopupMenuButton(
+              tooltip: 'Actions',
               position: PopupMenuPosition.under,
               itemBuilder: (context) => QuoteActions.popupMenuItems(
                 context,
@@ -111,11 +119,12 @@ class QuoteCard extends StatelessWidget {
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             top: -15,
             left: -10,
             child: FaIcon(
               FontAwesomeIcons.quoteLeft,
+              color: Theme.of(context).colorScheme.primary,
               size: 48,
             ),
           ),
