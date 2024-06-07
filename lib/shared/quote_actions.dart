@@ -12,19 +12,51 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum QuoteActions {
-  info(icon: Icon(Icons.info), label: Text('Info'), name: 'Info'),
-  readMore(icon: Icon(Icons.visibility), label: Text('View quote'), name: 'View quote'),
-  create(icon: Icon(Icons.create), label: Text('Create'), name: 'Create'),
-  update(icon: Icon(Icons.edit), label: Text('Edit'), name: 'Edit'),
-  copy(icon: Icon(Icons.copy), label: Text('Copy'), name: 'Copy'),
-  share(icon: Icon(Icons.share), label: Text('Share'), name: 'Share'),
-  copyLink(icon: Icon(Icons.link), label: Text('Copy link'), name: 'Copy link'),
+  info(
+    icon: Icon(Icons.info_outline),
+    label: Text('Info'),
+    name: 'Info',
+  ),
+  readMore(
+    icon: Icon(Icons.visibility_outlined),
+    label: Text('View quote'),
+    name: 'View quote',
+  ),
+  create(
+    icon: Icon(Icons.create_outlined),
+    label: Text('Create'),
+    name: 'Create',
+  ),
+  update(
+    icon: Icon(Icons.edit_outlined),
+    label: Text('Edit'),
+    name: 'Edit',
+  ),
+  copy(
+    icon: Icon(Icons.copy_outlined),
+    label: Text('Copy'),
+    name: 'Copy',
+  ),
+  share(
+    icon: Icon(Icons.share_outlined),
+    label: Text('Share'),
+    name: 'Share',
+  ),
+  copyLink(
+    icon: Icon(Icons.link_outlined),
+    label: Text('Copy link'),
+    name: 'Copy link',
+  ),
   goToLink(
-    icon: Icon(Icons.open_in_new),
+    icon: Icon(Icons.open_in_new_outlined),
     label: Text('Go to link'),
     name: 'Go to link',
   ),
-  delete(icon: Icon(Icons.delete), label: Text('Delete'), name: 'Delete');
+  delete(
+    icon: Icon(Icons.delete_outline),
+    label: Text('Delete'),
+    name: 'Delete',
+  );
 
   const QuoteActions({
     required this.icon,
@@ -45,13 +77,14 @@ enum QuoteActions {
     Quote quote, {
     Iterable<QuoteActions> actions = QuoteActions.values,
   }) =>
-      actions.where(quote.can).toList();
+      actions.where(quote.canPerform).toList();
 
   static PopupMenuButton<Quote> popupMenuButton(
     BuildContext context,
     Quote quote,
   ) =>
       PopupMenuButton(
+        tooltip: 'Actions',
         position: PopupMenuPosition.under,
         itemBuilder: (context) => popupMenuItems(context, quote).toList(),
       );
@@ -72,9 +105,9 @@ enum QuoteActions {
                 QuoteActions.info => () => showQuoteInfoDialog(context, quote),
                 QuoteActions.delete => () => deleteQuote(context, quote),
                 QuoteActions.copy => () =>
-                    copyToClipBoard(quote.shareableFormat),
+                    copyToClipBoard(context, quote.shareableFormat),
                 QuoteActions.copyLink => () =>
-                    copyToClipBoard(quote.sourceUri ?? ''),
+                    copyToClipBoard(context, quote.sourceUri ?? ''),
                 QuoteActions.share => () => Share.share(quote.shareableFormat),
                 QuoteActions.goToLink => () =>
                     launchUrl(Uri.parse(quote.sourceUri!)),
