@@ -60,16 +60,16 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ElevatedButton(
+                      OutlinedButton(
                         onPressed: () => setState(() {}),
-                        child: const Icon(Icons.refresh),
+                        child: const Icon(Icons.shuffle_outlined),
                       ),
                       const SizedBox(
                         width: 20,
                       ),
-                      ElevatedButton(
+                      OutlinedButton(
                         onPressed: () => Share.share(quote.shareableFormat),
-                        child: const Icon(Icons.share),
+                        child: const Icon(Icons.share_outlined),
                       ),
                     ],
                   ),
