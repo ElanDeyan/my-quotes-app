@@ -50,14 +50,14 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
         child: QuoteScreenBody(quoteId: quote.id!),
       ),
       actions: [
-        ElevatedButton(
+        OutlinedButton(
           onPressed: () {
             Navigator.pop(context);
             showUpdateQuoteDialog(context, quote);
           },
           child: const Text('Edit'),
         ),
-        ElevatedButton(onPressed: () => context.pop(), child: const Text('Ok')),
+        OutlinedButton(onPressed: () => context.pop(), child: const Text('Ok')),
       ],
     ),
   );
