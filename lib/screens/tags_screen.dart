@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/shared/create_tag.dart';
 import 'package:my_quotes/shared/delete_tag.dart';
@@ -14,6 +15,11 @@ class TagsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tags'),
+        leading: BackButton(
+          onPressed: () => context.canPop()
+              ? context.pop(context)
+              : context.pushNamed('mainScreen'),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => createTag(context),
