@@ -80,9 +80,12 @@ class TagsScreen extends StatelessWidget {
       ),
       itemBuilder: (context, index) => ListTile(
         title: Text(tags[index].name),
-        onTap: () => context.goNamed(quoteWithTagNavigationKey, pathParameters:{
-          'tagId': '${tags[index].id!}',
-        },),
+        onTap: () => context.goNamed(
+          quoteWithTagNavigationKey,
+          pathParameters: {
+            'tagId': '${tags[index].id!}',
+          },
+        ),
         trailing: PopupMenuButton(
           tooltip: 'Actions',
           itemBuilder: (context) =>

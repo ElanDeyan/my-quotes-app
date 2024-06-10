@@ -37,8 +37,9 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      onPressed: () =>
-          context.canPop() ? context.pop() : context.pushNamed(tagsNavigationKey),
+      onPressed: () => context.canPop()
+          ? context.pop()
+          : context.pushNamed(tagsNavigationKey),
       icon: const Icon(Icons.arrow_back),
     );
   }
