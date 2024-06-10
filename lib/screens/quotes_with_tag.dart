@@ -48,6 +48,7 @@ class QuotesWithTag extends StatelessWidget {
                     return ListView.builder(
                       itemCount: data.length,
                       itemBuilder: (context, index) => ListTile(
+                        leading: const Icon(Icons.format_quote),
                         title: Text(
                           data[index].content,
                           maxLines: 2,
