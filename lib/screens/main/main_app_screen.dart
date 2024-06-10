@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/destinations.dart';
+import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/my_quotes_screen.dart';
@@ -9,16 +10,26 @@ import 'package:my_quotes/shared/show_add_quote_dialog.dart';
 import 'package:my_quotes/shared/show_quote_search.dart';
 
 final class MainAppScreen extends StatefulWidget with DestinationsMixin {
-  const MainAppScreen({super.key, required this.destinations});
+  const MainAppScreen({
+    super.key,
+    required this.destinations,
+    this.initialLocationIndex = 0,
+  });
 
   final Map<String, DestinationData> destinations;
+  final int initialLocationIndex;
 
   @override
   State<MainAppScreen> createState() => _MainAppScreenState();
 }
 
 final class _MainAppScreenState extends State<MainAppScreen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialLocationIndex;
+  }
 
   Widget get bodyContent => switch (_selectedIndex) {
         0 => const HomeScreen(),
@@ -56,23 +67,30 @@ final class _MainAppScreenState extends State<MainAppScreen> {
                   keyboardType: TextInputType.text,
                 ),
               ),
-              icon: const Icon(Icons.search),
+              icon: const Icon(Icons.search_outlined),
             ),
             IconButton(
-              icon: const Icon(Icons.label),
+              icon: const Icon(Icons.label_outlined),
               tooltip: 'Tags',
-              onPressed: () => context.pushNamed('tags'),
+              onPressed: () => context.pushNamed(tagsNavigationKey),
             ),
           ],
           if (isCompactWindowSize) ..._actionsForCompactWindow(context),
         ],
       ),
-      body: isCompactWindowSize
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: bodyContent,
-            )
-          : _notCompactWindowSizeBody(context),
+      body: PopScope(
+        onPopInvoked: (didPop) {
+          if (didPop && bodyContent is MyQuotesScreen) {
+            context.goNamed(homeNavigationKey);
+          }
+        },
+        child: isCompactWindowSize
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: bodyContent,
+              )
+            : _notCompactWindowSizeBody(context),
+      ),
       floatingActionButton: isCompactWindowSize
           ? FloatingActionButton(
               tooltip: 'Add a new quote',
@@ -94,7 +112,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
       IconButton(
         tooltip: 'Settings',
         onPressed: () => context.pushNamed(settingsNavigationKey),
-        icon: const Icon(Icons.settings),
+        icon: const Icon(Icons.settings_outlined),
       ),
     ];
   }
@@ -137,7 +155,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
                 ),
             ],
             trailing: IconButton(
-              onPressed: () => context.pushNamed('settings'),
+              onPressed: () => context.pushNamed(settingsNavigationKey),
               icon: settingsDestination.selectedIcon,
               tooltip: settingsDestination.label,
             ),

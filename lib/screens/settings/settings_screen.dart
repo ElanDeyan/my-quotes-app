@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/color_pallete.dart';
 import 'package:my_quotes/helpers/string_extension.dart';
+import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/settings/color_pallete_radio_list.dart';
 import 'package:my_quotes/screens/settings/language_radio_list.dart';
 import 'package:my_quotes/screens/settings/theme_mode_radio_list.dart';
@@ -24,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
         leading: BackButton(
           onPressed: () => context.canPop()
               ? context.pop(context)
-              : context.pushNamed('mainScreen'),
+              : context.pushNamed(homeNavigationKey),
         ),
         title: const Text(screenName),
       ),

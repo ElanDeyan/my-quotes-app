@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/shared/copy_to_clipboard.dart';
 import 'package:my_quotes/shared/delete_quote.dart';
@@ -99,8 +100,10 @@ enum QuoteActions {
             (action) => PopupMenuItem(
               value: quote,
               onTap: switch (action) {
-                QuoteActions.readMore => () => context
-                    .pushNamed('quote', pathParameters: {'id': '${quote.id!}'}),
+                QuoteActions.readMore => () => context.pushNamed(
+                      quoteByIdNavigationKey,
+                      pathParameters: {'id': '${quote.id!}'},
+                    ),
                 QuoteActions.create => () => showAddQuoteDialog(context),
                 QuoteActions.info => () => showQuoteInfoDialog(context, quote),
                 QuoteActions.delete => () => deleteQuote(context, quote),

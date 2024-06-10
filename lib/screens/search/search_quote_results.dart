@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/quote_actions.dart';
 
 class SearchQuoteResults extends StatelessWidget {
@@ -11,6 +12,14 @@ class SearchQuoteResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.pushNamed(myQuotesNavigationKey),
+        ),
+      ),
       body: ListView.builder(
         itemCount: searchResults.length,
         itemBuilder: (context, index) => ListTile(
@@ -25,22 +34,22 @@ class SearchQuoteResults extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           trailing: PopupMenuButton(
-          tooltip: 'Actions',
-          position: PopupMenuPosition.under,
-          itemBuilder: (context) => QuoteActions.popupMenuItems(
-            context,
-            searchResults[index],
-            actions: QuoteActions.values.where(
-              (action) => switch (action) {
-                QuoteActions.create => false,
-                _ => true,
-              },
+            tooltip: 'Actions',
+            position: PopupMenuPosition.under,
+            itemBuilder: (context) => QuoteActions.popupMenuItems(
+              context,
+              searchResults[index],
+              actions: QuoteActions.values.where(
+                (action) => switch (action) {
+                  QuoteActions.create => false,
+                  _ => true,
+                },
+              ),
             ),
           ),
-        ),
           onTap: () {
-            context.goNamed(
-              'quote',
+            context.pushNamed(
+              quoteByIdNavigationKey,
               pathParameters: {'id': '${searchResults[index].id}'},
             );
           },

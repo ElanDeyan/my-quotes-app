@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/constants/destinations.dart';
+import 'package:my_quotes/routes/routes_names.dart';
 
 mixin DestinationsMixin {
   static const destinationsData = <String, DestinationData>{

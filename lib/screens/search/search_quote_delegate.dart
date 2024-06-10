@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,9 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      onPressed: () => Navigator.pop(context),
+      onPressed: () => context.canPop()
+          ? context.pop()
+          : context.pushNamed(myQuotesNavigationKey),
       icon: const Icon(Icons.arrow_back),
     );
   }
@@ -122,8 +125,8 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     onTap: () {
-                      context.goNamed(
-                        'quote',
+                      context.pushNamed(
+                        quoteByIdNavigationKey,
                         pathParameters: {'id': '${searchResults[index].id}'},
                       );
                     },

@@ -7,7 +7,3 @@ typedef DestinationData = ({
   String label,
   String debugLabel
 });
-
-const homeNavigationKey = 'home';
-const myQuotesNavigationKey = 'myQuotes';
-const settingsNavigationKey = 'settings';
