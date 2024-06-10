@@ -317,7 +317,8 @@ mixin QuoteFormMixin {
                 });
               },
             );
-
+            formKey.currentState?.reset();
+            _multipleTagSearchController..clearAllPickedItems()..clearSearchField();
             Navigator.pop(context);
           }
         },
