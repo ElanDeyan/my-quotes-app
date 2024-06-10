@@ -238,8 +238,15 @@ mixin QuoteFormMixin {
                   ),
                 ),
                 fuzzySearch: FuzzySearch.jaro,
+                showedItemsScrollPhysics: const AlwaysScrollableScrollPhysics(),
+                sortShowedItems: true,
+                sortPickedItems: true,
+                showedItemsBoxDecoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)),
+                ),
                 itemsVisibility: ShowedItemsVisibility.onType,
-                itemBuilder: (tag, i) => Padding(
+                itemBuilder: (tag, _) => Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(tag.name),
                 ),
