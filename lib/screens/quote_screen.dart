@@ -121,12 +121,21 @@ class ViewQuotePage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      QuoteCard(
-                        quote: quote,
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.sizeOf(context).width * 0.9,
+                        ),
+                        child: QuoteCard(
+                          quote: quote,
+                        ),
                       ),
                       const SizedBox(height: 16),
-                      Text('Created at: ${DateFormat('dd/MM/yyyy HH:mm:ss').format(quote.createdAt!)}.'),
-                      Text('Is favorite? ${quote.isFavorite ?? false ? 'Yes' : 'No'}.'),
+                      Text(
+                        'Created at: ${DateFormat('dd/MM/yyyy HH:mm:ss').format(quote.createdAt!)}.',
+                      ),
+                      Text(
+                        'Is favorite? ${quote.isFavorite ?? false ? 'Yes' : 'No'}.',
+                      ),
                     ],
                   );
                 }
