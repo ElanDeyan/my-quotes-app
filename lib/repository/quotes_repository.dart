@@ -7,6 +7,8 @@ abstract interface class QuotesRepository {
 
   Future<Quote?> getQuoteById(int id);
 
+  Future<List<Quote>> getQuotesWithTagId(int tagId);
+
   Future<int> addQuote(Quote quote);
 
   Future<bool> updateQuote(Quote quote);

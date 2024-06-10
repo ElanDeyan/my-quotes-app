@@ -5,7 +5,7 @@ import 'package:my_quotes/screens/error_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/main/main_app_screen.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
-import 'package:my_quotes/screens/quotes_with_filters.dart';
+import 'package:my_quotes/screens/quotes_with_tag.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
 import 'package:my_quotes/screens/settings/settings_screen.dart';
 import 'package:my_quotes/screens/tags_screen.dart';
@@ -45,7 +45,7 @@ final routesConfig = GoRouter(
             GoRoute(
               path: 'tag/:tagId',
               name: quoteWithTagNavigationKey,
-              builder: (context, state) => QuotesWithFilters(
+              builder: (context, state) => QuotesWithTag(
                 tagId: int.parse(state.pathParameters['tagId']!),
               ),
             ),

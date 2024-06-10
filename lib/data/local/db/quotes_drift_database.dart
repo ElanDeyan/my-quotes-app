@@ -137,4 +137,11 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
       ),
     );
   }
+
+  @override
+  Future<List<Quote>> getQuotesWithTagId(int tagId) async {
+    final quotes = await allQuotes;
+
+    return quotes.where((quote) => quote.tagsId.contains(tagId)).toList();
+  }
 }

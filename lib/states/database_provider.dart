@@ -75,4 +75,9 @@ final class DatabaseProvider extends ChangeNotifier
     notifyListeners();
     return didUpdate;
   }
+
+  @override
+  Future<List<Quote>> getQuotesWithTagId(int tagId) {
+    return _appRepository.getQuotesWithTagId(tagId);
+  }
 }
