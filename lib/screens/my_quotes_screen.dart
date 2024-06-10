@@ -117,7 +117,7 @@ class QuoteTileCard extends StatelessWidget {
         subtitleTextStyle: TextStyle(
           color: Theme.of(context).colorScheme.onSurface,
           fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
-          fontWeight: FontWeight.w100,
+          fontWeight: FontWeight.w500,
         ),
         trailing: PopupMenuButton(
           tooltip: 'Actions',
