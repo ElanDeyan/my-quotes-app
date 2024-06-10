@@ -12,14 +12,6 @@ class SearchQuoteResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.canPop()
-              ? context.pop()
-              : context.pushNamed(myQuotesNavigationKey),
-        ),
-      ),
       body: ListView.builder(
         itemCount: searchResults.length,
         itemBuilder: (context, index) => ListTile(
