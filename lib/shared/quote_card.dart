@@ -7,9 +7,10 @@ import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
 class QuoteCard extends StatelessWidget {
-  const QuoteCard({super.key, required this.quote});
+  const QuoteCard({super.key, required this.quote, this.showActions = true});
 
   final Quote quote;
+  final bool showActions;
 
   @override
   Widget build(BuildContext context) {
@@ -99,26 +100,27 @@ class QuoteCard extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            right: 0,
-            child: PopupMenuButton(
-              tooltip: 'Actions',
-              position: PopupMenuPosition.under,
-              itemBuilder: (context) => QuoteActions.popupMenuItems(
-                context,
-                quote,
-                actions: QuoteActions.values.where(
-                  (action) => switch (action) {
-                    QuoteActions.create ||
-                    QuoteActions.share ||
-                    QuoteActions.delete =>
-                      false,
-                    _ => true
-                  },
+          if (showActions)
+            Positioned(
+              right: 0,
+              child: PopupMenuButton(
+                tooltip: 'Actions',
+                position: PopupMenuPosition.under,
+                itemBuilder: (context) => QuoteActions.popupMenuItems(
+                  context,
+                  quote,
+                  actions: QuoteActions.values.where(
+                    (action) => switch (action) {
+                      QuoteActions.create ||
+                      QuoteActions.share ||
+                      QuoteActions.delete =>
+                        false,
+                      _ => true
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
           Positioned(
             top: -15,
             left: -10,

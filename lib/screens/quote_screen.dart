@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/routes/routes_names.dart';
+import 'package:my_quotes/shared/quote_card.dart';
 import 'package:my_quotes/shared/show_update_quote_dialog.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -25,17 +27,15 @@ final class QuoteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Quote info'),
+        leading: BackButton(
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.pushNamed(myQuotesNavigationKey),
+        ),
       ),
-      body: QuoteScreenBody(quoteId: quoteId),
+      body: ViewQuotePage(quoteId: quoteId),
     );
   }
-}
-
-Future<void> showQuoteInfoModal(BuildContext context, Quote quote) {
-  return showModalBottomSheet<void>(
-    context: context,
-    builder: (context) => QuoteScreenBody(quoteId: quote.id!),
-  );
 }
 
 Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
@@ -47,7 +47,7 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
       title: const Text('Quote info'),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
-        child: QuoteScreenBody(quoteId: quote.id!),
+        child: QuoteScreenDialogBody(quoteId: quote.id!),
       ),
       actions: [
         OutlinedButton(
@@ -63,8 +63,83 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
   );
 }
 
-class QuoteScreenBody extends StatelessWidget {
-  const QuoteScreenBody({
+class ViewQuotePage extends StatelessWidget {
+  const ViewQuotePage({
+    super.key,
+    required this.quoteId,
+  });
+
+  final int quoteId;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Center(
+        child: _quoteInfoWithCard(),
+      ),
+    );
+  }
+
+  Consumer<DatabaseProvider> _quoteInfoWithCard() {
+    return Consumer<DatabaseProvider>(
+      builder: (context, database, child) => FutureBuilder(
+        future: database.getQuoteById(quoteId),
+        builder: (context, snapshot) {
+          final connectionState = snapshot.connectionState;
+
+          switch (connectionState) {
+            case ConnectionState.none:
+              return Text(
+                'No database found',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              );
+            case ConnectionState.active || ConnectionState.waiting:
+              final isDarkTheme =
+                  MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+
+              return ShimmerPro.sized(
+                scaffoldBackgroundColor: Theme.of(context).colorScheme.surface,
+                light: isDarkTheme ? ShimmerProLight.lighter : null,
+                height: 200,
+                width: 300,
+              );
+
+            case ConnectionState.done:
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              } else {
+                final data = snapshot.data;
+                if (data.isNull) {
+                  return const Text('Quote not found');
+                } else {
+                  final quote = data!;
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      QuoteCard(
+                        quote: quote,
+                      ),
+                      const SizedBox(height: 16),
+                      Text('Created at: ${DateFormat('dd/MM/yyyy HH:mm:ss').format(quote.createdAt!)}.'),
+                      Text('Is favorite? ${quote.isFavorite ?? false ? 'Yes' : 'No'}.'),
+                    ],
+                  );
+                }
+              }
+          }
+        },
+      ),
+    );
+  }
+}
+
+class QuoteScreenDialogBody extends StatelessWidget {
+  const QuoteScreenDialogBody({
     super.key,
     required this.quoteId,
   });
