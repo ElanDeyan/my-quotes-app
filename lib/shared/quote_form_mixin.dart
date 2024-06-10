@@ -237,6 +237,7 @@ mixin QuoteFormMixin {
                     ],
                   ),
                 ),
+                fuzzySearch: FuzzySearch.jaro,
                 itemsVisibility: ShowedItemsVisibility.onType,
                 itemBuilder: (tag, i) => Padding(
                   padding: const EdgeInsets.all(8),
@@ -257,7 +258,7 @@ mixin QuoteFormMixin {
   Consumer<DatabaseProvider> _actionButton(Quote? quoteForUpdate) {
     return Consumer<DatabaseProvider>(
       builder: (context, database, child) => OutlinedButton.icon(
-        icon: isUpdateForm ? const Icon(Icons.update) : const Icon(Icons.add),
+        icon: isUpdateForm ? const Icon(Icons.edit_outlined) : const Icon(Icons.add_outlined),
         label: isUpdateForm ? const Text('Update') : const Text('Create'),
         onPressed: () {
           final isValid = formKey.currentState?.saveAndValidate() ?? false;
