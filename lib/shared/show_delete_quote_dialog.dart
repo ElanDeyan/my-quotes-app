@@ -16,9 +16,16 @@ Future<bool?> showDeleteQuoteDialog(BuildContext context, Quote quote) {
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(true),
           style: ButtonStyle(
-            backgroundColor: WidgetStateColor.resolveWith((states) => Theme.of(context).colorScheme.errorContainer,),
+            backgroundColor: WidgetStateColor.resolveWith(
+              (states) => Theme.of(context).colorScheme.errorContainer,
+            ),
           ),
-          child: Text('Delete', style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),),
+          child: Text(
+            'Delete',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onErrorContainer,
+            ),
+          ),
         ),
       ],
     ),

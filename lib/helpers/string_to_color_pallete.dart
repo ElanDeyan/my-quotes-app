@@ -5,7 +5,9 @@ extension ColorSchemePaletteExtension on ColorSchemePalette {
     const colorSchemePaletteValues = ColorSchemePalette.values;
 
     for (final colorSchemePalette in colorSchemePaletteValues) {
-      if (string.toLowerCase().compareTo(colorSchemePalette.storageName.toLowerCase()) ==
+      if (string
+              .toLowerCase()
+              .compareTo(colorSchemePalette.storageName.toLowerCase()) ==
           0) {
         return colorSchemePalette;
       }

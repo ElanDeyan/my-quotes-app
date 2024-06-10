@@ -27,12 +27,15 @@ Take a look in this quote:
   String get dataForQuery {
     final stringBuffer = StringBuffer();
 
-    stringBuffer.writeAll([
-      content,
-      author,
-      if (source.isNotNullOrBlank) source else '',
-      if (sourceUri.isNotNullOrBlank) sourceUri else '',
-    ], '\n',);
+    stringBuffer.writeAll(
+      [
+        content,
+        author,
+        if (source.isNotNullOrBlank) source else '',
+        if (sourceUri.isNotNullOrBlank) sourceUri else '',
+      ],
+      '\n',
+    );
 
     return stringBuffer.toString();
   }

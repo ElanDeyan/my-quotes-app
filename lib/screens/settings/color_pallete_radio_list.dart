@@ -7,10 +7,12 @@ final class ColorSchemePaletteRadioList extends StatefulWidget {
   const ColorSchemePaletteRadioList({super.key});
 
   @override
-  State<ColorSchemePaletteRadioList> createState() => _ColorSchemePaletteRadioListState();
+  State<ColorSchemePaletteRadioList> createState() =>
+      _ColorSchemePaletteRadioListState();
 }
 
-final class _ColorSchemePaletteRadioListState extends State<ColorSchemePaletteRadioList> {
+final class _ColorSchemePaletteRadioListState
+    extends State<ColorSchemePaletteRadioList> {
   late ColorSchemePalette _colorSchemePaletteGroupValue;
   @override
   Widget build(BuildContext context) {
@@ -22,9 +24,12 @@ final class _ColorSchemePaletteRadioListState extends State<ColorSchemePaletteRa
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Choose a color pallete', style: TextStyle(
-              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
-            ),),
+            Text(
+              'Choose a color pallete',
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
+              ),
+            ),
             for (final colorSchemePalette in ColorSchemePalette.values)
               RadioListTile(
                 value: colorSchemePalette,

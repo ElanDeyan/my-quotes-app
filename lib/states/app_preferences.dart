@@ -22,13 +22,15 @@ final class AppPreferences extends ChangeNotifier {
     _themeMode = ThemeModeExtension.themeModeFromString(
       await _userPreferencesRepository.themeMode,
     );
-    final localColorScheme = ColorSchemePaletteExtension.colorSchemePaletteFromString(
-              await _userPreferencesRepository.colorSchemePalette,
-            );
+    final localColorScheme =
+        ColorSchemePaletteExtension.colorSchemePaletteFromString(
+      await _userPreferencesRepository.colorSchemePalette,
+    );
     if (localColorScheme != null) {
       _colorSchemePalette = localColorScheme;
     } else {
-      _colorSchemePalette = ColorSchemePaletteRepository.defaultColorSchemePalette;
+      _colorSchemePalette =
+          ColorSchemePaletteRepository.defaultColorSchemePalette;
       colorSchemePalette = _colorSchemePalette;
     }
     _language = await _userPreferencesRepository.language;

@@ -48,10 +48,10 @@ Future<String?>? showCreateTagDialog(
           ),
           TextButton(
             onPressed: () {
-            if (createTagFormKey.currentState?.validate() ?? false) {
-              Navigator.pop(context, textEditingController.text);
-            }
-          },
+              if (createTagFormKey.currentState?.validate() ?? false) {
+                Navigator.pop(context, textEditingController.text);
+              }
+            },
             child: const Text('Save'),
           ),
         ],

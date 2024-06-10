@@ -11,7 +11,7 @@ final class IconWithLabel extends StatelessWidget {
     required this.horizontalGap,
     required this.label,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return Row(
