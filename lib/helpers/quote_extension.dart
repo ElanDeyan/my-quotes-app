@@ -1,7 +1,7 @@
 import 'package:basics/basics.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
-import 'package:my_quotes/shared/quote_actions.dart';
+import 'package:my_quotes/shared/quotes/quote_actions.dart';
 
 extension QuoteExtension on Quote {
   bool get hasSourceAndUri => source.isNotNull && sourceUri.isNotNull;

@@ -4,11 +4,11 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
-import 'package:my_quotes/shared/copy_to_clipboard.dart';
-import 'package:my_quotes/shared/delete_quote.dart';
 import 'package:my_quotes/shared/icon_with_label.dart';
-import 'package:my_quotes/shared/show_add_quote_dialog.dart';
-import 'package:my_quotes/shared/show_update_quote_dialog.dart';
+import 'package:my_quotes/shared/quotes/copy_to_clipboard.dart';
+import 'package:my_quotes/shared/quotes/delete_quote.dart';
+import 'package:my_quotes/shared/quotes/show_add_quote_dialog.dart';
+import 'package:my_quotes/shared/quotes/show_update_quote_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
