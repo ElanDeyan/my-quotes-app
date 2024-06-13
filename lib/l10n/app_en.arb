@@ -3,5 +3,41 @@
     "helloWorld": "Hello world!",
     "@helloWorld": {
         "description": "A greeting in english"
-    }
+    },
+    "settings": "Settings",
+    "themeMode": "Theme mode",
+    "chooseThemeModeMessage":"Choose a theme mode",
+    "themeModeName": "{themeMode,select, system{System} light{Light} dark{Dark} other{Missing theme mode}}",
+    "@themeModeName": {
+        "placeholders": {
+            "themeMode": {
+                "type": "String",
+                "example": "system"
+            }
+        }
+    },
+    "colorPallete": "Color pallete",
+    "chooseColorPaletteMessage":"Choose a color palette",
+    "colorPaletteName": "{colorPalette,select, blue{Blue} caramel{Caramel} espresso_and_crema{Espresso and Crema} flutter_dash{Flutter Dash} green{Green} indigo{Indigo} pink{Pink} vanilla{Vanilla} vivid_sky_blue{Vivid Sky Blue} ultra_violet{Ultra violet} other{Missing color palete}}",
+    "@colorPaletteName": {
+        "placeholders": {
+            "colorPalette": {
+                "type": "String",
+                "example": "blue"
+            }
+        }
+    },
+    "language": "App language",
+    "chooseAppLanguage":"Choose an app language",
+    "languageName": "{language,select, en{English} pt{Brazilian Portuguese} other{Missing language}}",
+    "@languageName": {
+        "placeholders": {
+            "language": {
+                "type": "String",
+                "example": "en"
+            }
+        }
+    },
+    "info": "Info",
+    "infoDescription": "Thanks for using this app!\nI hope you're enjoying!\n\nThis' my first published app and your sharing can help me to find jobs and oportunities. :-)\n\nTo support my work, share with your friends and follow me in my social medias:"
 }

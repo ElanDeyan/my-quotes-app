@@ -16,23 +16,34 @@ final class _LanguageRadioListState extends State<LanguageRadioList> {
   Widget build(BuildContext context) {
     final preferences = Provider.of<AppPreferences>(context);
     _languageGroupValue = preferences.language;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text('Choose a language:'),
-        for (final language
-            in AppLocalizations.supportedLocales.map((e) => e.toString()))
-          RadioListTile(
-            value: language,
-            groupValue: _languageGroupValue,
-            onChanged: (value) => setState(() {
-              _languageGroupValue = value!;
-              preferences.language = value;
-            }),
-            selected: _languageGroupValue == language,
-            title: Text(language),
-          ),
-      ],
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.chooseAppLanguage,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
+              ),
+            ),
+            for (final language
+                in AppLocalizations.supportedLocales.map((e) => e.toString()))
+              RadioListTile(
+                value: language,
+                groupValue: _languageGroupValue,
+                onChanged: (value) => setState(() {
+                  _languageGroupValue = value!;
+                  preferences.language = value;
+                }),
+                selected: _languageGroupValue == language,
+                title: Text(AppLocalizations.of(context)!.languageName(language)),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

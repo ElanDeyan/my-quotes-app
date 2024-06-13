@@ -1,4 +1,40 @@
 {
     "@@locale": "pt",
-    "helloWorld": "Olá mundo!"
+    "helloWorld": "Olá mundo!",
+    "settings": "Configurações",
+    "themeMode": "Tema",
+    "chooseThemeModeMessage":"Escolha um tema",
+    "themeModeName": "{themeMode,select, system{Padrão do sistema} light{Claro} dark{Escuro} other{Falta tema}}",
+    "@themeModeName": {
+        "placeholders": {
+            "themeMode": {
+                "type": "String",
+                "example": "system"
+            }
+        }
+    },
+    "colorPallete": "Paleta de cores",
+    "chooseColorPaletteMessage":"Escolha uma paleta de cores",
+    "colorPaletteName": "{colorPalette,select, blue{Azul} caramel{Caramelo} espresso_and_crema{Expresso e Creme} flutter_dash{Flutter Dash} green{Verde} indigo{Anil} pink{Rosa} vanilla{Baunilha} vivid_sky_blue{Azul celeste vívido} ultra_violet{Ultra violeta} other{Falta paleta de cores}}",
+    "@colorPaletteName": {
+        "placeholders": {
+            "colorPalette": {
+                "type": "String",
+                "example": "blue"
+            }
+        }
+    },
+    "language": "Idioma do app",
+    "chooseAppLanguage":"Escolha um idioma",
+    "languageName": "{language,select, en{Inglês} pt{Português brasileiro} other{Falta idioma}}",
+    "@languageName": {
+        "placeholders": {
+            "language": {
+                "type": "String",
+                "example": "en"
+            }
+        }
+    },
+    "info": "Sobre o app",
+    "infoDescription": "Obrigado por usar este app!\nEspero que esteja gostando!\n\nEste é meu primeiro app publicado e seu compartilhamento pode me ajudar a conseguir trabalhos e oportunidades. :-)\n\nPara apoiar meu trabalho, compartilhe com seus amigos e me siga nas minhas redes sociais:"
 }
