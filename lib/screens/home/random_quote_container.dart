@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/shared/quotes/quote_card.dart';
+import 'package:my_quotes/shared/quotes/share_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
 
 final class RandomQuoteContainer extends StatefulWidget {
@@ -49,12 +49,16 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
             if (quote == null) {
               return const Text("You don't have quotes added yet.");
             } else {
+              final screenshotController = ScreenshotController();
               return Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: QuoteCard(
-                      quote: quote,
+                  Screenshot(
+                    controller: screenshotController,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: QuoteCard(
+                        quote: quote,
+                      ),
                     ),
                   ),
                   Row(
@@ -68,7 +72,7 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
                         width: 20,
                       ),
                       OutlinedButton(
-                        onPressed: () => Share.share(quote.shareableFormat),
+                        onPressed: () => showShareActions(context, quote),
                         child: const Icon(Icons.share_outlined),
                       ),
                     ],

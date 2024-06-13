@@ -7,9 +7,9 @@ import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/shared/icon_with_label.dart';
 import 'package:my_quotes/shared/quotes/copy_to_clipboard.dart';
 import 'package:my_quotes/shared/quotes/delete_quote.dart';
+import 'package:my_quotes/shared/quotes/share_actions.dart';
 import 'package:my_quotes/shared/quotes/show_add_quote_dialog.dart';
 import 'package:my_quotes/shared/quotes/show_update_quote_dialog.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum QuoteActions {
@@ -111,7 +111,7 @@ enum QuoteActions {
                     copyToClipBoard(context, quote.shareableFormat),
                 QuoteActions.copyLink => () =>
                     copyToClipBoard(context, quote.sourceUri ?? ''),
-                QuoteActions.share => () => Share.share(quote.shareableFormat),
+                QuoteActions.share => () => showShareActions(context, quote),
                 QuoteActions.goToLink => () =>
                     launchUrl(Uri.parse(quote.sourceUri!)),
                 QuoteActions.update => () =>
