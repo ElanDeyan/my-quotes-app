@@ -67,8 +67,8 @@ final class _MainAppScreenState extends State<MainAppScreen> {
                 SearchQuoteDelegate(
                   context: context,
                   keyboardType: TextInputType.text,
-                  searchFieldLabel: AppLocalizations.of(context)!
-                      .navigationSearchLabel,
+                  searchFieldLabel:
+                      AppLocalizations.of(context)!.navigationSearchLabel,
                 ),
               ),
               icon: const Icon(Icons.search_outlined),

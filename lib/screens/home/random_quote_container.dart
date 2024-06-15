@@ -50,6 +50,7 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
               return const Text("You don't have quotes added yet.");
             } else {
               return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
