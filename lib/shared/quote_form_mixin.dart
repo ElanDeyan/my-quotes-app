@@ -96,7 +96,8 @@ mixin QuoteFormMixin {
             ),
             FormBuilderCheckbox(
               name: 'isFavorite',
-              title: const Text('Is favorite?'),
+              title:
+                  Text(AppLocalizations.of(context)!.quoteFormFieldIsFavorite),
               shape: StarBorder(
                 squash: .5,
                 innerRadiusRatio: .5,
@@ -117,7 +118,7 @@ mixin QuoteFormMixin {
             const SizedBox(
               height: 10,
             ),
-            _actionButton(quoteForUpdate),
+            _actionButton(context, quoteForUpdate),
           ],
         ),
       ),
@@ -185,11 +186,12 @@ mixin QuoteFormMixin {
             if (!snapshot.hasError) {
               final allTags = snapshot.data!.first!;
               return MultipleSearchSelection(
-                searchField: const TextField(
+                searchField: TextField(
                   decoration: InputDecoration(
-                    labelText: 'Tags',
-                    hintText: 'Tag name',
-                    border: OutlineInputBorder(),
+                    labelText: AppLocalizations.of(context)!.quoteFormFieldTags,
+                    hintText: AppLocalizations.of(context)!
+                        .quoteFormFieldTagsHintText,
+                    border: const OutlineInputBorder(),
                   ),
                   smartDashesType: SmartDashesType.enabled,
                   smartQuotesType: SmartQuotesType.enabled,
@@ -199,6 +201,10 @@ mixin QuoteFormMixin {
                 items: allTags,
                 fieldToCheck: (tag) => tag.name,
                 clearSearchFieldOnSelect: true,
+                noResultsWidget: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(AppLocalizations.of(context)!.noResultsFound),
+                ),
                 showSelectAllButton: false,
                 showClearAllButton: false,
                 initialPickedItems: <Tag>[
@@ -253,13 +259,21 @@ mixin QuoteFormMixin {
     );
   }
 
-  Consumer<DatabaseProvider> _actionButton(Quote? quoteForUpdate) {
+  Consumer<DatabaseProvider> _actionButton(
+    BuildContext context,
+    Quote? quoteForUpdate,
+  ) {
+    final actionButtonText = isUpdateForm
+        ? AppLocalizations.of(context)!.quoteFormActionButtonEdit
+        : AppLocalizations.of(context)!.quoteFormActionButtonAdd;
+
+    final actionButtonIcon = isUpdateForm
+        ? const Icon(Icons.save_outlined)
+        : const Icon(Icons.create_outlined);
     return Consumer<DatabaseProvider>(
       builder: (context, database, child) => OutlinedButton.icon(
-        icon: isUpdateForm
-            ? const Icon(Icons.edit_outlined)
-            : const Icon(Icons.add_outlined),
-        label: isUpdateForm ? const Text('Update') : const Text('Create'),
+        icon: actionButtonIcon,
+        label: Text(actionButtonText),
         onPressed: () {
           final isValid = formKey.currentState?.saveAndValidate() ?? false;
           if (isValid) {
@@ -295,10 +309,13 @@ mixin QuoteFormMixin {
 
                 result.then((value) {
                   if (value case true || int _) {
+                    final successfulMessage = isUpdateForm
+                        ? AppLocalizations.of(context)!.quoteFormSuccessfulEdit
+                        : AppLocalizations.of(context)!.quoteFormSuccessfulAdd;
                     FToast().init(context).showToast(
                           child: Chip(
                             label: Text(
-                              'Successfully ${isUpdateForm ? 'updated' : 'added'}!',
+                              successfulMessage,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(99),

@@ -71,6 +71,10 @@
       }
     }
   },
+  "createTag": "Adicionar etiqueta",
+  "noResultsFound": "Nenhum resultado encontrado",
+  "addQuoteTitle":"Adicionar frase",
+  "editQuoteTitle":"Editar frase",
   "quoteFormFieldContent": "Frase",
   "quoteFormFieldAuthor":"Autor(a)",
   "quoteFormFieldAnonymAuthor":"Anônimo",
@@ -78,6 +82,13 @@
   "quoteFormFieldSourceHintText": "Um filme, livro, evento, lugar etc",
   "quoteFormFieldSourceUri": "Link da fonte",
   "quoteFormFieldSourceUriHintText": "Link para a fonte",
+  "quoteFormFieldIsFavorite": "Favoritar?",
+  "quoteFormFieldTags": "Etiquetas",
+  "quoteFormFieldTagsHintText": "Nome da etiqueta",
+  "quoteFormActionButtonAdd": "Adicionar frase",
+  "quoteFormActionButtonEdit": "Salvar",
+  "quoteFormSuccessfulAdd": "Adicionado com sucesso!",
+  "quoteFormSuccessfulEdit": "Editado com sucesso!",
   "invalidLink": "Insira um URL válido.",
   "nonEmptyField": "Campo ''{field}'' não pode ser vazio.",
   "@nonEmptyField": {

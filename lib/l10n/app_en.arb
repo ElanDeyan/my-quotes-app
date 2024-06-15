@@ -74,6 +74,10 @@
       }
     }
   },
+  "createTag": "Create tag",
+  "noResultsFound": "No results found",
+  "addQuoteTitle":"Add quote",
+  "editQuoteTitle":"Edit quote",
   "quoteFormFieldContent":"Content",
   "quoteFormFieldAuthor":"Author",
   "quoteFormFieldAnonymAuthor":"Anonym",
@@ -81,6 +85,13 @@
   "quoteFormFieldSourceHintText": "A movie, book, event, place and etc",
   "quoteFormFieldSourceUri": "Source link",
   "quoteFormFieldSourceUriHintText": "Link to the source",
+  "quoteFormFieldIsFavorite": "Favorite?",
+  "quoteFormFieldTags": "Tags",
+  "quoteFormFieldTagsHintText": "Tag name",
+  "quoteFormActionButtonAdd": "Add quote",
+  "quoteFormActionButtonEdit": "Save",
+  "quoteFormSuccessfulAdd": "Successfully added!",
+  "quoteFormSuccessfulEdit": "Successfully updated!",
   "invalidLink": "Enter a valid link.",
   "nonEmptyField": "Field {field} cannot be empty.",
   "@nonEmptyField": {
