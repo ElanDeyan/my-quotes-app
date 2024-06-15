@@ -62,6 +62,17 @@
             }
         }
     },
-    "tagActionsPopupButtonTooltip": "Actions"
+    "tags":"Tags",
+    "tagActionsPopupButtonTooltip": "Actions",
+    "tagActions": "{action, select, other{Missing action} edit{Edit} delete{Delete}}",
+    "@tagActions": {
+        "description": "Tag actions",
+        "placeholders": {
+            "action": {
+              "type":"String",
+              "example":"Edit" 
+            }
+        }
+    }
 
 }

@@ -17,7 +17,7 @@ class TagsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tags'),
+        title: Text(AppLocalizations.of(context)!.tags),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -99,7 +99,7 @@ class TagsScreen extends StatelessWidget {
           },
         ),
         trailing: PopupMenuButton(
-          tooltip: 'Actions',
+          tooltip: AppLocalizations.of(context)!.tagActionsPopupButtonTooltip,
           itemBuilder: (context) =>
               TagActions.popupMenuItems(context, tags[index]),
         ),
