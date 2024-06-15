@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/shared/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -120,7 +121,7 @@ class QuoteTileCard extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         trailing: PopupMenuButton(
-          tooltip: 'Actions',
+          tooltip: AppLocalizations.of(context)!.quoteActionsPopupButtonTooltip,
           position: PopupMenuPosition.under,
           itemBuilder: (context) => QuoteActions.popupMenuItems(
             context,

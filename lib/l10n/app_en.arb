@@ -50,5 +50,18 @@
     "navigationSearchLabel": "Search",
     "navigationBack": "Back",
     "navigationAddQuote":"Add a new quote",
-    "navigationAddTag": "Add a new tag"
+    "navigationAddTag": "Add a new tag",
+    "quoteActionsPopupButtonTooltip": "Actions",
+    "quoteActions": "{action, select, other{Missing action} info{Info} view_quote{View quote} create{Create} edit{Edit} copy{Copy} share{Share} copy_link{Copy Link} go_to_link{Go to link} delete{Delete}}",
+    "@quoteActions": {
+        "description": "Quote actions",
+        "placeholders": {
+            "action": {
+              "type":"String",
+              "example":"Edit" 
+            }
+        }
+    },
+    "tagActionsPopupButtonTooltip": "Actions"
+
 }

@@ -47,5 +47,17 @@
     "navigationSearchLabel": "Buscar",
     "navigationBack": "Voltar",
     "navigationAddQuote":"Adicionar frase",
-    "navigationAddTag": "Adicionar etiqueta"
+    "navigationAddTag": "Adicionar etiqueta",
+    "quoteActionsPopupButtonTooltip": "Mais ações",
+    "quoteActions": "{action, select, other{Falta adicionar} info{Informações} view_quote{Ver frase} create{Adicionar} edit{Editar} copy{Copiar} share{Compartilhar} copy_link{Copiar link} go_to_link{Acessar link} delete{Deletar}}",
+    "@quoteActions": {
+        "description": "Quote actions",
+        "placeholders": {
+            "action": {
+              "type":"String",
+              "example":"Edit" 
+            }
+        }
+    },
+    "tagActionsPopupButtonTooltip": "Mais ações"
 }
