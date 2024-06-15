@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:my_quotes/constants/color_pallete.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
@@ -94,6 +95,7 @@ final class MyApp extends StatelessWidget {
           localizationsDelegates: const [
             ...AppLocalizations.localizationsDelegates,
             ...GlobalMaterialLocalizations.delegates,
+            ...FormBuilderLocalizations.localizationsDelegates,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale(scriptCode, countryCode),
