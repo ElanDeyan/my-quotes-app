@@ -92,8 +92,8 @@ final class MyApp extends StatelessWidget {
             ),
           ),
           localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
+            ...AppLocalizations.localizationsDelegates,
+            ...GlobalMaterialLocalizations.delegates,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale(scriptCode, countryCode),
