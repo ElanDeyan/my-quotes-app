@@ -36,5 +36,16 @@
         }
     },
     "info": "Sobre o app",
-    "infoDescription": "Obrigado por usar este app!\nEspero que esteja gostando!\n\nEste é meu primeiro app publicado e seu compartilhamento pode me ajudar a conseguir trabalhos e oportunidades. :-)\n\nPara apoiar meu trabalho, compartilhe com seus amigos e me siga nas minhas redes sociais:"
+    "infoDescription": "Obrigado por usar este app!\nEspero que esteja gostando!\n\nEste é meu primeiro app publicado e seu compartilhamento pode me ajudar a conseguir trabalhos e oportunidades. :-)\n\nPara apoiar meu trabalho, compartilhe com seus amigos e me siga nas minhas redes sociais:",
+    "navigationHome":"Início",
+    "navgationMyQuotes": "Frases",
+    "navigationSettings": "Configurações",
+    "navigationTags": "Etiquetas",
+    "navigationSearchQuote": "Pesquisar frase",
+    "navigationSearchTag":"Pesquisar etiqueta",
+    "navigationSearchClear": "Limpar busca",
+    "navigationSearchLabel": "Buscar",
+    "navigationBack": "Voltar",
+    "navigationAddQuote":"Adicionar frase",
+    "navigationAddTag": "Adicionar etiqueta"
 }

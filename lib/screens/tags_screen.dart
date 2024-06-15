@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/routes/routes_names.dart';
@@ -20,17 +21,28 @@ class TagsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () =>
-                showTagSearch(context, SearchTagDelegate(context: context)),
+            tooltip: AppLocalizations.of(context)!.navigationSearchTag,
+            onPressed: () => showTagSearch(
+              context,
+              SearchTagDelegate(
+                context: context,
+                keyboardType: TextInputType.text,
+                searchFieldLabel:
+                    AppLocalizations.of(context)!.navigationSearchLabel,
+              ),
+            ),
           ),
         ],
-        leading: BackButton(
+        leading: IconButton(
+          tooltip: AppLocalizations.of(context)!.navigationBack,
+          icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () => context.canPop()
               ? context.pop(context)
               : context.pushNamed(myQuotesNavigationKey),
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        tooltip: AppLocalizations.of(context)!.navigationAddTag,
         onPressed: () => createTag(context),
         child: const Icon(Icons.new_label),
       ),

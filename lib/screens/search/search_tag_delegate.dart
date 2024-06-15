@@ -1,5 +1,6 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/routes/routes_names.dart';
@@ -26,10 +27,11 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
+        tooltip: AppLocalizations.of(context)!.navigationSearchClear,
         onPressed: () {
           query = '';
         },
-        icon: const Icon(Icons.clear),
+        icon: const Icon(Icons.clear_outlined),
       ),
     ];
   }
@@ -37,10 +39,11 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
+      tooltip: AppLocalizations.of(context)!.navigationBack,
       onPressed: () => context.canPop()
           ? context.pop()
           : context.pushNamed(tagsNavigationKey),
-      icon: const Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back_outlined),
     );
   }
 

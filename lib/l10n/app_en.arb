@@ -39,5 +39,16 @@
         }
     },
     "info": "Info",
-    "infoDescription": "Thanks for using this app!\nI hope you're enjoying!\n\nThis' my first published app and your sharing can help me to find jobs and oportunities. :-)\n\nTo support my work, share with your friends and follow me in my social medias:"
+    "infoDescription": "Thanks for using this app!\nI hope you're enjoying!\n\nThis' my first published app and your sharing can help me to find jobs and oportunities. :-)\n\nTo support my work, share with your friends and follow me in my social medias:",
+    "navigationHome":"Home",
+    "navgationMyQuotes": "My Quotes",
+    "navigationSettings": "Settings",
+    "navigationTags": "Tags",
+    "navigationSearchQuote": "Search quote",
+    "navigationSearchTag":"Search tag",
+    "navigationSearchClear": "Clear search",
+    "navigationSearchLabel": "Search",
+    "navigationBack": "Back",
+    "navigationAddQuote":"Add a new quote",
+    "navigationAddTag": "Add a new tag"
 }

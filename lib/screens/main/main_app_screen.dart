@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/destinations.dart';
 import 'package:my_quotes/routes/routes_names.dart';
@@ -60,18 +61,21 @@ final class _MainAppScreenState extends State<MainAppScreen> {
         actions: [
           if (bodyContent is MyQuotesScreen) ...[
             IconButton(
+              tooltip: AppLocalizations.of(context)!.navigationSearchQuote,
               onPressed: () => showQuoteSearch(
                 context,
                 SearchQuoteDelegate(
                   context: context,
                   keyboardType: TextInputType.text,
+                  searchFieldLabel: AppLocalizations.of(context)!
+                      .navigationSearchLabel,
                 ),
               ),
               icon: const Icon(Icons.search_outlined),
             ),
             IconButton(
               icon: const Icon(Icons.label_outlined),
-              tooltip: 'Tags',
+              tooltip: AppLocalizations.of(context)!.navigationTags,
               onPressed: () => context.pushNamed(tagsNavigationKey),
             ),
           ],
@@ -93,7 +97,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
       ),
       floatingActionButton: isCompactWindowSize
           ? FloatingActionButton(
-              tooltip: 'Add a new quote',
+              tooltip: AppLocalizations.of(context)!.navigationAddQuote,
               onPressed: () => showAddQuoteDialog(context),
               backgroundColor: Theme.of(context).colorScheme.secondary,
               child: Icon(
@@ -108,11 +112,12 @@ final class _MainAppScreenState extends State<MainAppScreen> {
   }
 
   List<IconButton> _actionsForCompactWindow(BuildContext context) {
+    final settingsDestination = widget.destinations[settingsNavigationKey]!;
     return <IconButton>[
       IconButton(
-        tooltip: 'Settings',
+        tooltip: settingsDestination.label,
         onPressed: () => context.pushNamed(settingsNavigationKey),
-        icon: const Icon(Icons.settings_outlined),
+        icon: settingsDestination.outlinedIcon,
       ),
     ];
   }
@@ -136,7 +141,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             onDestinationSelected: _updateIndex,
             leading: !isCompactWindowSize
                 ? FloatingActionButton(
-                    tooltip: 'Add a new quote',
+                    tooltip: AppLocalizations.of(context)!.navigationAddQuote,
                     backgroundColor:
                         Theme.of(context).colorScheme.surfaceContainerHighest,
                     onPressed: () => showAddQuoteDialog(context),
@@ -156,7 +161,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             ],
             trailing: IconButton(
               onPressed: () => context.pushNamed(settingsNavigationKey),
-              icon: settingsDestination.selectedIcon,
+              icon: settingsDestination.outlinedIcon,
               tooltip: settingsDestination.label,
             ),
             selectedIndex: _selectedIndex,

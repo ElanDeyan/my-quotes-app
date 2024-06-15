@@ -18,20 +18,20 @@ final routesConfig = GoRouter(
       path: '/',
       name: mainScreenNavigationKey,
       builder: (context, state) =>
-          const MainAppScreen(destinations: DestinationsMixin.destinationsData),
+          MainAppScreen(destinations: DestinationsMixin.destinationsDataOf(context)),
       routes: [
         GoRoute(
           path: 'home',
           name: homeNavigationKey,
-          builder: (context, state) => const MainAppScreen(
-            destinations: DestinationsMixin.destinationsData,
+          builder: (context, state) => MainAppScreen(
+            destinations: DestinationsMixin.destinationsDataOf(context),
           ),
         ),
         GoRoute(
           path: 'myQuotes',
           name: myQuotesNavigationKey,
-          builder: (context, state) => const MainAppScreen(
-            destinations: DestinationsMixin.destinationsData,
+          builder: (context, state) => MainAppScreen(
+            destinations: DestinationsMixin.destinationsDataOf(context),
             initialLocationIndex: 1,
           ),
           routes: [
