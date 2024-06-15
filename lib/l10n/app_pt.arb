@@ -1,74 +1,91 @@
 {
-    "@@locale": "pt",
-    "helloWorld": "Olá mundo!",
-    "settings": "Configurações",
-    "themeMode": "Tema",
-    "chooseThemeModeMessage":"Escolha um tema",
-    "themeModeName": "{themeMode,select, system{Padrão do sistema} light{Claro} dark{Escuro} other{Falta tema}}",
-    "@themeModeName": {
-        "placeholders": {
-            "themeMode": {
-                "type": "String",
-                "example": "system"
-            }
-        }
-    },
-    "colorPallete": "Paleta de cores",
-    "chooseColorPaletteMessage":"Escolha uma paleta de cores",
-    "colorPaletteName": "{colorPalette,select, blue{Azul} caramel{Caramelo} espresso_and_crema{Expresso e Creme} flutter_dash{Flutter Dash} green{Verde} indigo{Anil} pink{Rosa} vanilla{Baunilha} vivid_sky_blue{Azul celeste vívido} ultra_violet{Ultra violeta} other{Falta paleta de cores}}",
-    "@colorPaletteName": {
-        "placeholders": {
-            "colorPalette": {
-                "type": "String",
-                "example": "blue"
-            }
-        }
-    },
-    "language": "Idioma do app",
-    "chooseAppLanguage":"Escolha um idioma",
-    "languageName": "{language,select, en{Inglês} pt{Português brasileiro} other{Falta idioma}}",
-    "@languageName": {
-        "placeholders": {
-            "language": {
-                "type": "String",
-                "example": "en"
-            }
-        }
-    },
-    "info": "Sobre o app",
-    "infoDescription": "Obrigado por usar este app!\nEspero que esteja gostando!\n\nEste é meu primeiro app publicado e seu compartilhamento pode me ajudar a conseguir trabalhos e oportunidades. :-)\n\nPara apoiar meu trabalho, compartilhe com seus amigos e me siga nas minhas redes sociais:",
-    "navigationHome":"Início",
-    "navgationMyQuotes": "Frases",
-    "navigationSettings": "Configurações",
-    "navigationTags": "Etiquetas",
-    "navigationSearchQuote": "Pesquisar frase",
-    "navigationSearchTag":"Pesquisar etiqueta",
-    "navigationSearchClear": "Limpar busca",
-    "navigationSearchLabel": "Buscar",
-    "navigationBack": "Voltar",
-    "navigationAddQuote":"Adicionar frase",
-    "navigationAddTag": "Adicionar etiqueta",
-    "quoteActionsPopupButtonTooltip": "Mais ações",
-    "quoteActions": "{action, select, other{Falta adicionar} info{Informações} view_quote{Ver frase} create{Adicionar} edit{Editar} copy{Copiar} share{Compartilhar} copy_link{Copiar link} go_to_link{Acessar link} delete{Deletar}}",
-    "@quoteActions": {
-        "description": "Quote actions",
-        "placeholders": {
-            "action": {
-              "type":"String",
-              "example":"Edit" 
-            }
-        }
-    },
-    "tags":"Etiquetas",
-    "tagActionsPopupButtonTooltip": "Mais ações",
-    "tagActions": "{action, select, other{Falta adicionar} edit{Editar} delete{Deletar}}",
-    "@tagActions": {
-        "description": "Tag actions",
-        "placeholders": {
-            "action": {
-              "type":"String",
-              "example":"Editar" 
-            }
-        }
+  "@@locale": "pt",
+  "helloWorld": "Olá mundo!",
+  "settings": "Configurações",
+  "themeMode": "Tema",
+  "chooseThemeModeMessage": "Escolha um tema",
+  "themeModeName": "{themeMode,select, system{Padrão do sistema} light{Claro} dark{Escuro} other{Falta tema}}",
+  "@themeModeName": {
+    "placeholders": {
+      "themeMode": {
+        "type": "String",
+        "example": "system"
+      }
     }
+  },
+  "colorPallete": "Paleta de cores",
+  "chooseColorPaletteMessage": "Escolha uma paleta de cores",
+  "colorPaletteName": "{colorPalette,select, blue{Azul} caramel{Caramelo} espresso_and_crema{Expresso e Creme} flutter_dash{Flutter Dash} green{Verde} indigo{Anil} pink{Rosa} vanilla{Baunilha} vivid_sky_blue{Azul celeste vívido} ultra_violet{Ultra violeta} other{Falta paleta de cores}}",
+  "@colorPaletteName": {
+    "placeholders": {
+      "colorPalette": {
+        "type": "String",
+        "example": "blue"
+      }
+    }
+  },
+  "language": "Idioma do app",
+  "chooseAppLanguage": "Escolha um idioma",
+  "languageName": "{language,select, en{Inglês} pt{Português brasileiro} other{Falta idioma}}",
+  "@languageName": {
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "en"
+      }
+    }
+  },
+  "info": "Sobre o app",
+  "infoDescription": "Obrigado por usar este app!\nEspero que esteja gostando!\n\nEste é meu primeiro app publicado e seu compartilhamento pode me ajudar a conseguir trabalhos e oportunidades. :-)\n\nPara apoiar meu trabalho, compartilhe com seus amigos e me siga nas minhas redes sociais:",
+  "navigationHome": "Início",
+  "navgationMyQuotes": "Frases",
+  "navigationSettings": "Configurações",
+  "navigationTags": "Etiquetas",
+  "navigationSearchQuote": "Pesquisar frase",
+  "navigationSearchTag": "Pesquisar etiqueta",
+  "navigationSearchClear": "Limpar busca",
+  "navigationSearchLabel": "Buscar",
+  "navigationBack": "Voltar",
+  "navigationAddQuote": "Adicionar frase",
+  "navigationAddTag": "Adicionar etiqueta",
+  "quoteActionsPopupButtonTooltip": "Mais ações",
+  "quoteActions": "{action, select, other{Falta adicionar} info{Informações} view_quote{Ver frase} create{Adicionar} edit{Editar} copy{Copiar} share{Compartilhar} copy_link{Copiar link} go_to_link{Acessar link} delete{Deletar}}",
+  "@quoteActions": {
+    "description": "Quote actions",
+    "placeholders": {
+      "action": {
+        "type": "String",
+        "example": "Edit"
+      }
+    }
+  },
+  "tags": "Etiquetas",
+  "tagActionsPopupButtonTooltip": "Mais ações",
+  "tagActions": "{action, select, other{Falta adicionar} edit{Editar} delete{Deletar}}",
+  "@tagActions": {
+    "description": "Tag actions",
+    "placeholders": {
+      "action": {
+        "type": "String",
+        "example": "Editar"
+      }
+    }
+  },
+  "quoteFormFieldContent": "Frase",
+  "quoteFormFieldAuthor":"Autor(a)",
+  "quoteFormFieldAnonymAuthor":"Anônimo",
+  "quoteFormFieldSource": "Fonte",
+  "quoteFormFieldSourceHintText": "Um filme, livro, evento, lugar etc",
+  "quoteFormFieldSourceUri": "Link da fonte",
+  "quoteFormFieldSourceUriHintText": "Link para a fonte",
+  "invalidLink": "Insira um URL válido.",
+  "nonEmptyField": "Campo ''{field}'' não pode ser vazio.",
+  "@nonEmptyField": {
+    "description": "Non empty field",
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  }
 }

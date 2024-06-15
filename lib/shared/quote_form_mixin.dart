@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:basics/basics.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
@@ -21,19 +22,6 @@ mixin QuoteFormMixin {
 
   final _multipleTagSearchController = MultipleSearchController<Tag>();
 
-  final urlPattern = RegExp(
-    r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)',
-  );
-
-  String? sourceUriValidator(String? value) {
-    if (value.isNotNullOrBlank) {
-      if (!urlPattern.hasMatch(value!)) {
-        return 'Enter a valid link';
-      }
-    }
-    return null;
-  }
-
   final _pickedItems = <Tag>[];
 
   Widget quoteFormBody(BuildContext context, {Quote? quoteForUpdate}) {
@@ -47,36 +35,36 @@ mixin QuoteFormMixin {
           children: [
             FormBuilderTextField(
               name: 'content',
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Content',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)!.quoteFormFieldContent,
               ),
               maxLines: null,
               smartQuotesType: SmartQuotesType.enabled,
               keyboardType: TextInputType.multiline,
               enableSuggestions: true,
               smartDashesType: SmartDashesType.enabled,
-              validator: (value) {
-                if (value.isNullOrBlank) {
-                  return "Can't be empty.";
-                }
-                return null;
-              },
+              validator: FormBuilderValidators.required(
+                errorText: AppLocalizations.of(context)!.nonEmptyField(
+                  AppLocalizations.of(context)!.quoteFormFieldContent,
+                ),
+              ),
               valueTransformer: (value) => value?.trim(),
             ),
             const SizedBox(
               height: 10,
             ),
-            _authorTextField(),
+            _authorTextField(context),
             const SizedBox(
               height: 10,
             ),
             FormBuilderTextField(
               name: 'source',
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Source',
-                hintText: 'Like a movie, book, event, place and etc',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)!.quoteFormFieldSource,
+                hintText:
+                    AppLocalizations.of(context)!.quoteFormFieldSourceHintText,
               ),
               keyboardType: TextInputType.text,
               enableSuggestions: true,
@@ -89,12 +77,14 @@ mixin QuoteFormMixin {
             ),
             FormBuilderTextField(
               name: 'sourceUri',
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Source link',
-                hintText: 'Link to the source',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText:
+                    AppLocalizations.of(context)!.quoteFormFieldSourceUri,
+                hintText: AppLocalizations.of(context)!
+                    .quoteFormFieldSourceUriHintText,
               ),
-              validator: sourceUriValidator,
+              validator: FormBuilderValidators.url(),
               enableSuggestions: true,
               smartDashesType: SmartDashesType.enabled,
               smartQuotesType: SmartQuotesType.enabled,
@@ -134,43 +124,41 @@ mixin QuoteFormMixin {
     );
   }
 
-  FormBuilderTextField _authorTextField() {
+  FormBuilderTextField _authorTextField(BuildContext context) {
+    final fieldName = AppLocalizations.of(context)!.quoteFormFieldAuthor;
     return isUpdateForm
         ? FormBuilderTextField(
             name: 'author',
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Author',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: fieldName,
             ),
             smartQuotesType: SmartQuotesType.enabled,
             keyboardType: TextInputType.name,
             enableSuggestions: true,
             smartDashesType: SmartDashesType.enabled,
-            validator: (value) {
-              if (value.isNullOrBlank) {
-                return "Can't be empty.";
-              }
-              return null;
-            },
+            validator: FormBuilderValidators.required(
+              errorText: AppLocalizations.of(context)!.nonEmptyField(
+                fieldName,
+              ),
+            ),
             valueTransformer: (value) => value?.trim(),
           )
         : FormBuilderTextField(
             name: 'author',
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Author',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: fieldName,
             ),
-            initialValue: 'Anonym',
+            initialValue:
+                AppLocalizations.of(context)!.quoteFormFieldAnonymAuthor,
             smartQuotesType: SmartQuotesType.enabled,
             enableSuggestions: true,
             smartDashesType: SmartDashesType.enabled,
             keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value.isNullOrBlank) {
-                return "Can't be empty.";
-              }
-              return null;
-            },
+            validator: FormBuilderValidators.required(
+              errorText: AppLocalizations.of(context)!.nonEmptyField(fieldName),
+            ),
             valueTransformer: (value) => value?.trim(),
           );
   }
