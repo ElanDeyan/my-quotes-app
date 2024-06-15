@@ -243,7 +243,10 @@ mixin QuoteFormMixin {
                 sortPickedItems: true,
                 showedItemsBoxDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5),
+                  ),
                 ),
                 itemsVisibility: ShowedItemsVisibility.onType,
                 itemBuilder: (tag, _) => Padding(
@@ -265,7 +268,9 @@ mixin QuoteFormMixin {
   Consumer<DatabaseProvider> _actionButton(Quote? quoteForUpdate) {
     return Consumer<DatabaseProvider>(
       builder: (context, database, child) => OutlinedButton.icon(
-        icon: isUpdateForm ? const Icon(Icons.edit_outlined) : const Icon(Icons.add_outlined),
+        icon: isUpdateForm
+            ? const Icon(Icons.edit_outlined)
+            : const Icon(Icons.add_outlined),
         label: isUpdateForm ? const Text('Update') : const Text('Create'),
         onPressed: () {
           final isValid = formKey.currentState?.saveAndValidate() ?? false;
@@ -326,7 +331,9 @@ mixin QuoteFormMixin {
               },
             );
             formKey.currentState?.reset();
-            _multipleTagSearchController..clearAllPickedItems()..clearSearchField();
+            _multipleTagSearchController
+              ..clearAllPickedItems()
+              ..clearSearchField();
             Navigator.pop(context);
           }
         },

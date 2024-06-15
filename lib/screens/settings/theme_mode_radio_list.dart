@@ -37,7 +37,11 @@ final class _ThemeModeRadioListState extends State<ThemeModeRadioList> {
                 preferences.themeMode = value;
               }),
               selected: _themeModeGroupValue == themeMode,
-              title: Text(AppLocalizations.of(context)!.themeModeName(themeMode.name).toTitleCase()),
+              title: Text(
+                AppLocalizations.of(context)!
+                    .themeModeName(themeMode.name)
+                    .toTitleCase(),
+              ),
             ),
         ],
       ),

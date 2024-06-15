@@ -39,7 +39,8 @@ final class _LanguageRadioListState extends State<LanguageRadioList> {
                   preferences.language = value;
                 }),
                 selected: _languageGroupValue == language,
-                title: Text(AppLocalizations.of(context)!.languageName(language)),
+                title:
+                    Text(AppLocalizations.of(context)!.languageName(language)),
               ),
           ],
         ),

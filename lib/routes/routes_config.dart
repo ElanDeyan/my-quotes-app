@@ -17,8 +17,9 @@ final routesConfig = GoRouter(
     GoRoute(
       path: '/',
       name: mainScreenNavigationKey,
-      builder: (context, state) =>
-          MainAppScreen(destinations: DestinationsMixin.destinationsDataOf(context)),
+      builder: (context, state) => MainAppScreen(
+        destinations: DestinationsMixin.destinationsDataOf(context),
+      ),
       routes: [
         GoRoute(
           path: 'home',

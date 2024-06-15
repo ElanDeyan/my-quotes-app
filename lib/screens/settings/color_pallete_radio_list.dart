@@ -40,7 +40,10 @@ final class _ColorSchemePaletteRadioListState
                   preferences.colorSchemePalette = value;
                 }),
                 selected: _colorSchemePaletteGroupValue == colorSchemePalette,
-                title: Text(AppLocalizations.of(context)!.colorPaletteName(colorSchemePalette.storageName)),
+                title: Text(
+                  AppLocalizations.of(context)!
+                      .colorPaletteName(colorSchemePalette.storageName),
+                ),
               ),
           ],
         ),
