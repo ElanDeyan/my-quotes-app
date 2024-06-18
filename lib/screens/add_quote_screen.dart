@@ -20,13 +20,27 @@ final class AddQuoteScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: AddQuoteForm(),
+      body: const AddQuoteForm(),
     );
   }
 }
 
-final class AddQuoteForm extends StatelessWidget with QuoteFormMixin {
-  AddQuoteForm({super.key});
+final class AddQuoteForm extends StatefulWidget {
+  const AddQuoteForm({super.key});
+
+  @override
+  State<AddQuoteForm> createState() => _AddQuoteFormState();
+}
+
+class _AddQuoteFormState extends State<AddQuoteForm> with QuoteFormMixin {
+  @override
+  void dispose() {
+    multipleTagSearchController
+      ..clearAllPickedItems()
+      ..clearSearchField();
+    formKey.currentState?.reset();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

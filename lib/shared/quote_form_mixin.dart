@@ -20,7 +20,7 @@ mixin QuoteFormMixin {
 
   bool get isUpdateForm => false;
 
-  final _multipleTagSearchController = MultipleSearchController<Tag>();
+  final multipleTagSearchController = MultipleSearchController<Tag>();
 
   final _pickedItems = <Tag>[];
 
@@ -112,7 +112,7 @@ mixin QuoteFormMixin {
             ),
             _selectTags(
               context,
-              _multipleTagSearchController,
+              multipleTagSearchController,
               quoteForUpdate: quoteForUpdate,
             ),
             const SizedBox(
@@ -283,7 +283,7 @@ mixin QuoteFormMixin {
 
             formValue.putIfAbsent(
               'tags',
-              () => _multipleTagSearchController
+              () => multipleTagSearchController
                   .getPickedItems()
                   .map((tag) => tag.id)
                   .nonNulls
@@ -335,10 +335,6 @@ mixin QuoteFormMixin {
                 });
               },
             );
-            formKey.currentState?.reset();
-            _multipleTagSearchController
-              ..clearAllPickedItems()
-              ..clearSearchField();
             Navigator.pop(context);
           }
         },

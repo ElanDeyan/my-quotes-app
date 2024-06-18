@@ -74,15 +74,29 @@ class UpdateQuoteScreenBody extends StatelessWidget {
   }
 }
 
-class UpdateQuoteForm extends StatelessWidget with QuoteFormMixin {
-  UpdateQuoteForm({
+class UpdateQuoteForm extends StatefulWidget {
+  const UpdateQuoteForm({
     super.key,
     required this.quote,
   });
 
   final Quote quote;
 
-  Map<String, dynamic> get quoteAsJson => quote.toJson()
+  @override
+  State<UpdateQuoteForm> createState() => _UpdateQuoteFormState();
+}
+
+class _UpdateQuoteFormState extends State<UpdateQuoteForm> with QuoteFormMixin {
+  @override
+  void dispose() {
+    multipleTagSearchController
+      ..clearAllPickedItems()
+      ..clearSearchField();
+    formKey.currentState?.reset();
+    super.dispose();
+  }
+
+  Map<String, dynamic> get quoteAsJson => widget.quote.toJson()
     ..update(
       'tags',
       (value) => switch (value) {
@@ -102,7 +116,7 @@ class UpdateQuoteForm extends StatelessWidget with QuoteFormMixin {
       onChanged: formKey.currentState?.validate,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: quoteAsJson,
-      child: quoteFormBody(context, quoteForUpdate: quote),
+      child: quoteFormBody(context, quoteForUpdate: widget.quote),
     );
   }
 }
