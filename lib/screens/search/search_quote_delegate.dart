@@ -2,6 +2,7 @@ import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/fuzzy_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
@@ -57,18 +58,18 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
                 );
               }
               final searchResults = snapshot.data!
-                  .where(
-                    (quote) => quote.dataForQuery
-                        .toLowerCase()
-                        .contains(query.toLowerCase()),
+                  .fuzzyExtractAllSorted(
+                    query: query,
+                    cutoff: 50,
+                    getter: (quote) => quote.dataForQuery,
                   )
-                  .toList();
+                  .map((result) => result.choice);
               if (searchResults.isEmpty) {
                 return const Center(
                   child: Text('No results found'),
                 );
               }
-              return SearchQuoteResults(searchResults: searchResults);
+              return SearchQuoteResults(searchResults: searchResults.toList());
             } else {
               return Center(
                 child: Text(snapshot.error.toString()),
@@ -98,11 +99,12 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
                 }
 
                 final searchResults = snapshot.data!
-                    .where(
-                      (quote) => quote.dataForQuery
-                          .toLowerCase()
-                          .contains(query.toLowerCase()),
+                    .fuzzyExtractAllSorted(
+                      query: query,
+                      cutoff: 50,
+                      getter: (quote) => quote.dataForQuery,
                     )
+                    .map((result) => result.choice)
                     .toList();
 
                 if (searchResults.isEmpty) {
