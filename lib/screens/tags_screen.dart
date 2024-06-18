@@ -92,7 +92,7 @@ class TagsScreen extends StatelessWidget {
       ),
       itemBuilder: (context, index) => ListTile(
         title: Text(tags[index].name),
-        onTap: () => context.goNamed(
+        onTap: () => context.pushNamed(
           quoteWithTagNavigationKey,
           pathParameters: {
             'tagId': '${tags[index].id!}',
