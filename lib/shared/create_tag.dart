@@ -1,5 +1,6 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
@@ -17,7 +18,7 @@ void createTag(BuildContext context) {
         database.createTag(Tag(name: value!));
         FToast().init(context).showToast(
               child: Chip(
-                label: const Text('Created!'),
+                label: Text(AppLocalizations.of(context)!.created),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(99),
                 ),

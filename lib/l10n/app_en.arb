@@ -76,11 +76,11 @@
   },
   "createTag": "Create tag",
   "noResultsFound": "No results found",
-  "addQuoteTitle":"Add quote",
-  "editQuoteTitle":"Edit quote",
-  "quoteFormFieldContent":"Content",
-  "quoteFormFieldAuthor":"Author",
-  "quoteFormFieldAnonymAuthor":"Anonym",
+  "addQuoteTitle": "Add quote",
+  "editQuoteTitle": "Edit quote",
+  "quoteFormFieldContent": "Content",
+  "quoteFormFieldAuthor": "Author",
+  "quoteFormFieldAnonymAuthor": "Anonym",
   "quoteFormFieldSource": "Source",
   "quoteFormFieldSourceHintText": "A movie, book, event, place and etc",
   "quoteFormFieldSourceUri": "Source link",
@@ -101,5 +101,25 @@
         "type": "String"
       }
     }
-  }
+  },
+  "created": "Created!",
+  "tagName": "Tag name",
+  "requiredFieldAlert": "Required field",
+  "emptyOrBlankAlert": "Can''t have only blank spaces",
+  "disallowedCommasAlert": "Commas aren''t allowed",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "deleteTag": "Delete \"{tagName}\" tag?",
+  "@deleteTag": {
+    "description": "Delete tag",
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "areYouSure": "Are you sure?",
+  "irreversibleAction": "This action can''t be undone.",
+  "deleteTagEffects": "Quotes with this tag will only lose that tag."
 }

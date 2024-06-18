@@ -1,5 +1,7 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/nullable_extension.dart';
 
 Future<String?>? showCreateTagDialog(
   BuildContext context, [
@@ -18,23 +20,26 @@ Future<String?>? showCreateTagDialog(
 
       final createTagFormKey = GlobalKey<FormState>();
       return AlertDialog(
-        title: const Text('Create tag'),
+        title: Text(AppLocalizations.of(context)!.createTag),
         content: Form(
           key: createTagFormKey,
           autovalidateMode: AutovalidateMode.always,
           child: TextFormField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Tag name',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: AppLocalizations.of(context)!.tagName,
             ),
             controller: textEditingController,
             validator: (value) {
-              if (value.isNullOrBlank) {
-                return "Can't be empty";
+              if (value.isNull) {
+                return AppLocalizations.of(context)!.requiredFieldAlert;
+              }
+              if (value?.isBlank ?? true) {
+                return AppLocalizations.of(context)!.emptyOrBlankAlert;
               }
 
               if (value.isNotNullOrBlank && value!.contains(',')) {
-                return 'Commas are disallowed';
+                return AppLocalizations.of(context)!.disallowedCommasAlert;
               }
 
               return null;
@@ -44,15 +49,15 @@ Future<String?>? showCreateTagDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () {
               if (createTagFormKey.currentState?.validate() ?? false) {
-                Navigator.pop(context, textEditingController.text);
+                Navigator.pop(context, textEditingController.text.trim());
               }
             },
-            child: const Text('Save'),
+            child: Text(AppLocalizations.of(context)!.save),
           ),
         ],
       );

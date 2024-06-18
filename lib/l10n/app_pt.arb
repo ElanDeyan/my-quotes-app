@@ -98,5 +98,25 @@
         "type": "String"
       }
     }
-  }
+  },
+  "created": "Adicionado!",
+  "tagName": "Nome da etiqueta",
+  "requiredFieldAlert": "Campo obrigatório",
+  "emptyOrBlankAlert": "Não pode ter somente espaços em branco",
+  "disallowedCommasAlert": "Não pode ter vírgulas",
+  "cancel": "Cancelar",
+  "save": "Salvar",
+  "delete": "Deletar",
+  "deleteTag": "Deletar etiqueta \"{tagName}\"?",
+  "@deleteTag": {
+    "description": "Delete tag",
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "areYouSure": "Tem certeza?",
+  "irreversibleAction": "Essa ação não poderá ser desfeita.",
+  "deleteTagEffects": "Frases com esta etiqueta irão apenas perder ela."
 }
