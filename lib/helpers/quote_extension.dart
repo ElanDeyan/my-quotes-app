@@ -1,4 +1,5 @@
 import 'package:basics/basics.dart';
+import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/shared/quote_actions.dart';
@@ -11,7 +12,7 @@ extension QuoteExtension on Quote {
   bool get hasSourceUri => sourceUri.isNotNull;
 
   Iterable<int> get tagsId =>
-      tags?.split(',').map(int.tryParse).nonNulls ?? const <int>[];
+      tags?.split(idSeparatorChar).map(int.tryParse).nonNulls ?? const <int>[];
 
   String get shareableFormat => '''
 Take a look in this quote:

@@ -1,5 +1,6 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
+import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 
 Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
@@ -24,7 +25,7 @@ Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
               return "Can't be empty";
             }
 
-            if (value.isNotNullOrBlank && value!.contains(',')) {
+            if (value.isNotNullOrBlank && value!.contains(idSeparatorChar)) {
               return 'Commas are disallowed';
             }
 

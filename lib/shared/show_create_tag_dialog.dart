@@ -1,6 +1,7 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 
 Future<String?>? showCreateTagDialog(
@@ -38,7 +39,7 @@ Future<String?>? showCreateTagDialog(
                 return AppLocalizations.of(context)!.emptyOrBlankAlert;
               }
 
-              if (value.isNotNullOrBlank && value!.contains(',')) {
+              if (value.isNotNullOrBlank && value!.contains(idSeparatorChar)) {
                 return AppLocalizations.of(context)!.disallowedCommasAlert;
               }
 
