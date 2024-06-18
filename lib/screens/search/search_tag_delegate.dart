@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/fuzzy_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_tag_results.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -59,17 +60,18 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
                 );
               }
               final searchResults = snapshot.data!
-                  .where(
-                    (tag) =>
-                        tag.name.toLowerCase().contains(query.toLowerCase()),
+                  .fuzzyExtractAllSorted(
+                    query: query,
+                    cutoff: 50,
+                    getter: (tag) => tag.name,
                   )
-                  .toList();
+                  .map((result) => result.choice);
               if (searchResults.isEmpty) {
                 return const Center(
                   child: Text('No results found'),
                 );
               }
-              return SearchTagResults(searchResults: searchResults);
+              return SearchTagResults(searchResults: searchResults.toList());
             } else {
               return Center(
                 child: Text(snapshot.error.toString()),
@@ -98,10 +100,12 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
                   );
                 }
                 final searchResults = snapshot.data!
-                    .where(
-                      (tag) =>
-                          tag.name.toLowerCase().contains(query.toLowerCase()),
+                    .fuzzyExtractAllSorted(
+                      query: query,
+                      cutoff: 50,
+                      getter: (tag) => tag.name,
                     )
+                    .map((result) => result.choice)
                     .toList();
                 if (searchResults.isEmpty) {
                   return const Center(
