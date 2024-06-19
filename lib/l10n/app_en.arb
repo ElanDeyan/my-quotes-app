@@ -121,5 +121,22 @@
   },
   "areYouSure": "Are you sure?",
   "irreversibleAction": "This action can''t be undone.",
-  "deleteTagEffects": "Quotes with this tag will only lose that tag."
+  "deleteTagEffects": "Quotes with this tag will only lose that tag.",
+  "updateTag": "Update tag",
+  "newTagName": "New tag name",
+  "quoteNotFoundWithId": "Quote with this {id} not found.",
+  "@quoteNotFoundWithId": {
+    "placeholders": {
+      "id": {
+        "type": "num"
+      }
+    }
+  },
+  "noDatabaseConnectionMessage": "No database connection.",
+  "errorOccurred": "An error has occurred.",
+  "quotesWithThisTag": "Quotes with this tag",
+  "noQuotesWithTag": "No quotes with this tag found.",
+  "quoteInfo": "Quote info",
+  "edit": "Edit",
+  "ok": "Ok"
 }

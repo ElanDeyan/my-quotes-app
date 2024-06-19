@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -13,7 +14,7 @@ class QuotesWithTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quotes with tag'),
+        title: Text(AppLocalizations.of(context)!.quotesWithThisTag),
         leading: BackButton(
           onPressed: () => context.canPop()
               ? context.pop()
@@ -28,8 +29,10 @@ class QuotesWithTag extends StatelessWidget {
 
             switch (connectionState) {
               case ConnectionState.none:
-                return const Center(
-                  child: Text('No database found.'),
+                return Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                  ),
                 );
 
               case ConnectionState.active || ConnectionState.waiting:
@@ -40,8 +43,9 @@ class QuotesWithTag extends StatelessWidget {
               case ConnectionState.done:
                 if (!snapshot.hasError) {
                   if (snapshot.data!.isEmpty) {
-                    return const Center(
-                      child: Text('No quotes with this tag found.'),
+                    return Center(
+                      child:
+                          Text(AppLocalizations.of(context)!.noQuotesWithTag),
                     );
                   } else {
                     final data = snapshot.data!;

@@ -118,5 +118,23 @@
   },
   "areYouSure": "Tem certeza?",
   "irreversibleAction": "Essa ação não poderá ser desfeita.",
-  "deleteTagEffects": "Frases com esta etiqueta irão apenas perder ela."
+  "deleteTagEffects": "Frases com esta etiqueta irão apenas perder ela.",
+  "updateTag": "Editar etiqueta",
+  "newTagName": "Novo nome",
+  "quoteNotFoundWithId": "Frase com o id {id} não encontrada.",
+  "@quoteNotFoundWithId": {
+    "placeholders": {
+    "id": {
+      "type": "num"
+    }
+
+    }
+  },
+  "noDatabaseConnectionMessage": "Sem conexão com o banco de dados.",
+  "errorOccurred": "Um erro aconteceu.",
+  "quotesWithThisTag": "Frases com esta etiqueta",
+  "noQuotesWithTag": "Nenhuma frase com esta etiqueta encontrada.",
+  "quoteInfo": "Detalhes",
+  "edit": "Editar",
+  "ok": "Ok"
 }
