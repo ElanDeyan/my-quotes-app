@@ -136,5 +136,7 @@
   "noQuotesWithTag": "Nenhuma frase com esta etiqueta encontrada.",
   "quoteInfo": "Detalhes",
   "edit": "Editar",
-  "ok": "Ok"
+  "ok": "Ok",
+  "copiedToClipboard": "Copiado para a área de transferência!",
+  "deleted": "Deletado"
 }

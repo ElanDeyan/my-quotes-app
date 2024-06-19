@@ -138,5 +138,7 @@
   "noQuotesWithTag": "No quotes with this tag found.",
   "quoteInfo": "Quote info",
   "edit": "Edit",
-  "ok": "Ok"
+  "ok": "Ok",
+  "copiedToClipboard": "Copied to clipboard!",
+  "deleted": "Deleted"
 }
