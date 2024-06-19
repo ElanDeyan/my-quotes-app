@@ -1,7 +1,11 @@
 import 'package:basics/basics.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
-import 'package:my_quotes/shared/quote_actions.dart';
+import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 extension QuoteExtension on Quote {
   bool get hasSourceAndUri => source.isNotNull && sourceUri.isNotNull;
@@ -11,13 +15,15 @@ extension QuoteExtension on Quote {
   bool get hasSourceUri => sourceUri.isNotNull;
 
   Iterable<int> get tagsId =>
-      tags?.split(',').map(int.tryParse).nonNulls ?? const <int>[];
+      tags?.split(idSeparatorChar).map(int.tryParse).nonNulls ?? const <int>[];
 
-  String get shareableFormat => '''
-Take a look in this quote:
+  String shareableFormatOf(BuildContext context) => '''
+${AppLocalizations.of(context)!.quoteShareHeader}
 "$content"
-- $author${source.isNotNullOrBlank ? ", $source" : ''}.${sourceUri.isNotNullOrBlank ? '\nSee more in: $sourceUri' : ''}
-''';
+\u2014 $author${source.isNotNullOrBlank ? ", $source" : ''}.
+${sourceUri.isNotNullOrBlank ? '\n${AppLocalizations.of(context)!.quoteShareSeeMore(sourceUri!)}' : ''}
+'''
+      .trim();
 
   bool canPerform(QuoteActions action) => switch (action) {
         QuoteActions.copyLink || QuoteActions.goToLink => hasSourceUri,
@@ -39,4 +45,7 @@ Take a look in this quote:
 
     return stringBuffer.toString();
   }
+
+  String createdAtLocaleMessageOf(BuildContext context) => timeago
+      .format(createdAt!, locale: Localizations.localeOf(context).languageCode);
 }

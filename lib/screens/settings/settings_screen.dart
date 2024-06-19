@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/color_pallete.dart';
@@ -16,8 +17,6 @@ class SettingsScreen extends StatelessWidget {
     super.key,
   });
 
-  static const screenName = 'Settings';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
               ? context.pop(context)
               : context.pushNamed(homeNavigationKey),
         ),
-        title: const Text(screenName),
+        title: Text(AppLocalizations.of(context)!.settings),
       ),
       body: Consumer<AppPreferences>(
         builder: (context, value, child) => ListView(
@@ -35,9 +34,11 @@ class SettingsScreen extends StatelessWidget {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.brightness_medium_outlined),
-              title: const Text('Theme mode'),
+              title: Text(AppLocalizations.of(context)!.themeMode),
               subtitle: Text(
-                value.themeMode.name.toTitleCase(),
+                AppLocalizations.of(context)!
+                    .themeModeName(value.themeMode.name)
+                    .toTitleCase(),
               ),
               onTap: () => showDialog<void>(
                 context: context,
@@ -48,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.palette_outlined),
-              title: const Text('Color pallete'),
+              title: Text(AppLocalizations.of(context)!.colorPallete),
               subtitle: Row(
                 children: [
                   CircleAvatar(
@@ -62,7 +63,10 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(
                     width: 5.0,
                   ),
-                  Text(value.colorSchemePalette.uiName),
+                  Text(
+                    AppLocalizations.of(context)!
+                        .colorPaletteName(value.colorSchemePalette.storageName),
+                  ),
                 ],
               ),
               onTap: () => showDialog<void>(
@@ -74,8 +78,10 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.translate_outlined),
-              title: const Text('App language'),
-              subtitle: Text(value.language),
+              title: Text(AppLocalizations.of(context)!.language),
+              subtitle: Text(
+                AppLocalizations.of(context)!.languageName(value.language),
+              ),
               onTap: () => showDialog<void>(
                 context: context,
                 builder: (_) => const Dialog(
@@ -85,18 +91,14 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.info_outline),
-              title: const Text('App info'),
+              title: Text(AppLocalizations.of(context)!.info),
               onTap: () => showAboutDialog(
                 context: context,
                 applicationName: 'My Quotes',
                 applicationVersion: '0.1.0',
                 applicationIcon: const Icon(Icons.format_quote),
                 children: [
-                  const Text('Thanks for using this app!'),
-                  const Text("I hope you're enjoying!"),
-                  const Text(
-                    'To support my work, share with your friends and follow me in my medias:',
-                  ),
+                  Text(AppLocalizations.of(context)!.infoDescription),
                   Wrap(
                     spacing: 5.0,
                     children: <IconButton>[
@@ -107,6 +109,20 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         ),
                         icon: const FaIcon(FontAwesomeIcons.linkedinIn),
+                      ),
+                      IconButton(
+                        onPressed: () async => await launchUrl(
+                          Uri.parse('https://github.com/ElanDeyan'),
+                        ),
+                        icon: const FaIcon(FontAwesomeIcons.github),
+                      ),
+                      IconButton(
+                        onPressed: () async => await launchUrl(
+                          Uri.parse(
+                            'https://youtube.com/@deyanwithcode?si=HB1KS0Ys3fqQBkAk',
+                          ),
+                        ),
+                        icon: const FaIcon(FontAwesomeIcons.youtube),
                       ),
                     ],
                   ),

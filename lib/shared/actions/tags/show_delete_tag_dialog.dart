@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 
 Future<bool?> showDeleteTagDialog(BuildContext context, Tag tag) {
@@ -6,19 +7,19 @@ Future<bool?> showDeleteTagDialog(BuildContext context, Tag tag) {
     context: context,
     builder: (context) => AlertDialog(
       icon: const Icon(Icons.warning),
-      title: Text('Delete "${tag.name}" tag?'),
-      content: const Column(
+      title: Text(AppLocalizations.of(context)!.deleteTag(tag.name)),
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("This can't be undone."),
-          Text('All quotes with this tag will only loose this tag.'),
+          Text(AppLocalizations.of(context)!.irreversibleAction),
+          Text(AppLocalizations.of(context)!.deleteTagEffects),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         ElevatedButton(
           onPressed: () => Navigator.pop(context, true),
@@ -28,7 +29,7 @@ Future<bool?> showDeleteTagDialog(BuildContext context, Tag tag) {
             ),
           ),
           child: Text(
-            'Delete',
+            AppLocalizations.of(context)!.delete,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onErrorContainer,
             ),

@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:basics/basics.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
@@ -19,20 +20,7 @@ mixin QuoteFormMixin {
 
   bool get isUpdateForm => false;
 
-  final _multipleTagSearchController = MultipleSearchController<Tag>();
-
-  final urlPattern = RegExp(
-    r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)',
-  );
-
-  String? sourceUriValidator(String? value) {
-    if (value.isNotNullOrBlank) {
-      if (!urlPattern.hasMatch(value!)) {
-        return 'Enter a valid link';
-      }
-    }
-    return null;
-  }
+  final multipleTagSearchController = MultipleSearchController<Tag>();
 
   final _pickedItems = <Tag>[];
 
@@ -47,36 +35,36 @@ mixin QuoteFormMixin {
           children: [
             FormBuilderTextField(
               name: 'content',
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Content',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)!.quoteFormFieldContent,
               ),
               maxLines: null,
               smartQuotesType: SmartQuotesType.enabled,
               keyboardType: TextInputType.multiline,
               enableSuggestions: true,
               smartDashesType: SmartDashesType.enabled,
-              validator: (value) {
-                if (value.isNullOrBlank) {
-                  return "Can't be empty.";
-                }
-                return null;
-              },
+              validator: FormBuilderValidators.required(
+                errorText: AppLocalizations.of(context)!.nonEmptyField(
+                  AppLocalizations.of(context)!.quoteFormFieldContent,
+                ),
+              ),
               valueTransformer: (value) => value?.trim(),
             ),
             const SizedBox(
               height: 10,
             ),
-            _authorTextField(),
+            _authorTextField(context),
             const SizedBox(
               height: 10,
             ),
             FormBuilderTextField(
               name: 'source',
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Source',
-                hintText: 'Like a movie, book, event, place and etc',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)!.quoteFormFieldSource,
+                hintText:
+                    AppLocalizations.of(context)!.quoteFormFieldSourceHintText,
               ),
               keyboardType: TextInputType.text,
               enableSuggestions: true,
@@ -89,12 +77,14 @@ mixin QuoteFormMixin {
             ),
             FormBuilderTextField(
               name: 'sourceUri',
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Source link',
-                hintText: 'Link to the source',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText:
+                    AppLocalizations.of(context)!.quoteFormFieldSourceUri,
+                hintText: AppLocalizations.of(context)!
+                    .quoteFormFieldSourceUriHintText,
               ),
-              validator: sourceUriValidator,
+              validator: FormBuilderValidators.url(),
               enableSuggestions: true,
               smartDashesType: SmartDashesType.enabled,
               smartQuotesType: SmartQuotesType.enabled,
@@ -106,7 +96,8 @@ mixin QuoteFormMixin {
             ),
             FormBuilderCheckbox(
               name: 'isFavorite',
-              title: const Text('Is favorite?'),
+              title:
+                  Text(AppLocalizations.of(context)!.quoteFormFieldIsFavorite),
               shape: StarBorder(
                 squash: .5,
                 innerRadiusRatio: .5,
@@ -121,56 +112,54 @@ mixin QuoteFormMixin {
             ),
             _selectTags(
               context,
-              _multipleTagSearchController,
+              multipleTagSearchController,
               quoteForUpdate: quoteForUpdate,
             ),
             const SizedBox(
               height: 10,
             ),
-            _actionButton(quoteForUpdate),
+            _actionButton(context, quoteForUpdate),
           ],
         ),
       ),
     );
   }
 
-  FormBuilderTextField _authorTextField() {
+  FormBuilderTextField _authorTextField(BuildContext context) {
+    final fieldName = AppLocalizations.of(context)!.quoteFormFieldAuthor;
     return isUpdateForm
         ? FormBuilderTextField(
             name: 'author',
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Author',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: fieldName,
             ),
             smartQuotesType: SmartQuotesType.enabled,
             keyboardType: TextInputType.name,
             enableSuggestions: true,
             smartDashesType: SmartDashesType.enabled,
-            validator: (value) {
-              if (value.isNullOrBlank) {
-                return "Can't be empty.";
-              }
-              return null;
-            },
+            validator: FormBuilderValidators.required(
+              errorText: AppLocalizations.of(context)!.nonEmptyField(
+                fieldName,
+              ),
+            ),
             valueTransformer: (value) => value?.trim(),
           )
         : FormBuilderTextField(
             name: 'author',
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Author',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: fieldName,
             ),
-            initialValue: 'Anonym',
+            initialValue:
+                AppLocalizations.of(context)!.quoteFormFieldAnonymAuthor,
             smartQuotesType: SmartQuotesType.enabled,
             enableSuggestions: true,
             smartDashesType: SmartDashesType.enabled,
             keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value.isNullOrBlank) {
-                return "Can't be empty.";
-              }
-              return null;
-            },
+            validator: FormBuilderValidators.required(
+              errorText: AppLocalizations.of(context)!.nonEmptyField(fieldName),
+            ),
             valueTransformer: (value) => value?.trim(),
           );
   }
@@ -197,11 +186,12 @@ mixin QuoteFormMixin {
             if (!snapshot.hasError) {
               final allTags = snapshot.data!.first!;
               return MultipleSearchSelection(
-                searchField: const TextField(
+                searchField: TextField(
                   decoration: InputDecoration(
-                    labelText: 'Tags',
-                    hintText: 'Tag name',
-                    border: OutlineInputBorder(),
+                    labelText: AppLocalizations.of(context)!.quoteFormFieldTags,
+                    hintText: AppLocalizations.of(context)!
+                        .quoteFormFieldTagsHintText,
+                    border: const OutlineInputBorder(),
                   ),
                   smartDashesType: SmartDashesType.enabled,
                   smartQuotesType: SmartQuotesType.enabled,
@@ -211,6 +201,10 @@ mixin QuoteFormMixin {
                 items: allTags,
                 fieldToCheck: (tag) => tag.name,
                 clearSearchFieldOnSelect: true,
+                noResultsWidget: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(AppLocalizations.of(context)!.noResultsFound),
+                ),
                 showSelectAllButton: false,
                 showClearAllButton: false,
                 initialPickedItems: <Tag>[
@@ -243,7 +237,10 @@ mixin QuoteFormMixin {
                 sortPickedItems: true,
                 showedItemsBoxDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5),
+                  ),
                 ),
                 itemsVisibility: ShowedItemsVisibility.onType,
                 itemBuilder: (tag, _) => Padding(
@@ -262,11 +259,21 @@ mixin QuoteFormMixin {
     );
   }
 
-  Consumer<DatabaseProvider> _actionButton(Quote? quoteForUpdate) {
+  Consumer<DatabaseProvider> _actionButton(
+    BuildContext context,
+    Quote? quoteForUpdate,
+  ) {
+    final actionButtonText = isUpdateForm
+        ? AppLocalizations.of(context)!.quoteFormActionButtonEdit
+        : AppLocalizations.of(context)!.quoteFormActionButtonAdd;
+
+    final actionButtonIcon = isUpdateForm
+        ? const Icon(Icons.save_outlined)
+        : const Icon(Icons.create_outlined);
     return Consumer<DatabaseProvider>(
       builder: (context, database, child) => OutlinedButton.icon(
-        icon: isUpdateForm ? const Icon(Icons.edit_outlined) : const Icon(Icons.add_outlined),
-        label: isUpdateForm ? const Text('Update') : const Text('Create'),
+        icon: actionButtonIcon,
+        label: Text(actionButtonText),
         onPressed: () {
           final isValid = formKey.currentState?.saveAndValidate() ?? false;
           if (isValid) {
@@ -276,7 +283,7 @@ mixin QuoteFormMixin {
 
             formValue.putIfAbsent(
               'tags',
-              () => _multipleTagSearchController
+              () => multipleTagSearchController
                   .getPickedItems()
                   .map((tag) => tag.id)
                   .nonNulls
@@ -302,10 +309,13 @@ mixin QuoteFormMixin {
 
                 result.then((value) {
                   if (value case true || int _) {
+                    final successfulMessage = isUpdateForm
+                        ? AppLocalizations.of(context)!.quoteFormSuccessfulEdit
+                        : AppLocalizations.of(context)!.quoteFormSuccessfulAdd;
                     FToast().init(context).showToast(
                           child: Chip(
                             label: Text(
-                              'Successfully ${isUpdateForm ? 'updated' : 'added'}!',
+                              successfulMessage,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(99),
@@ -325,8 +335,6 @@ mixin QuoteFormMixin {
                 });
               },
             );
-            formKey.currentState?.reset();
-            _multipleTagSearchController..clearAllPickedItems()..clearSearchField();
             Navigator.pop(context);
           }
         },

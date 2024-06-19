@@ -1,6 +1,9 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/nullable_extension.dart';
 
 Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
   final textEditingController =
@@ -9,23 +12,27 @@ Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
   return showDialog<String?>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('Update tag'),
+      title: Text(AppLocalizations.of(context)!.updateTag),
       content: Form(
         key: updateTagFormKey,
         autovalidateMode: AutovalidateMode.always,
         child: TextFormField(
           controller: textEditingController,
-          decoration: const InputDecoration(
-            labelText: 'New tag name',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.newTagName,
+            border: const OutlineInputBorder(),
           ),
           validator: (value) {
-            if (value.isNullOrBlank) {
-              return "Can't be empty";
+            if (value.isNull) {
+              return AppLocalizations.of(context)!.requiredFieldAlert;
             }
 
-            if (value.isNotNullOrBlank && value!.contains(',')) {
-              return 'Commas are disallowed';
+            if (value?.isBlank ?? true) {
+              return AppLocalizations.of(context)!.emptyOrBlankAlert;
+            }
+
+            if (value.isNotNullOrBlank && value!.contains(idSeparatorChar)) {
+              return AppLocalizations.of(context)!.disallowedCommasAlert;
             }
 
             return null;
@@ -35,7 +42,7 @@ Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(context)!.delete),
         ),
         TextButton(
           onPressed: () {
@@ -43,7 +50,7 @@ Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
               Navigator.pop(context, textEditingController.text);
             }
           },
-          child: const Text('Update'),
+          child: Text(AppLocalizations.of(context)!.save),
         ),
       ],
     ),

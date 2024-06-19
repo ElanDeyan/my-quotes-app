@@ -1,5 +1,6 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/fuzzy_extension.dart';
@@ -27,10 +28,11 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
+        tooltip: AppLocalizations.of(context)!.navigationSearchClear,
         onPressed: () {
           query = '';
         },
-        icon: const Icon(Icons.clear),
+        icon: const Icon(Icons.clear_outlined),
       ),
     ];
   }
@@ -38,10 +40,11 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
+      tooltip: AppLocalizations.of(context)!.navigationBack,
       onPressed: () => context.canPop()
           ? context.pop()
           : context.pushNamed(tagsNavigationKey),
-      icon: const Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back_outlined),
     );
   }
 
@@ -52,8 +55,8 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (!snapshot.hasError) {
               if (snapshot.data!.isEmpty) {
-                return const Center(
-                  child: Text('No tags found'),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noTagsAddedYet),
                 );
               }
               final searchResults = snapshot.data!
@@ -64,8 +67,8 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
                   )
                   .map((result) => result.choice);
               if (searchResults.isEmpty) {
-                return const Center(
-                  child: Text('No results found'),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noResultsFound),
                 );
               }
               return SearchTagResults(searchResults: searchResults.toList());
@@ -92,8 +95,8 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (!snapshot.hasError) {
                 if (snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text('No quotes found'),
+                  return Center(
+                    child: Text(AppLocalizations.of(context)!.noTagsAddedYet),
                   );
                 }
                 final searchResults = snapshot.data!
@@ -105,8 +108,8 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
                     .map((result) => result.choice)
                     .toList();
                 if (searchResults.isEmpty) {
-                  return const Center(
-                    child: Text('No results found'),
+                  return Center(
+                    child: Text(AppLocalizations.of(context)!.noResultsFound),
                   );
                 }
                 return ListView.builder(

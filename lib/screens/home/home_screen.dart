@@ -6,20 +6,11 @@ final class HomeScreen extends StatelessWidget {
     super.key,
   });
 
-  static const screenName = 'Home';
-
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          RandomQuoteContainer(),
-          // TODO: decide if will show this element
-          // Placeholder(
-          //   child: Text('Favorites history'),
-          // ),
-        ],
+    return const SizedBox.expand(
+      child: Center(
+        child: RandomQuoteContainer(),
       ),
     );
   }

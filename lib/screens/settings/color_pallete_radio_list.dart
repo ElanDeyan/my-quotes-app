@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/constants/color_pallete.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
@@ -20,12 +21,12 @@ final class _ColorSchemePaletteRadioListState
     _colorSchemePaletteGroupValue = preferences.colorSchemePalette;
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Choose a color pallete',
+              AppLocalizations.of(context)!.chooseColorPaletteMessage,
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               ),
@@ -39,7 +40,10 @@ final class _ColorSchemePaletteRadioListState
                   preferences.colorSchemePalette = value;
                 }),
                 selected: _colorSchemePaletteGroupValue == colorSchemePalette,
-                title: Text(colorSchemePalette.uiName),
+                title: Text(
+                  AppLocalizations.of(context)!
+                      .colorPaletteName(colorSchemePalette.storageName),
+                ),
               ),
           ],
         ),

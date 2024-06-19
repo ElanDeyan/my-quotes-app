@@ -1,5 +1,6 @@
 import 'package:basics/basics.dart';
 import 'package:drift/drift.dart';
+import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/connection/connection.dart' as impl;
 import 'package:my_quotes/data/tables/quote_table.dart';
 import 'package:my_quotes/data/tables/tag_table.dart';
@@ -119,9 +120,9 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
 
     for (final quote in quotesWithThisTag) {
       if (quote.tags.isNotNullOrBlank) {
-        final newIdsString = quote.tags!.split(',')..remove('$id');
+        final newIdsString = quote.tags!.split(idSeparatorChar)..remove('$id');
 
-        updateQuote(quote.copyWith(tags: Value(newIdsString.join(','))));
+        updateQuote(quote.copyWith(tags: Value(newIdsString.join(idSeparatorChar))));
       }
     }
 

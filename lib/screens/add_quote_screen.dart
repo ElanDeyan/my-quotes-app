@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:my_quotes/shared/create_tag.dart';
-import 'package:my_quotes/shared/quote_form_mixin.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/shared/actions/tags/create_tag.dart';
+import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
 
 final class AddQuoteScreen extends StatelessWidget {
   const AddQuoteScreen({super.key});
@@ -10,22 +11,36 @@ final class AddQuoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add'),
+        title: Text(AppLocalizations.of(context)!.addQuoteTitle),
         actions: [
           IconButton(
             onPressed: () => createTag(context),
             icon: const Icon(Icons.new_label),
-            tooltip: 'Create tag',
+            tooltip: AppLocalizations.of(context)!.createTag,
           ),
         ],
       ),
-      body: AddQuoteForm(),
+      body: const AddQuoteForm(),
     );
   }
 }
 
-final class AddQuoteForm extends StatelessWidget with QuoteFormMixin {
-  AddQuoteForm({super.key});
+final class AddQuoteForm extends StatefulWidget {
+  const AddQuoteForm({super.key});
+
+  @override
+  State<AddQuoteForm> createState() => _AddQuoteFormState();
+}
+
+class _AddQuoteFormState extends State<AddQuoteForm> with QuoteFormMixin {
+  @override
+  void dispose() {
+    multipleTagSearchController
+      ..clearAllPickedItems()
+      ..clearSearchField();
+    formKey.currentState?.reset();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

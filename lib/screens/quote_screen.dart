@@ -1,13 +1,14 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
-import 'package:my_quotes/shared/quote_card.dart';
-import 'package:my_quotes/shared/show_update_quote_dialog.dart';
+import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
+import 'package:my_quotes/shared/widgets/icon_with_label.dart';
+import 'package:my_quotes/shared/widgets/quote_card.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
@@ -20,13 +21,11 @@ final class QuoteScreen extends StatelessWidget {
 
   final int quoteId;
 
-  static const screenName = 'Quote';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quote info'),
+        title: Text(AppLocalizations.of(context)!.quoteInfo),
         leading: BackButton(
           onPressed: () => context.canPop()
               ? context.pop()
@@ -44,7 +43,7 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
     builder: (context) => AlertDialog(
       icon: const Icon(Icons.info),
       scrollable: true,
-      title: const Text('Quote info'),
+      title: Text(AppLocalizations.of(context)!.quoteInfo),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
         child: QuoteScreenDialogBody(quoteId: quote.id!),
@@ -55,9 +54,12 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
             Navigator.pop(context);
             showUpdateQuoteDialog(context, quote);
           },
-          child: const Text('Edit'),
+          child: Text(AppLocalizations.of(context)!.edit),
         ),
-        OutlinedButton(onPressed: () => context.pop(), child: const Text('Ok')),
+        OutlinedButton(
+          onPressed: () => context.pop(),
+          child: Text(AppLocalizations.of(context)!.ok),
+        ),
       ],
     ),
   );
@@ -92,7 +94,7 @@ class ViewQuotePage extends StatelessWidget {
           switch (connectionState) {
             case ConnectionState.none:
               return Text(
-                'No database found',
+                AppLocalizations.of(context)!.noDatabaseConnectionMessage,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
@@ -114,7 +116,9 @@ class ViewQuotePage extends StatelessWidget {
               } else {
                 final data = snapshot.data;
                 if (data.isNull) {
-                  return const Text('Quote not found');
+                  return Text(
+                    AppLocalizations.of(context)!.quoteNotFoundWithId(quoteId),
+                  );
                 } else {
                   final quote = data!;
                   return Column(
@@ -131,11 +135,17 @@ class ViewQuotePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Created at: ${DateFormat('dd/MM/yyyy HH:mm:ss').format(quote.createdAt!)}.',
+                        quote.createdAtLocaleMessageOf(context).capitalize(),
                       ),
-                      Text(
-                        'Is favorite? ${quote.isFavorite ?? false ? 'Yes' : 'No'}.',
-                      ),
+                      if (quote.isFavorite ?? false)
+                        IconWithLabel(
+                          icon: const Icon(Icons.star),
+                          horizontalGap: 10,
+                          label: Text(
+                            AppLocalizations.of(context)!
+                                .isFavorite(quote.isFavorite.toString()),
+                          ),
+                        ),
                     ],
                   );
                 }
@@ -155,9 +165,6 @@ class QuoteScreenDialogBody extends StatelessWidget {
 
   final int quoteId;
 
-  // TODO: apply locale format
-  DateFormat get _dateFormat => DateFormat('dd/MM/yyyy HH:mm:ss');
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -172,7 +179,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
               switch (connectionState) {
                 case ConnectionState.none:
                   return Text(
-                    'No database found',
+                    AppLocalizations.of(context)!.noDatabaseConnectionMessage,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
@@ -202,7 +209,10 @@ class QuoteScreenDialogBody extends StatelessWidget {
                 case ConnectionState.done:
                   final data = snapshot.data;
                   if (data.isNull) {
-                    return const Text('Quote not found');
+                    return Text(
+                      AppLocalizations.of(context)!
+                          .quoteNotFoundWithId(quoteId),
+                    );
                   } else {
                     final quote = data!;
                     return Column(
@@ -211,21 +221,31 @@ class QuoteScreenDialogBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          'Quote info',
+                          AppLocalizations.of(context)!.quoteInfo,
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                         Text('Id: ${quote.id!}'),
-                        Text('Content: ${quote.content}'),
-                        Text('Author: ${quote.author}'),
-                        if (quote.source.isNotNullOrBlank)
-                          Text('Source: ${quote.source!}'),
-                        if (quote.sourceUri.isNotNullOrBlank)
-                          Text('Link: ${quote.sourceUri}'),
                         Text(
-                          'Created at: ${_dateFormat.format(quote.createdAt!)}',
+                          '${AppLocalizations.of(context)!.quoteFormFieldContent}: ${quote.content}',
+                        ),
+                        Text(
+                          '${AppLocalizations.of(context)!.quoteFormFieldAuthor}: ${quote.author}',
+                        ),
+                        if (quote.source.isNotNullOrBlank)
+                          Text(
+                            '${AppLocalizations.of(context)!.quoteFormFieldSource}: ${quote.source!}',
+                          ),
+                        if (quote.sourceUri.isNotNullOrBlank)
+                          Text(
+                            '${AppLocalizations.of(context)!.quoteFormFieldSourceUri}: ${quote.sourceUri}',
+                          ),
+                        Text(
+                          quote.createdAtLocaleMessageOf(context).capitalize(),
                         ),
                         if (quote.tagsId.isEmpty)
-                          const Text('Tags: No tags added')
+                          Text(
+                            AppLocalizations.of(context)!.quoteWithoutTags,
+                          )
                         else
                           FutureBuilder(
                             future: database.getTagsByIds(quote.tagsId),
@@ -235,25 +255,37 @@ class QuoteScreenDialogBody extends StatelessWidget {
                                 if (snapshot.hasData) {
                                   final tags = snapshot.data!;
                                   if (tags.isEmpty) {
-                                    return const Text('No tags found');
+                                    return Text(
+                                      AppLocalizations.of(context)!.noTagsFound,
+                                    );
                                   } else {
                                     final tagsNames =
                                         tags.map((tag) => tag.name).join(', ');
                                     return Text(
-                                      'Tags: $tagsNames',
+                                      '${AppLocalizations.of(context)!.tags}: $tagsNames',
                                     );
                                   }
-                                } else {
-                                  return const Text('No tags found');
                                 }
+                                return Text(
+                                  AppLocalizations.of(context)!.noTagsFound,
+                                );
                               } else {
-                                return const Text('Loading tags...');
+                                return ShimmerPro.text(
+                                  scaffoldBackgroundColor:
+                                      Theme.of(context).colorScheme.onSurface,
+                                );
                               }
                             },
                           ),
-                        Text(
-                          'Is favorite? ${quote.isFavorite! ? 'Yes' : 'No'}',
-                        ),
+                        if (quote.isFavorite ?? false)
+                          IconWithLabel(
+                            icon: const Icon(Icons.star),
+                            horizontalGap: 10,
+                            label: Text(
+                              AppLocalizations.of(context)!
+                                  .isFavorite(quote.isFavorite.toString()),
+                            ),
+                          ),
                       ],
                     );
                   }

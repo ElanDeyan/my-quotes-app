@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/shared/quote_actions.dart';
+import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
@@ -9,8 +10,6 @@ final class MyQuotesScreen extends StatelessWidget {
   const MyQuotesScreen({
     super.key,
   });
-
-  static const screenName = 'All quotes';
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ final class MyQuotesScreen extends StatelessWidget {
           switch (connectionState) {
             case ConnectionState.none:
               return Text(
-                'No database found',
+                AppLocalizations.of(context)!.noDatabaseConnectionMessage,
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               );
@@ -51,8 +50,8 @@ final class MyQuotesScreen extends StatelessWidget {
             case ConnectionState.done:
               final data = snapshot.data!;
               if (data case <Quote>[]) {
-                return const Center(
-                  child: Text("You don't have any quotes yet"),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noQuotesAddedYet),
                 );
               }
               return ListView.builder(
@@ -60,7 +59,8 @@ final class MyQuotesScreen extends StatelessWidget {
                 itemCount: data.length,
                 semanticChildCount: data.length,
                 padding: EdgeInsets.only(
-                  bottom: kBottomNavigationBarHeight,
+                  bottom: kBottomNavigationBarHeight +
+                      kFloatingActionButtonMargin * 2,
                   left: MediaQuery.sizeOf(context).width * 0.0125,
                   right: MediaQuery.sizeOf(context).width * 0.0125,
                 ),
@@ -120,7 +120,7 @@ class QuoteTileCard extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         trailing: PopupMenuButton(
-          tooltip: 'Actions',
+          tooltip: AppLocalizations.of(context)!.quoteActionsPopupButtonTooltip,
           position: PopupMenuPosition.under,
           itemBuilder: (context) => QuoteActions.popupMenuItems(
             context,

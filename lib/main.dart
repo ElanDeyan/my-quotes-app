@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:my_quotes/constants/color_pallete.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
@@ -9,10 +10,12 @@ import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  timeago.setLocaleMessages('pt', timeago.PtBrMessages());
   // TODO: find a better place to run it
   SharedPreferences.setPrefix('myQuotes');
 
@@ -25,7 +28,7 @@ void main() async {
   runApp(
     MyAppProvider(
       appPreferencesProvider: appPreferences,
-      databaseNotitfier: DatabaseProvider(appRepository: AppDatabase()),
+      databaseNotifier: DatabaseProvider(appRepository: AppDatabase()),
     ),
   );
 }
@@ -34,9 +37,9 @@ final class MyAppProvider extends StatelessWidget {
   const MyAppProvider({
     super.key,
     required AppPreferences appPreferencesProvider,
-    required DatabaseProvider databaseNotitfier,
+    required DatabaseProvider databaseNotifier,
   })  : _appPreferences = appPreferencesProvider,
-        _databaseNotifier = databaseNotitfier;
+        _databaseNotifier = databaseNotifier;
 
   final AppPreferences _appPreferences;
 
@@ -92,8 +95,9 @@ final class MyApp extends StatelessWidget {
             ),
           ),
           localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
+            ...AppLocalizations.localizationsDelegates,
+            ...GlobalMaterialLocalizations.delegates,
+            ...FormBuilderLocalizations.localizationsDelegates,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale(scriptCode, countryCode),

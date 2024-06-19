@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/shared/quote_actions.dart';
+import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -57,7 +58,7 @@ class QuoteCard extends StatelessWidget {
                   ),
                   Text(
                     '- ${quote.author}'
-                    '${quote.hasSource ? ', ${quote.source}.' : ''}',
+                    '${quote.hasSource ? ', ${quote.source}.' : '.'}',
                     softWrap: true,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -104,7 +105,9 @@ class QuoteCard extends StatelessWidget {
             Positioned(
               right: 0,
               child: PopupMenuButton(
-                tooltip: 'Actions',
+                tooltip: AppLocalizations.of(context)!
+                    .quoteActionsPopupButtonTooltip,
+                icon: const Icon(Icons.more_horiz_outlined),
                 position: PopupMenuPosition.under,
                 itemBuilder: (context) => QuoteActions.popupMenuItems(
                   context,
