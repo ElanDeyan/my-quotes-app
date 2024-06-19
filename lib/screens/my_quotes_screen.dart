@@ -11,8 +11,6 @@ final class MyQuotesScreen extends StatelessWidget {
     super.key,
   });
 
-  static const screenName = 'All quotes';
-
   @override
   Widget build(BuildContext context) {
     return Consumer<DatabaseProvider>(
@@ -24,7 +22,7 @@ final class MyQuotesScreen extends StatelessWidget {
           switch (connectionState) {
             case ConnectionState.none:
               return Text(
-                'No database found',
+                AppLocalizations.of(context)!.noDatabaseConnectionMessage,
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               );
@@ -52,8 +50,8 @@ final class MyQuotesScreen extends StatelessWidget {
             case ConnectionState.done:
               final data = snapshot.data!;
               if (data case <Quote>[]) {
-                return const Center(
-                  child: Text("You don't have any quotes yet"),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noQuotesAddedYet),
                 );
               }
               return ListView.builder(

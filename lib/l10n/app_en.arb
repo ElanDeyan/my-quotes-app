@@ -140,5 +140,30 @@
   "edit": "Edit",
   "ok": "Ok",
   "copiedToClipboard": "Copied to clipboard!",
-  "deleted": "Deleted"
+  "deleted": "Deleted",
+  "updated": "Updated!",
+  "isFavorite": "{isFavorite, select, other{Invalid} true{Is favorited.} false{Is not favorited.}}",
+  "@isFavorite": {
+      "description": "Is favorite",
+      "placeholders": {
+          "isFavorite": {
+            "type": "String",
+            "example":"1" 
+          }
+      }
+  },
+  "noQuotesAddedYet": "You don''t have any quotes yet.",
+  "noTagsAddedYet": "You don''t have any tags yet.",
+  "quoteWithoutTags": "You don''t added tags for this quote.",
+  "noTagsFound": "No tags found.",
+  "quoteShareHeader": "Take a look at this quote:",
+  "quoteShareSeeMore": "See more in: {url}",
+  "@quoteShareSeeMore": {
+    "description": "Quote share see more",
+    "placeholders": {
+      "url":{
+        "type": "String"
+      }
+    }
+  }
 }

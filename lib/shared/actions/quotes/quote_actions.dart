@@ -7,9 +7,9 @@ import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/shared/actions/copy_to_clipboard.dart';
 import 'package:my_quotes/shared/actions/quotes/delete_quote.dart';
-import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
+import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -120,10 +120,11 @@ enum QuoteActions {
                 QuoteActions.info => () => showQuoteInfoDialog(context, quote),
                 QuoteActions.delete => () => deleteQuote(context, quote),
                 QuoteActions.copy => () =>
-                    copyToClipBoard(context, quote.shareableFormat),
+                    copyToClipBoard(context, quote.shareableFormatOf(context)),
                 QuoteActions.copyLink => () =>
                     copyToClipBoard(context, quote.sourceUri ?? ''),
-                QuoteActions.share => () => Share.share(quote.shareableFormat),
+                QuoteActions.share => () =>
+                    Share.share(quote.shareableFormatOf(context)),
                 QuoteActions.goToLink => () =>
                     launchUrl(Uri.parse(quote.sourceUri!)),
                 QuoteActions.update => () =>

@@ -55,8 +55,8 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (!snapshot.hasError) {
               if (snapshot.data!.isEmpty) {
-                return const Center(
-                  child: Text('No tags found'),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noTagsAddedYet),
                 );
               }
               final searchResults = snapshot.data!
@@ -67,8 +67,8 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
                   )
                   .map((result) => result.choice);
               if (searchResults.isEmpty) {
-                return const Center(
-                  child: Text('No results found'),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noResultsFound),
                 );
               }
               return SearchTagResults(searchResults: searchResults.toList());
@@ -95,8 +95,8 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (!snapshot.hasError) {
                 if (snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text('No quotes found'),
+                  return Center(
+                    child: Text(AppLocalizations.of(context)!.noTagsAddedYet),
                   );
                 }
                 final searchResults = snapshot.data!
@@ -108,8 +108,8 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
                     .map((result) => result.choice)
                     .toList();
                 if (searchResults.isEmpty) {
-                  return const Center(
-                    child: Text('No results found'),
+                  return Center(
+                    child: Text(AppLocalizations.of(context)!.noResultsFound),
                   );
                 }
                 return ListView.builder(

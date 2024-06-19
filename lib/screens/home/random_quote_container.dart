@@ -69,7 +69,7 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
                         width: 20,
                       ),
                       OutlinedButton(
-                        onPressed: () => Share.share(quote.shareableFormat),
+                        onPressed: () => Share.share(quote.shareableFormatOf(context)),
                         child: const Icon(Icons.share_outlined),
                       ),
                     ],

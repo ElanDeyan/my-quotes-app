@@ -10,10 +10,12 @@ import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  timeago.setLocaleMessages('pt', timeago.PtBrMessages());
   // TODO: find a better place to run it
   SharedPreferences.setPrefix('myQuotes');
 

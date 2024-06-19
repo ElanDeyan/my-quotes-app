@@ -72,7 +72,7 @@ class QuotesWithTag extends StatelessWidget {
                   }
                 } else {
                   return Center(
-                    child: Text(snapshot.error.toString()),
+                    child: Text(AppLocalizations.of(context)!.errorOccurred),
                   );
                 }
             }

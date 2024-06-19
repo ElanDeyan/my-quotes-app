@@ -138,5 +138,30 @@
   "edit": "Editar",
   "ok": "Ok",
   "copiedToClipboard": "Copiado para a área de transferência!",
-  "deleted": "Deletado"
+  "deleted": "Deletado",
+  "updated": "Atualizado!",
+  "isFavorite": "{isFavorite, select, other{Inválido} true{Favorito.} false{Não favorito.}}",
+  "@isFavorite": {
+      "description": "Is favorite",
+      "placeholders": {
+          "isFavorite": {
+            "type": "String",
+            "example":"1" 
+          }
+      }
+  },
+  "noQuotesAddedYet": "Você ainda não tem frases adicionadas.",
+  "noTagsAddedYet": "Você ainda não tem etiquetas adicionadas.",
+  "quoteWithoutTags": "Nenhuma etiqueta adicionada.",
+  "noTagsFound": "Nenhuma etiqueta encontrada.",
+  "quoteShareHeader": "Olha essa frase:",
+  "quoteShareSeeMore": "Veja mais em: {url}",
+  "@quoteShareSeeMore": {
+    "description": "Quote share see more",
+    "placeholders": {
+      "url":{
+        "type": "String"
+      }
+    }
+  }
 }

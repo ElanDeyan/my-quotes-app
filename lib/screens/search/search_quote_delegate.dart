@@ -56,8 +56,8 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (!snapshot.hasError) {
               if (snapshot.data!.isEmpty) {
-                return const Center(
-                  child: Text('No quotes found'),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noQuotesAddedYet),
                 );
               }
               final searchResults = snapshot.data!
@@ -68,8 +68,8 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
                   )
                   .map((result) => result.choice);
               if (searchResults.isEmpty) {
-                return const Center(
-                  child: Text('No results found'),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noResultsFound),
                 );
               }
               return SearchQuoteResults(searchResults: searchResults.toList());
@@ -96,8 +96,8 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (!snapshot.hasError) {
                 if (snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text('No quotes found'),
+                  return Center(
+                    child: Text(AppLocalizations.of(context)!.noQuotesAddedYet),
                   );
                 }
 
@@ -111,8 +111,8 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
                     .toList();
 
                 if (searchResults.isEmpty) {
-                  return const Center(
-                    child: Text('No results found'),
+                  return Center(
+                    child: Text(AppLocalizations.of(context)!.noResultsFound),
                   );
                 }
 

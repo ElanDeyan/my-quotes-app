@@ -117,12 +117,12 @@ class SettingsScreen extends StatelessWidget {
                         icon: const FaIcon(FontAwesomeIcons.github),
                       ),
                       IconButton(
-                        onPressed: () {},
-                        icon: const FaIcon(FontAwesomeIcons.instagram),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const FaIcon(FontAwesomeIcons.medium),
+                        onPressed: () async => await launchUrl(
+                          Uri.parse(
+                            'https://youtube.com/@deyanwithcode?si=HB1KS0Ys3fqQBkAk',
+                          ),
+                        ),
+                        icon: const FaIcon(FontAwesomeIcons.youtube),
                       ),
                     ],
                   ),
