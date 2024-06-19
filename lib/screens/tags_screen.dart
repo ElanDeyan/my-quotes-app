@@ -53,8 +53,10 @@ class TagsScreen extends StatelessWidget {
             future: database.allTags,
             builder: (context, snapshot) {
               return switch (snapshot.connectionState) {
-                ConnectionState.none => const Center(
-                    child: Text('No database connection'),
+                ConnectionState.none => Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                    ),
                   ),
                 ConnectionState.active ||
                 ConnectionState.waiting =>
@@ -62,8 +64,9 @@ class TagsScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   ),
                 ConnectionState.done => snapshot.hasError
-                    ? const Center(
-                        child: Text('Error'),
+                    ? Center(
+                        child:
+                            Text(AppLocalizations.of(context)!.errorOccurred),
                       )
                     : _tagsList(context, snapshot.data!),
               };
@@ -78,7 +81,9 @@ class TagsScreen extends StatelessWidget {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: tags.length,
-      padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+      padding: const EdgeInsets.only(
+        bottom: kBottomNavigationBarHeight + kFloatingActionButtonMargin,
+      ),
       prototypeItem: ListTile(
         title: const Text('Tag name'),
         trailing: PopupMenuButton<Tag>(
