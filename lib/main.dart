@@ -26,7 +26,7 @@ void main() async {
   runApp(
     MyAppProvider(
       appPreferencesProvider: appPreferences,
-      databaseNotitfier: DatabaseProvider(appRepository: AppDatabase()),
+      databaseNotifier: DatabaseProvider(appRepository: AppDatabase()),
     ),
   );
 }
@@ -35,9 +35,9 @@ final class MyAppProvider extends StatelessWidget {
   const MyAppProvider({
     super.key,
     required AppPreferences appPreferencesProvider,
-    required DatabaseProvider databaseNotitfier,
+    required DatabaseProvider databaseNotifier,
   })  : _appPreferences = appPreferencesProvider,
-        _databaseNotifier = databaseNotitfier;
+        _databaseNotifier = databaseNotifier;
 
   final AppPreferences _appPreferences;
 
