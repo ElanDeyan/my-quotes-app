@@ -47,29 +47,25 @@ class UpdateQuoteScreenBody extends StatelessWidget {
     final database = Provider.of<DatabaseProvider>(context, listen: false);
 
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          FutureBuilder(
-            future: database.getQuoteById(quoteId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                final maybeQuote = snapshot.data;
-                if (maybeQuote == null) {
-                  return Text(
-                    'Quote not found with this id: $quoteId',
-                  );
-                } else {
-                  return UpdateQuoteForm(quote: maybeQuote);
-                }
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ],
+      child: FutureBuilder(
+        future: database.getQuoteById(quoteId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            final maybeQuote = snapshot.data;
+            if (maybeQuote == null) {
+              return Text(
+                AppLocalizations.of(context)!.quoteNotFoundWithId(quoteId),
+              );
+            } else {
+              return UpdateQuoteForm(quote: maybeQuote);
+            }
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
