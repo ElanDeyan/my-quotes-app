@@ -61,7 +61,8 @@ final class MyQuotesScreen extends StatelessWidget {
                 itemCount: data.length,
                 semanticChildCount: data.length,
                 padding: EdgeInsets.only(
-                  bottom: kBottomNavigationBarHeight,
+                  bottom: kBottomNavigationBarHeight +
+                      kFloatingActionButtonMargin * 2,
                   left: MediaQuery.sizeOf(context).width * 0.0125,
                   right: MediaQuery.sizeOf(context).width * 0.0125,
                 ),
