@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_tag_delegate.dart';
-import 'package:my_quotes/shared/create_tag.dart';
-import 'package:my_quotes/shared/show_tag_search.dart';
-import 'package:my_quotes/shared/tag_actions.dart';
+import 'package:my_quotes/shared/actions/tags/create_tag.dart';
+import 'package:my_quotes/shared/actions/tags/show_tag_search.dart';
+import 'package:my_quotes/shared/actions/tags/tag_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 

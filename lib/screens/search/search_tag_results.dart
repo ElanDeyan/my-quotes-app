@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/shared/tag_actions.dart';
+import 'package:my_quotes/shared/actions/tags/tag_actions.dart';
 
 class SearchTagResults extends StatelessWidget {
   const SearchTagResults({super.key, required this.searchResults});

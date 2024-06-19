@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 
 Future<bool?> showDeleteQuoteDialog(BuildContext context, Quote quote) {
-  return showDialog<bool?>(
+  return showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
       title: Text(AppLocalizations.of(context)!.areYouSure),

@@ -3,8 +3,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/shared/create_tag.dart';
-import 'package:my_quotes/shared/quote_form_mixin.dart';
+import 'package:my_quotes/shared/actions/tags/create_tag.dart';
+import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -29,14 +29,13 @@ final class UpdateQuoteScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: UpdateQuoteScreenBody(quoteId: quoteId),
+      body: _UpdateQuoteScreenBody(quoteId: quoteId),
     );
   }
 }
 
-class UpdateQuoteScreenBody extends StatelessWidget {
-  const UpdateQuoteScreenBody({
-    super.key,
+class _UpdateQuoteScreenBody extends StatelessWidget {
+  const _UpdateQuoteScreenBody({
     required this.quoteId,
   });
 
