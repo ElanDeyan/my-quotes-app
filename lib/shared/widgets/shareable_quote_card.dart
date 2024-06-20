@@ -14,12 +14,13 @@ class ShareableQuoteCard extends StatelessWidget {
       color: Theme.of(context).colorScheme.surfaceContainer,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: Container(
+          margin: const EdgeInsets.all(16.0),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
               Card.outlined(
+                clipBehavior: Clip.none,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadiusDirectional.circular(10),
                   side: BorderSide(
