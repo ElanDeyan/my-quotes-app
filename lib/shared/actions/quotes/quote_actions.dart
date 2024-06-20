@@ -8,9 +8,9 @@ import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/shared/actions/copy_to_clipboard.dart';
 import 'package:my_quotes/shared/actions/quotes/delete_quote.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
+import 'package:my_quotes/shared/actions/quotes/show_quote_share_actions.dart';
 import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum QuoteActions {
@@ -92,6 +92,28 @@ enum QuoteActions {
   }) =>
       actions.where(quote.canPerform).toList();
 
+  static void Function() actionCallback(
+    BuildContext context,
+    QuoteActions action,
+    Quote quote,
+  ) =>
+      switch (action) {
+        QuoteActions.readMore => () => context.pushNamed(
+              quoteByIdNavigationKey,
+              pathParameters: {'id': '${quote.id!}'},
+            ),
+        QuoteActions.create => () => showAddQuoteDialog(context),
+        QuoteActions.info => () => showQuoteInfoDialog(context, quote),
+        QuoteActions.delete => () => deleteQuote(context, quote),
+        QuoteActions.copy => () =>
+            copyToClipBoard(context, quote.shareableFormatOf(context)),
+        QuoteActions.copyLink => () =>
+            copyToClipBoard(context, quote.sourceUri ?? ''),
+        QuoteActions.share => () => showQuoteShareActions(context, quote),
+        QuoteActions.goToLink => () => launchUrl(Uri.parse(quote.sourceUri!)),
+        QuoteActions.update => () => showUpdateQuoteDialog(context, quote)
+      };
+
   static PopupMenuButton<Quote> popupMenuButton(
     BuildContext context,
     Quote quote,
@@ -111,25 +133,7 @@ enum QuoteActions {
           .map(
             (action) => PopupMenuItem(
               value: quote,
-              onTap: switch (action) {
-                QuoteActions.readMore => () => context.pushNamed(
-                      quoteByIdNavigationKey,
-                      pathParameters: {'id': '${quote.id!}'},
-                    ),
-                QuoteActions.create => () => showAddQuoteDialog(context),
-                QuoteActions.info => () => showQuoteInfoDialog(context, quote),
-                QuoteActions.delete => () => deleteQuote(context, quote),
-                QuoteActions.copy => () =>
-                    copyToClipBoard(context, quote.shareableFormatOf(context)),
-                QuoteActions.copyLink => () =>
-                    copyToClipBoard(context, quote.sourceUri ?? ''),
-                QuoteActions.share => () =>
-                    Share.share(quote.shareableFormatOf(context)),
-                QuoteActions.goToLink => () =>
-                    launchUrl(Uri.parse(quote.sourceUri!)),
-                QuoteActions.update => () =>
-                    showUpdateQuoteDialog(context, quote),
-              },
+              onTap: QuoteActions.actionCallback(context, action, quote),
               child: IconWithLabel(
                 icon: action.icon,
                 horizontalGap: 10,
