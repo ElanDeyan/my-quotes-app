@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/shared/actions/tags/delete_tag.dart';
-import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/shared/actions/tags/update_tag.dart';
+import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 
 enum TagActions {
   edit(

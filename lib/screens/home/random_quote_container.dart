@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/shared/widgets/quote_card.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shimmer_pro/shimmer_pro.dart';
 
 final class RandomQuoteContainer extends StatefulWidget {
@@ -24,7 +24,7 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
         switch (connectionState) {
           case ConnectionState.none:
             return Text(
-              'No database found.',
+              AppLocalizations.of(context)!.noDatabaseConnectionMessage,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
@@ -42,12 +42,12 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
             );
           case ConnectionState.done:
             if (snapshot.hasError) {
-              return Text('An error occurred: ${snapshot.error}.');
+              return Text(AppLocalizations.of(context)!.errorOccurred);
             }
             final quote = snapshot.data;
 
             if (quote == null) {
-              return const Text("You don't have quotes added yet.");
+              return Text(AppLocalizations.of(context)!.noQuotesAddedYet);
             } else {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -69,7 +69,11 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
                         width: 20,
                       ),
                       OutlinedButton(
-                        onPressed: () => Share.share(quote.shareableFormatOf(context)),
+                        onPressed: QuoteActions.actionCallback(
+                          context,
+                          QuoteActions.share,
+                          quote,
+                        ),
                         child: const Icon(Icons.share_outlined),
                       ),
                     ],

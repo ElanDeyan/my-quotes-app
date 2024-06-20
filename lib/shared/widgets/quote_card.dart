@@ -101,6 +101,18 @@ class QuoteCard extends StatelessWidget {
               ),
             ),
           ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: IconButton(
+              onPressed: () {},
+              iconSize: 16,
+              icon: Icon(
+                quote.isFavorite ?? false ? Icons.star : Icons.star_outline,
+                size: 16,
+              ),
+            ),
+          ),
           if (showActions)
             Positioned(
               right: 0,
