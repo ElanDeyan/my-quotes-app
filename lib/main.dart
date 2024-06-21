@@ -6,18 +6,15 @@ import 'package:my_quotes/constants/color_pallete.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
+import 'package:my_quotes/services/setup.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  timeago.setLocaleMessages('pt', timeago.PtBrMessages());
-  // TODO: find a better place to run it
-  SharedPreferences.setPrefix('myQuotes');
+  servicesSetup();
 
   const userPreferencesHandler = UserPreferences();
   final appPreferences =
