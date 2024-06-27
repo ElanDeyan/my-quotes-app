@@ -9,6 +9,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/enums/form_types.dart';
 import 'package:my_quotes/helpers/iterable_extension.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
@@ -18,7 +19,7 @@ import 'package:provider/provider.dart';
 mixin QuoteFormMixin {
   final formKey = GlobalKey<FormBuilderState>();
 
-  bool get isUpdateForm => false;
+  FormTypes get formType => FormTypes.add;
 
   final multipleTagSearchController = MultipleSearchController<Tag>();
 
@@ -127,7 +128,7 @@ mixin QuoteFormMixin {
 
   FormBuilderTextField _authorTextField(BuildContext context) {
     final fieldName = AppLocalizations.of(context)!.quoteFormFieldAuthor;
-    return isUpdateForm
+    return formType != FormTypes.add
         ? FormBuilderTextField(
             name: 'author',
             decoration: InputDecoration(
@@ -263,11 +264,11 @@ mixin QuoteFormMixin {
     BuildContext context,
     Quote? quoteForUpdate,
   ) {
-    final actionButtonText = isUpdateForm
+    final actionButtonText = formType == FormTypes.update
         ? AppLocalizations.of(context)!.quoteFormActionButtonEdit
         : AppLocalizations.of(context)!.quoteFormActionButtonAdd;
 
-    final actionButtonIcon = isUpdateForm
+    final actionButtonIcon = formType == FormTypes.update
         ? const Icon(Icons.save_outlined)
         : const Icon(Icons.create_outlined);
     return Consumer<DatabaseProvider>(
@@ -292,7 +293,7 @@ mixin QuoteFormMixin {
 
             final Quote quoteFromForm;
 
-            if (isUpdateForm) {
+            if (formType == FormTypes.update) {
               quoteFromForm = Quote.fromJson(formValue).copyWith(
                 id: Value(quoteForUpdate!.id),
                 createdAt: Value(quoteForUpdate.createdAt),
@@ -303,13 +304,13 @@ mixin QuoteFormMixin {
 
             scheduleMicrotask(
               () {
-                final result = isUpdateForm
+                final result = formType == FormTypes.update
                     ? database.updateQuote(quoteFromForm)
                     : database.addQuote(quoteFromForm);
 
                 result.then((value) {
                   if (value case true || int _) {
-                    final successfulMessage = isUpdateForm
+                    final successfulMessage = formType == FormTypes.update
                         ? AppLocalizations.of(context)!.quoteFormSuccessfulEdit
                         : AppLocalizations.of(context)!.quoteFormSuccessfulAdd;
                     FToast().init(context).showToast(

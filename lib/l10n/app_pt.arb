@@ -163,5 +163,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "addFromFile": "Adicionar de um arquivo",
+  "quoteFileParseError": "Não foi possível processar o arquivo"
 }

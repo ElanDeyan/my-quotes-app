@@ -28,7 +28,7 @@ enum ShareActions {
       (action) {
         if (action == ShareActions.link && !quote.hasSourceUri) return false;
         if (action == ShareActions.image && (isLinux || isWeb)) return false;
-        if (action == ShareActions.file) return false;
+        if (action == ShareActions.file && isLinux) return false;
         return true;
       },
     ).toList();
@@ -62,10 +62,24 @@ enum ShareActions {
                         .create();
                 await imagePath.writeAsBytes(image);
 
-                await Share.shareXFiles([XFile(imagePath.path, bytes: image)]);
+                await Share.shareXFiles(
+                  [XFile(imagePath.path, bytes: image)],
+                );
+
+                await imagePath.delete();
               },
             );
           },
-        ShareActions.file => () => throw UnimplementedError()
+        ShareActions.file => () async {
+            final directory = await getApplicationDocumentsDirectory();
+            final quoteFilePath =
+                await File('${directory.path}/quote-file-${quote.id!}.json')
+                    .create();
+            await quoteFilePath.writeAsString(quote.toJsonString());
+
+            await Share.shareXFiles([XFile(quoteFilePath.path)]);
+
+            await quoteFilePath.delete();
+          },
       };
 }

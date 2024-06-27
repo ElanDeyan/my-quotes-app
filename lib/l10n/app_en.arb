@@ -165,5 +165,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "addFromFile": "Upload from file",
+  "quoteFileParseError": "An error occurred when parsing the file"
 }
