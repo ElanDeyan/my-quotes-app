@@ -75,11 +75,14 @@ enum ShareActions {
             final quoteFilePath =
                 await File('${directory.path}/quote-file-${quote.id!}.json')
                     .create();
-            await quoteFilePath.writeAsString(quote.toJsonString());
+            if (context.mounted) {
+              await quoteFilePath
+                  .writeAsString(await quote.toShareableJsonString(context));
 
-            await Share.shareXFiles([XFile(quoteFilePath.path)]);
+              await Share.shareXFiles([XFile(quoteFilePath.path)]);
 
-            await quoteFilePath.delete();
+              await quoteFilePath.delete();
+            }
           },
       };
 }

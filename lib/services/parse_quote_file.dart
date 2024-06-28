@@ -12,7 +12,13 @@ Future<QuoteAndTags?> parseQuoteFile(
   File file,
 ) async {
   if (_isJsonFile(file)) {
-    final decodedFile = jsonDecode(await file.readAsString());
+    late final dynamic decodedFile;
+
+    try {
+      decodedFile = jsonDecode(await file.readAsString());
+    } catch (_) {
+      return null;
+    }
 
     if (decodedFile
         case {
