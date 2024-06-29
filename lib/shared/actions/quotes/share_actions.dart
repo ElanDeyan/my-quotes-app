@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:my_quotes/constants/platforms.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/shared/widgets/shareable_quote_card.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:screenshot/screenshot.dart';
+import 'package:my_quotes/services/quote_to_file.dart';
+import 'package:my_quotes/services/quote_to_image.dart';
 import 'package:share_plus/share_plus.dart';
 
 enum ShareActions {
@@ -27,8 +24,8 @@ enum ShareActions {
     return actions.where(
       (action) {
         if (action == ShareActions.link && !quote.hasSourceUri) return false;
-        if (action == ShareActions.image && (isLinux || isWeb)) return false;
-        if (action == ShareActions.file && isLinux) return false;
+        if (action == ShareActions.image && isWeb) return false;
+        if (action == ShareActions.file && isWeb) return false;
         return true;
       },
     ).toList();
@@ -40,49 +37,10 @@ enum ShareActions {
     Quote quote,
   ) =>
       switch (action) {
-        ShareActions.text => () =>
-            Share.share(quote.shareableFormatOf(context)),
+        ShareActions.text => () async =>
+            await Share.share(quote.shareableFormatOf(context)),
         ShareActions.link => () => Share.share(quote.sourceUri!),
-        ShareActions.image => () async {
-            final screenshotController = ScreenshotController();
-            await screenshotController
-                .captureFromWidget(
-              ShareableQuoteCard(
-                quote: quote,
-              ),
-              context: context,
-              delay: Durations.medium3,
-              pixelRatio: MediaQuery.devicePixelRatioOf(context),
-            )
-                .then(
-              (image) async {
-                final directory = await getApplicationDocumentsDirectory();
-                final imagePath =
-                    await File('${directory.path}/quote-${quote.id!}.png')
-                        .create();
-                await imagePath.writeAsBytes(image);
-
-                await Share.shareXFiles(
-                  [XFile(imagePath.path, bytes: image)],
-                );
-
-                await imagePath.delete();
-              },
-            );
-          },
-        ShareActions.file => () async {
-            final directory = await getApplicationDocumentsDirectory();
-            final quoteFilePath =
-                await File('${directory.path}/quote-file-${quote.id!}.json')
-                    .create();
-            if (context.mounted) {
-              await quoteFilePath
-                  .writeAsString(await quote.toShareableJsonString(context));
-
-              await Share.shareXFiles([XFile(quoteFilePath.path)]);
-
-              await quoteFilePath.delete();
-            }
-          },
+        ShareActions.image => () => quoteToImage(context, quote),
+        ShareActions.file => () => quoteToFile(context, quote),
       };
 }

@@ -10,7 +10,6 @@ Future<XFile?> getQuoteFile() async {
   );
 
   if (result != null) {
-    // TODO: deal with web
     final fileBytes = result.files.single.bytes;
 
     if (fileBytes != null) {

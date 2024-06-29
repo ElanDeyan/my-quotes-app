@@ -1,10 +1,7 @@
 import 'dart:convert';
 
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
-
-final _jsonExtensionRegex = RegExp(r'\.json$', caseSensitive: false);
 
 typedef QuoteAndTags = ({Quote quote, List<String> tags});
 
@@ -45,6 +42,3 @@ Future<QuoteAndTags?> parseQuoteFile(
   }
   return null;
 }
-
-bool _isJsonFile(XFile file) =>
-    _jsonExtensionRegex.hasMatch(p.extension(file.name));
