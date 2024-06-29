@@ -1,52 +1,50 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:path/path.dart' as p;
+import 'package:share_plus/share_plus.dart';
 
 final _jsonExtensionRegex = RegExp(r'\.json$', caseSensitive: false);
 
 typedef QuoteAndTags = ({Quote quote, List<String> tags});
 
 Future<QuoteAndTags?> parseQuoteFile(
-  File file,
+  XFile file,
 ) async {
-  if (_isJsonFile(file)) {
-    late final dynamic decodedFile;
+  late final dynamic decodedFile;
 
-    try {
-      decodedFile = jsonDecode(await file.readAsString());
-    } catch (_) {
-      return null;
-    }
+  try {
+    decodedFile = jsonDecode(await file.readAsString());
+  } catch (_) {
+    return null;
+  }
 
-    if (decodedFile
-        case {
-          "content": String _,
-          "author": String _,
-          "source": String? _,
-          "sourceUri": String? _,
-          "isFavorite": bool _,
-          "tags": final List<dynamic>? tags,
-        }) {
-      final jsonFile = decodedFile as Map<String, dynamic>;
+  if (decodedFile
+      case {
+        "content": String _,
+        "author": String _,
+        "source": String? _,
+        "sourceUri": String? _,
+        "isFavorite": bool _,
+        "tags": final List<dynamic>? tags,
+      }) {
+    final jsonFile = decodedFile as Map<String, dynamic>;
 
-      jsonFile.update(
-        "tags",
-        (value) => null,
-        ifAbsent: () => null,
-      );
+    jsonFile.update(
+      "tags",
+      (value) => null,
+      ifAbsent: () => null,
+    );
 
-      final jsonFileAsQuote = Quote.fromJson(jsonFile);
+    final jsonFileAsQuote = Quote.fromJson(jsonFile);
 
-      return (
-        quote: jsonFileAsQuote,
-        tags: tags?.cast<String>() ?? const <String>[],
-      );
-    }
+    return (
+      quote: jsonFileAsQuote,
+      tags: tags?.cast<String>() ?? const <String>[],
+    );
   }
   return null;
 }
 
-bool _isJsonFile(File file) =>
-    _jsonExtensionRegex.hasMatch(p.extension(file.path));
+bool _isJsonFile(XFile file) =>
+    _jsonExtensionRegex.hasMatch(p.extension(file.name));

@@ -1,5 +1,6 @@
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/services/file_picker.dart';
@@ -12,9 +13,9 @@ Future<void> handleQuoteFile(BuildContext context) async {
   final quoteFile = await getQuoteFile();
 
   if (quoteFile != null) {
-    final data = await Isolate.run(
-      () async => await parseQuoteFile(quoteFile),
-    );
+    final data = kIsWeb
+        ? await parseQuoteFile(quoteFile)
+        : await Isolate.run(() async => await parseQuoteFile(quoteFile));
 
     if (data != null) {
       final (:quote, :tags) = data;

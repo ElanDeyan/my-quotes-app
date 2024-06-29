@@ -1,17 +1,21 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
-import 'package:my_quotes/helpers/nullable_extension.dart';
+import 'package:share_plus/share_plus.dart';
 
-Future<File?> getQuoteFile() async {
+Future<XFile?> getQuoteFile() async {
   final FilePickerResult? result = await FilePicker.platform.pickFiles(
     lockParentWindow: true,
     type: FileType.custom,
     allowedExtensions: ['json'],
+    withData: true,
   );
 
-  if (result.isNotNull) {
-    return File(result!.files.single.path!);
+  if (result != null) {
+    // TODO: deal with web
+    final fileBytes = result.files.single.bytes;
+
+    if (fileBytes != null) {
+      return XFile.fromData(fileBytes);
+    }
   }
   return null;
 }
