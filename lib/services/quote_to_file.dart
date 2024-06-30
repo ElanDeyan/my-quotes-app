@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -17,18 +18,23 @@ Future<void> quoteToFile(BuildContext context, Quote quote) async {
     );
 
     if (pathToSave != null) {
-      final file = await File(pathToSave).create();
+      final file = await File(
+        '$pathToSave${!RegExp(r'.json$', caseSensitive: false).hasMatch(pathToSave) ? '.json' : ''}',
+      ).create();
       if (context.mounted) {
-        await file.writeAsString(await quote.toShareableJsonString(context));
+        await file.writeAsBytes(
+          utf8.encode(await quote.toShareableJsonString(context)),
+        );
       }
     }
   } else if (isAndroidOrIOS) {
-    final directory = await getApplicationDocumentsDirectory();
+    final directory = await getTemporaryDirectory();
     final quoteFilePath =
         await File('${directory.path}/quote-file-${quote.id!}.json').create();
     if (context.mounted) {
-      await quoteFilePath
-          .writeAsString(await quote.toShareableJsonString(context));
+      await quoteFilePath.writeAsBytes(
+        utf8.encode(await quote.toShareableJsonString(context)),
+      );
 
       await Share.shareXFiles([XFile(quoteFilePath.path)]);
 

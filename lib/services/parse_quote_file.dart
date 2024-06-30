@@ -11,7 +11,8 @@ Future<QuoteAndTags?> parseQuoteFile(
   late final dynamic decodedFile;
 
   try {
-    decodedFile = jsonDecode(await file.readAsString());
+    decodedFile =
+        jsonDecode(utf8.decode((await file.readAsString()).codeUnits));
   } catch (_) {
     return null;
   }
