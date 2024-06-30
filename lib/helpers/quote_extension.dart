@@ -5,6 +5,8 @@ import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
+import 'package:my_quotes/states/database_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 extension QuoteExtension on Quote {
@@ -48,4 +50,25 @@ ${sourceUri.isNotNullOrBlank ? '\n${AppLocalizations.of(context)!.quoteShareSeeM
 
   String createdAtLocaleMessageOf(BuildContext context) => timeago
       .format(createdAt!, locale: Localizations.localeOf(context).languageCode);
+
+  Future<List<String>> _getTagsName(BuildContext context) async {
+    final database = Provider.of<DatabaseProvider>(context, listen: false);
+    final tagsName =
+        (await database.getTagsByIds(tagsId)).map((tag) => tag.name);
+
+    return tagsName.toList();
+  }
+
+  Future<String> toShareableJsonString(BuildContext context) async {
+    final tagsName = await _getTagsName(context);
+
+    return '{'
+        '"content": "$content", '
+        '"author": "$author", '
+        '"source": ${source.isNotNullOrBlank ? '"$source"' : "null"}, '
+        '"sourceUri": ${sourceUri.isNotNullOrBlank ? '"$sourceUri"' : "null"}, '
+        '"isFavorite": ${isFavorite ?? false}, '
+        '"tags": ${'[' '"${tagsName.join('", "')}"' ']'}'
+        '}';
+  }
 }

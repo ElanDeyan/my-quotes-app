@@ -7,6 +7,7 @@ import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/my_quotes_screen.dart';
 import 'package:my_quotes/screens/search/search_quote_delegate.dart';
+import 'package:my_quotes/services/handle_quote_file.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_search.dart';
 
@@ -79,22 +80,20 @@ final class _MainAppScreenState extends State<MainAppScreen> {
               onPressed: () => context.pushNamed(tagsNavigationKey),
             ),
           ],
+          IconButton(
+            icon: const Icon(Icons.upload_file_outlined),
+            tooltip: AppLocalizations.of(context)!.addFromFile,
+            onPressed: () async => await handleQuoteFile(context),
+          ),
           if (isCompactWindowSize) ..._actionsForCompactWindow(context),
         ],
       ),
-      body: PopScope(
-        onPopInvoked: (didPop) {
-          if (didPop && bodyContent is MyQuotesScreen) {
-            context.goNamed(homeNavigationKey);
-          }
-        },
-        child: isCompactWindowSize
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: bodyContent,
-              )
-            : _notCompactWindowSizeBody(context),
-      ),
+      body: isCompactWindowSize
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: bodyContent,
+            )
+          : _notCompactWindowSizeBody(context),
       floatingActionButton: isCompactWindowSize
           ? FloatingActionButton(
               tooltip: AppLocalizations.of(context)!.navigationAddQuote,
