@@ -122,7 +122,8 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
       if (quote.tags.isNotNullOrBlank) {
         final newIdsString = quote.tags!.split(idSeparatorChar)..remove('$id');
 
-        updateQuote(quote.copyWith(tags: Value(newIdsString.join(idSeparatorChar))));
+        updateQuote(
+            quote.copyWith(tags: Value(newIdsString.join(idSeparatorChar))));
       }
     }
 
