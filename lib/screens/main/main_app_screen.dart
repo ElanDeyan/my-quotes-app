@@ -7,9 +7,12 @@ import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/my_quotes_screen.dart';
 import 'package:my_quotes/screens/search/search_quote_delegate.dart';
+import 'package:my_quotes/services/generate_backup_file.dart';
 import 'package:my_quotes/services/handle_quote_file.dart';
+import 'package:my_quotes/services/save_file.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_search.dart';
+import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 
 final class MainAppScreen extends StatefulWidget with DestinationsMixin {
   const MainAppScreen({
@@ -59,34 +62,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             color: Theme.of(context).colorScheme.surfaceContainerHighest,
           ),
         ),
-        actions: [
-          if (bodyContent is MyQuotesScreen) ...[
-            IconButton(
-              tooltip: AppLocalizations.of(context)!.navigationSearchQuote,
-              onPressed: () => showQuoteSearch(
-                context,
-                SearchQuoteDelegate(
-                  context: context,
-                  keyboardType: TextInputType.text,
-                  searchFieldLabel:
-                      AppLocalizations.of(context)!.navigationSearchLabel,
-                ),
-              ),
-              icon: const Icon(Icons.search_outlined),
-            ),
-            IconButton(
-              icon: const Icon(Icons.label_outlined),
-              tooltip: AppLocalizations.of(context)!.navigationTags,
-              onPressed: () => context.pushNamed(tagsNavigationKey),
-            ),
-          ],
-          IconButton(
-            icon: const Icon(Icons.upload_file_outlined),
-            tooltip: AppLocalizations.of(context)!.addFromFile,
-            onPressed: () async => await handleQuoteFile(context),
-          ),
-          if (isCompactWindowSize) ..._actionsForCompactWindow(context),
-        ],
+        actions: _appBarActions(context, isCompactWindowSize),
       ),
       body: isCompactWindowSize
           ? Padding(
@@ -108,6 +84,67 @@ final class _MainAppScreenState extends State<MainAppScreen> {
       bottomNavigationBar:
           isCompactWindowSize ? _myBottomNavigationBar() : null,
     );
+  }
+
+  List<Widget> _appBarActions(BuildContext context, bool isCompactWindowSize) {
+    return <Widget>[
+      if (bodyContent is MyQuotesScreen) ...<Widget>[
+        IconButton(
+          tooltip: AppLocalizations.of(context)!.navigationSearchQuote,
+          onPressed: () => showQuoteSearch(
+            context,
+            SearchQuoteDelegate(
+              context: context,
+              keyboardType: TextInputType.text,
+              searchFieldLabel:
+                  AppLocalizations.of(context)!.navigationSearchLabel,
+            ),
+          ),
+          icon: const Icon(Icons.search_outlined),
+        ),
+        IconButton(
+          icon: const Icon(Icons.label_outlined),
+          tooltip: AppLocalizations.of(context)!.navigationTags,
+          onPressed: () => context.pushNamed(tagsNavigationKey),
+        ),
+      ],
+      IconButton(
+        icon: const Icon(Icons.upload_file_outlined),
+        tooltip: AppLocalizations.of(context)!.addFromFile,
+        onPressed: () async => await handleQuoteFile(context),
+      ),
+      PopupMenuButton<void>(
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            child: const IconWithLabel(
+              icon: Icon(Icons.backup_outlined),
+              horizontalGap: 10,
+              label: Text('Create backup'),
+            ),
+            onTap: () async {
+              final backupFile = await generateBackupFile(context);
+              if (backupFile != null) {
+                await saveJsonFile(
+                  backupFile,
+                  'MyQuotes-Backup-${DateTime.now()}',
+                );
+              }
+            },
+          ),
+          PopupMenuItem(
+            child: const IconWithLabel(
+              icon: Icon(Icons.settings_backup_restore_outlined),
+              horizontalGap: 10,
+              label: Text('Restore backup'),
+            ),
+            onTap: () {},
+          ),
+        ],
+        icon: const Icon(Icons.import_export_outlined),
+        tooltip: 'Backup options',
+      ),
+      if (isCompactWindowSize) ..._actionsForCompactWindow(context),
+    ];
   }
 
   List<IconButton> _actionsForCompactWindow(BuildContext context) {
