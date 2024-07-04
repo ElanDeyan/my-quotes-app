@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 extension ThemeModeExtension on ThemeMode {
-  static ThemeMode themeModeFromString(String string) {
+  static ThemeMode? themeModeFromString(String string) {
     const themeModeValues = ThemeMode.values;
 
     for (final themeMode in themeModeValues) {
@@ -10,6 +10,6 @@ extension ThemeModeExtension on ThemeMode {
       }
     }
 
-    throw ArgumentError.value(string, null, 'Invalid theme mode name');
+    return null;
   }
 }

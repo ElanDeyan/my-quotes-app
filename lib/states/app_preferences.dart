@@ -20,20 +20,19 @@ final class AppPreferences extends ChangeNotifier {
 
   Future<void> loadLocalPreferences() async {
     _themeMode = ThemeModeExtension.themeModeFromString(
-      await _userPreferencesRepository.themeMode,
-    );
-    final localColorScheme =
+          await _userPreferencesRepository.themeMode,
+        ) ??
+        ThemeModeRepository.defaultThemeMode;
+
+    _colorSchemePalette =
         ColorSchemePaletteExtension.colorSchemePaletteFromString(
-      await _userPreferencesRepository.colorSchemePalette,
-    );
-    if (localColorScheme != null) {
-      _colorSchemePalette = localColorScheme;
-    } else {
-      _colorSchemePalette =
-          ColorSchemePaletteRepository.defaultColorSchemePalette;
-      colorSchemePalette = _colorSchemePalette;
-    }
+              await _userPreferencesRepository.colorSchemePalette,
+            ) ??
+            ColorSchemePaletteRepository.defaultColorSchemePalette;
+
     _language = await _userPreferencesRepository.language;
+
+    notifyListeners();
   }
 
   ThemeMode _themeMode;
