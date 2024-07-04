@@ -12,4 +12,8 @@ abstract interface class TagsRepository {
   Future<bool> updateTag(Tag tag);
 
   Future<int> deleteTag(int id);
+
+  Future<void> restoreTags(List<Tag> tags);
+
+  Future<void> clearAllTags();
 }

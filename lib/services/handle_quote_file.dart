@@ -10,7 +10,7 @@ import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
 
 Future<void> handleQuoteFile(BuildContext context) async {
-  final quoteFile = await getQuoteFile();
+  final quoteFile = await getJsonFile();
 
   if (quoteFile != null) {
     final data = kIsWeb

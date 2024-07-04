@@ -89,6 +89,41 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
+  Future<void> restoreQuotes(List<Quote> quotes) async {
+    batch((batch) {
+      batch.insertAllOnConflictUpdate(
+        quoteTable,
+        quotes.map((quote) => quote.toCompanion(true)),
+      );
+    });
+  }
+
+  @override
+  Future<void> restoreTags(List<Tag> tags) async {
+    batch(
+      (batch) => batch.insertAllOnConflictUpdate(
+        tagTable,
+        tags.map((tag) => tag.toCompanion(true)),
+      ),
+    );
+  }
+
+  @override
+  Future<void> clearAllQuotes() async {
+    delete(quoteTable).go();
+  }
+
+  @override
+  Future<void> clearAllTags() async {
+    delete(tagTable).go();
+
+    for (final quote in await allQuotes) {
+      update(quoteTable)
+          .replace(quote.toCompanion(true).copyWith(tags: const Value(null)));
+    }
+  }
+
+  @override
   Future<List<Tag>> get allTags async => select(tagTable).get();
 
   @override
@@ -123,7 +158,8 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
         final newIdsString = quote.tags!.split(idSeparatorChar)..remove('$id');
 
         updateQuote(
-            quote.copyWith(tags: Value(newIdsString.join(idSeparatorChar))));
+          quote.copyWith(tags: Value(newIdsString.join(idSeparatorChar))),
+        );
       }
     }
 

@@ -80,4 +80,28 @@ final class DatabaseProvider extends ChangeNotifier
   Future<List<Quote>> getQuotesWithTagId(int tagId) {
     return _appRepository.getQuotesWithTagId(tagId);
   }
+
+  @override
+  Future<void> clearAllQuotes() async {
+    _appRepository.clearAllQuotes();
+    notifyListeners();
+  }
+
+  @override
+  Future<void> clearAllTags() async {
+    _appRepository.clearAllTags();
+    notifyListeners();
+  }
+
+  @override
+  Future<void> restoreQuotes(List<Quote> quotes) async {
+    _appRepository.restoreQuotes(quotes);
+    notifyListeners();
+  }
+
+  @override
+  Future<void> restoreTags(List<Tag> tags) async {
+    _appRepository.restoreTags(tags);
+    notifyListeners();
+  }
 }

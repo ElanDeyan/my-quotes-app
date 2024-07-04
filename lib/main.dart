@@ -16,9 +16,9 @@ void main() async {
 
   servicesSetup();
 
-  const userPreferencesHandler = UserPreferences();
-  final appPreferences =
-      AppPreferences(userPreferencesRepository: userPreferencesHandler);
+  final appPreferences = AppPreferences(
+    userPreferencesRepository: const UserPreferences(),
+  );
 
   await appPreferences.loadLocalPreferences();
 
