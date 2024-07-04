@@ -15,5 +15,9 @@ abstract interface class QuotesRepository {
 
   Future<int> removeQuote(int id);
 
+  Future<void> clearAllQuotes();
+
+  Future<void> restoreQuotes(List<Quote> quotes);
+
   Stream<List<Quote>> get favorites;
 }

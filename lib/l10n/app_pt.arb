@@ -165,5 +165,12 @@
     }
   },
   "addFromFile": "Adicionar de um arquivo",
-  "quoteFileParseError": "Não foi possível processar o arquivo"
+  "quoteFileParseError": "Não foi possível processar o arquivo",
+  "backupFileParseError": "Não foi possível processar o arquivo de backup",
+  "backupOptionsTooltip": "Backup",
+  "createBackup": "Criar backup",
+  "restoreBackup": "Restaurar backup",
+  "restoreData": "Restaurar",
+  "restoreQuestion": "Você deseja restaurar os dados deste backup?",
+  "restoreAdvice": "Lembre-se: TODOS os seus dados locais serão substituídos."
 }

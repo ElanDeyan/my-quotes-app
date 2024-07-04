@@ -167,5 +167,12 @@
     }
   },
   "addFromFile": "Upload from file",
-  "quoteFileParseError": "An error occurred when parsing the file"
+  "quoteFileParseError": "An error occurred when parsing the file",
+  "backupFileParseError": "An error occurred when parsing the backup file",
+  "backupOptionsTooltip": "Backup",
+  "createBackup": "Create backup",
+  "restoreBackup": "Restore backup",
+  "restoreData": "Restore",
+  "restoreQuestion": "Do you want to recover your backup data?",
+  "restoreAdvice": "Remember: ALL of your local data will be lost and replaced by your backup."
 }

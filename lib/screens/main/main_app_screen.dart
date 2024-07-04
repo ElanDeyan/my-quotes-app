@@ -7,7 +7,9 @@ import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/my_quotes_screen.dart';
 import 'package:my_quotes/screens/search/search_quote_delegate.dart';
+import 'package:my_quotes/services/file_picker.dart';
 import 'package:my_quotes/services/generate_backup_file.dart';
+import 'package:my_quotes/services/handle_backup_file.dart';
 import 'package:my_quotes/services/handle_quote_file.dart';
 import 'package:my_quotes/services/save_file.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
@@ -116,10 +118,10 @@ final class _MainAppScreenState extends State<MainAppScreen> {
       PopupMenuButton<void>(
         itemBuilder: (context) => [
           PopupMenuItem(
-            child: const IconWithLabel(
-              icon: Icon(Icons.backup_outlined),
+            child: IconWithLabel(
+              icon: const Icon(Icons.backup_outlined),
               horizontalGap: 10,
-              label: Text('Create backup'),
+              label: Text(AppLocalizations.of(context)!.createBackup),
             ),
             onTap: () async {
               final backupFile = await generateBackupFile(context);
@@ -132,16 +134,22 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             },
           ),
           PopupMenuItem(
-            child: const IconWithLabel(
-              icon: Icon(Icons.settings_backup_restore_outlined),
+            child: IconWithLabel(
+              icon: const Icon(Icons.settings_backup_restore_outlined),
               horizontalGap: 10,
-              label: Text('Restore backup'),
+              label: Text(AppLocalizations.of(context)!.restoreBackup),
             ),
-            onTap: () {},
+            onTap: () async {
+              final backupFile = await getJsonFile();
+
+              if (context.mounted) {
+                await handleBackupFile(context, backupFile);
+              }
+            },
           ),
         ],
         icon: const Icon(Icons.import_export_outlined),
-        tooltip: 'Backup options',
+        tooltip: AppLocalizations.of(context)!.backupOptionsTooltip,
       ),
       if (isCompactWindowSize) ..._actionsForCompactWindow(context),
     ];
