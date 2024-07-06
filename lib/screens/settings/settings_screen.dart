@@ -32,10 +32,10 @@ class SettingsScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => BetterFeedback.of(context).showAndUploadToSentry(),
-        label: const IconWithLabel(
-          icon: Icon(Icons.feedback_outlined),
+        label: IconWithLabel(
+          icon: const Icon(Icons.feedback_outlined),
           horizontalGap: 10,
-          label: Text('Found an error?'),
+          label: Text(AppLocalizations.of(context)!.feedbackButtonLabel),
         ),
       ),
       body: Consumer<AppPreferences>(

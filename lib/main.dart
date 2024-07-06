@@ -12,6 +12,7 @@ import 'package:my_quotes/constants/keys.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
+import 'package:my_quotes/screens/feedback/my_quotes_feedback.dart';
 import 'package:my_quotes/services/setup.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -29,7 +30,7 @@ void main() async {
       )) {
         (final a, _) when a != '' => a,
         (_, final b) when b.isNotNullOrBlank => b,
-        _ => throw UnsupportedError('No sentry key defined')
+        _ => throw UnsupportedError('No sentry dsn defined')
       };
 
       await Sentry.init((options) => options.dsn = sentryDsn);
@@ -78,10 +79,39 @@ final class MyAppProvider extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => _appPreferences),
         ChangeNotifierProvider(create: (_) => _databaseNotifier),
       ],
-      child: BetterFeedback(
-        mode: FeedbackMode.navigate,
+      child: const MyQuotesFeedback(child: MyApp()),
+    );
+  }
+}
+
+final class MyQuotesFeedback extends StatelessWidget {
+  const MyQuotesFeedback({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AppPreferences>(
+      builder: (context, appPreferences, _) => BetterFeedback(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         pixelRatio: MediaQuery.devicePixelRatioOf(context),
-        child: const MyApp(),
+        mode: FeedbackMode.navigate,
+        feedbackBuilder: (context, fn, scrollController) =>
+            MyQuotesFeedbackFormArea(
+          context,
+          scrollController: scrollController,
+          fn: fn,
+        ),
+        themeMode: appPreferences.themeMode,
+        theme: FeedbackThemeData(
+          colorScheme: ColorSchemePalette.lightColorScheme(
+            appPreferences.colorSchemePalette,
+          ),
+        ),
+        child: child,
       ),
     );
   }
@@ -106,32 +136,34 @@ final class MyApp extends StatelessWidget {
           countryCode = null;
         }
 
-        return MaterialApp.router(
-          routerConfig: routesConfig,
-          debugShowCheckedModeBanner: false,
-          themeMode: appPreferences.themeMode,
-          theme: ThemeData(
-            useMaterial3: true,
-            brightness: Brightness.light,
-            colorScheme: ColorSchemePalette.lightColorScheme(
-              appPreferences.colorSchemePalette,
+        return MyQuotesFeedback(
+          child: MaterialApp.router(
+            routerConfig: routesConfig,
+            debugShowCheckedModeBanner: false,
+            themeMode: appPreferences.themeMode,
+            theme: ThemeData(
+              useMaterial3: true,
+              brightness: Brightness.light,
+              colorScheme: ColorSchemePalette.lightColorScheme(
+                appPreferences.colorSchemePalette,
+              ),
             ),
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            brightness: Brightness.dark,
-            colorScheme: ColorSchemePalette.darkColorScheme(
-              appPreferences.colorSchemePalette,
+            darkTheme: ThemeData(
+              useMaterial3: true,
+              brightness: Brightness.dark,
+              colorScheme: ColorSchemePalette.darkColorScheme(
+                appPreferences.colorSchemePalette,
+              ),
             ),
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              ...GlobalMaterialLocalizations.delegates,
+              ...FormBuilderLocalizations.localizationsDelegates,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: Locale(scriptCode, countryCode),
+            title: 'My Quotes',
           ),
-          localizationsDelegates: const [
-            ...AppLocalizations.localizationsDelegates,
-            ...GlobalMaterialLocalizations.delegates,
-            ...FormBuilderLocalizations.localizationsDelegates,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale(scriptCode, countryCode),
-          title: 'My Quotes',
         );
       },
     );

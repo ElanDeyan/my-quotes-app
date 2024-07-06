@@ -172,5 +172,10 @@
   "restoreBackup": "Restaurar backup",
   "restoreData": "Restaurar",
   "restoreQuestion": "Você deseja restaurar os dados deste backup?",
-  "restoreAdvice": "Lembre-se: TODOS os seus dados locais serão substituídos."
+  "restoreAdvice": "Lembre-se: TODOS os seus dados locais serão substituídos.",
+  "feedbackButtonLabel": "Ajude a melhorar este app",
+  "provideFeedback": "Feedback",
+  "feedbackInstructions": "Navegue até a tela desejada e escreva abaixo o que quer que melhore",
+  "feedbackTextLabel": "Seu feedback",
+  "feedbackSend": "Enviar feedback"
 }
