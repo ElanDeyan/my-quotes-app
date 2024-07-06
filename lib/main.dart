@@ -1,8 +1,14 @@
+import 'dart:async';
+
+import 'package:basics/basics.dart';
+import 'package:feedback_sentry/feedback_sentry.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:my_quotes/constants/color_pallete.dart';
+import 'package:my_quotes/constants/keys.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
@@ -10,8 +16,31 @@ import 'package:my_quotes/services/setup.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry/sentry.dart';
 
 void main() async {
+  runZonedGuarded(
+    () async {
+      await dotenv.load();
+
+      final sentryDsn = switch ((
+        const String.fromEnvironment(sentryDsnKey),
+        dotenv.env[sentryDsnKey]
+      )) {
+        (final a, _) when a != '' => a,
+        (_, final b) when b.isNotNullOrBlank => b,
+        _ => throw UnsupportedError('No sentry key defined')
+      };
+
+      await Sentry.init((options) => options.dsn = sentryDsn);
+      await initApp();
+    },
+    (exception, stackTrace) async =>
+        await Sentry.captureException(exception, stackTrace: stackTrace),
+  );
+}
+
+Future<void> initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   servicesSetup();
@@ -49,7 +78,11 @@ final class MyAppProvider extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => _appPreferences),
         ChangeNotifierProvider(create: (_) => _databaseNotifier),
       ],
-      child: const MyApp(),
+      child: BetterFeedback(
+        mode: FeedbackMode.navigate,
+        pixelRatio: MediaQuery.devicePixelRatioOf(context),
+        child: const MyApp(),
+      ),
     );
   }
 }
