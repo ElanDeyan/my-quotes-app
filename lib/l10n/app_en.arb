@@ -174,5 +174,10 @@
   "restoreBackup": "Restore backup",
   "restoreData": "Restore",
   "restoreQuestion": "Do you want to recover your backup data?",
-  "restoreAdvice": "Remember: ALL of your local data will be lost and replaced by your backup."
+  "restoreAdvice": "Remember: ALL of your local data will be lost and replaced by your backup.",
+  "feedbackButtonLabel": "Help me to improve this app",
+  "provideFeedback": "Provide feedback",
+  "feedbackInstructions": "Navigate through the app and type below what do you want.",
+  "feedbackTextLabel": "Your feedback",
+  "feedbackSend": "Send feedback"
 }

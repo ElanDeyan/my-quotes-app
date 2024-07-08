@@ -1,3 +1,4 @@
+import 'package:feedback_sentry/feedback_sentry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/settings/color_pallete_radio_list.dart';
 import 'package:my_quotes/screens/settings/language_radio_list.dart';
 import 'package:my_quotes/screens/settings/theme_mode_radio_list.dart';
+import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,6 +29,14 @@ class SettingsScreen extends StatelessWidget {
               : context.pushNamed(homeNavigationKey),
         ),
         title: Text(AppLocalizations.of(context)!.settings),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => BetterFeedback.of(context).showAndUploadToSentry(),
+        label: IconWithLabel(
+          icon: const Icon(Icons.feedback_outlined),
+          horizontalGap: 10,
+          label: Text(AppLocalizations.of(context)!.feedbackButtonLabel),
+        ),
       ),
       body: Consumer<AppPreferences>(
         builder: (context, value, child) => ListView(

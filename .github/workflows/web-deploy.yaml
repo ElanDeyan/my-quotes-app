@@ -22,7 +22,7 @@ jobs:
         run: flutter config --enable-web
 
       - name: 'Build web app (release mode)'
-        run: flutter build web --release --base-ref ${{ github.event.repository.name }}
+        run: flutter build web --release --base-ref ${{ github.event.repository.name }} --dart-define=SENTRY_DSN=${{secrets.MY_QUOTES_SENTRY_DSN}}
 
       - name: 'Deploy to GitHub Pages'
         uses: peaceiris/actions-gh-pages@v3
