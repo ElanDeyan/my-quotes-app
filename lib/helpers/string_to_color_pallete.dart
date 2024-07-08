@@ -1,4 +1,4 @@
-import 'package:my_quotes/constants/color_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_pallete.dart';
 
 extension ColorSchemePaletteExtension on ColorSchemePalette {
   static ColorSchemePalette? colorSchemePaletteFromString(String string) {

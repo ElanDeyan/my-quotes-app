@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 extension QuoteExtension on Quote {
-  bool get hasSourceAndUri => source.isNotNull && sourceUri.isNotNull;
+  bool get hasSourceAndUri =>
+      source.isNotNullOrBlank && sourceUri.isNotNullOrBlank;
 
-  bool get hasSource => source is String && source != '';
+  bool get hasSource => source.isNotNullOrBlank;
 
-  bool get hasSourceUri => sourceUri.isNotNull;
+  bool get hasSourceUri => sourceUri.isNotNullOrBlank;
 
   Iterable<int> get tagsId =>
       tags?.split(idSeparatorChar).map(int.tryParse).nonNulls ?? const <int>[];
@@ -39,8 +39,8 @@ ${sourceUri.isNotNullOrBlank ? '\n${AppLocalizations.of(context)!.quoteShareSeeM
       [
         content,
         author,
-        if (source.isNotNullOrBlank) source else '',
-        if (sourceUri.isNotNullOrBlank) sourceUri else '',
+        if (source.isNotNullOrBlank) source,
+        if (sourceUri.isNotNullOrBlank) sourceUri,
       ],
       '\n',
     );
