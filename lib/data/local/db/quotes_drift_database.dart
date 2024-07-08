@@ -4,7 +4,6 @@ import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/connection/connection.dart' as impl;
 import 'package:my_quotes/data/tables/quote_table.dart';
 import 'package:my_quotes/data/tables/tag_table.dart';
-import 'package:my_quotes/helpers/iterable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/repository/app_repository.dart';
 
@@ -64,7 +63,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   Future<Quote?> get randomQuote async {
     final quotes = await allQuotes;
 
-    return quotes.singleSampleOrNull;
+    return quotes.getRandom();
   }
 
   @override
