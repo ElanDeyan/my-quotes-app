@@ -47,7 +47,7 @@ class _MyQuotesFeedbackFormAreaState extends State<MyQuotesFeedbackFormArea> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context)!.provideFeedback,
+              AppLocalizations.of(widget.context)!.provideFeedback,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
@@ -81,7 +81,8 @@ class _MyQuotesFeedbackFormAreaState extends State<MyQuotesFeedbackFormArea> {
                         widget.fn(_feedbackTextController.text);
                       }
                     },
-                    label: Text(AppLocalizations.of(context)!.feedbackSend),
+                    label:
+                        Text(AppLocalizations.of(widget.context)!.feedbackSend),
                     icon: const Icon(Icons.send_outlined),
                   ),
                 ],

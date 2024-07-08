@@ -79,7 +79,9 @@ final class MyAppProvider extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => _appPreferences),
         ChangeNotifierProvider(create: (_) => _databaseNotifier),
       ],
-      child: const MyQuotesFeedback(child: MyApp()),
+      child: const MyQuotesFeedback(
+        child: MyApp(),
+      ),
     );
   }
 }
