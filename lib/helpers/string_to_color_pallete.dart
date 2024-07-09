@@ -5,10 +5,10 @@ extension ColorSchemePaletteExtension on ColorSchemePalette {
     const colorSchemePaletteValues = ColorSchemePalette.values;
 
     for (final colorSchemePalette in colorSchemePaletteValues) {
-      if (string
-              .toLowerCase()
-              .compareTo(colorSchemePalette.storageName.toLowerCase()) ==
-          0) {
+      final storageNameRegExp = RegExp(colorSchemePalette.storageName);
+      final uiNameRegExp = RegExp(colorSchemePalette.uiName);
+
+      if (storageNameRegExp.hasMatch(string) || uiNameRegExp.hasMatch(string)) {
         return colorSchemePalette;
       }
     }
