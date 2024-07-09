@@ -10,7 +10,6 @@ import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/iterable_extension.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -208,10 +207,10 @@ mixin QuoteFormMixin {
                 ),
                 showSelectAllButton: false,
                 showClearAllButton: false,
-                initialPickedItems: <Tag>[
+                initialPickedItems: <Tag>{
                   ...?snapshot.data!.last,
                   ..._pickedItems,
-                ].uniques.toList(),
+                }.toList(),
                 onPickedChange: (tags) => _pickedItems
                   ..clear()
                   ..addAll(tags),
