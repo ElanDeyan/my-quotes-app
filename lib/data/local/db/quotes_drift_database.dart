@@ -13,6 +13,8 @@ part 'quotes_drift_database.g.dart';
 final class AppDatabase extends _$AppDatabase implements AppRepository {
   AppDatabase() : super(impl.connect());
 
+  AppDatabase.forTesting(super.executor);
+
   @override
   int get schemaVersion => 3;
 
@@ -33,16 +35,16 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   Future<int> addQuote(Quote quote) async {
     return into(quoteTable).insert(
       QuoteTableCompanion.insert(
+        id: Value(quote.id),
         content: quote.content,
         author: quote.author,
-        createdAt: Value(DateTime.now()),
+        createdAt: Value(quote.createdAt),
         isFavorite: Value(quote.isFavorite),
         source: Value(quote.source),
         sourceUri: Value(quote.sourceUri),
         tags: Value(quote.tags),
       ),
       mode: InsertMode.insertOrReplace,
-      onConflict: DoNothing(),
     );
   }
 
