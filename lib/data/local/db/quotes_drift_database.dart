@@ -32,6 +32,13 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
+  Future<List<Quote>> get allQuotes async => select(quoteTable).get();
+
+  @override
+  Stream<List<Quote>> get favorites =>
+      (select(quoteTable)..where((row) => row.isFavorite.equals(true))).watch();
+
+  @override
   Future<int> addQuote(Quote quote) async {
     return into(quoteTable).insert(
       QuoteTableCompanion.insert(
@@ -49,29 +56,20 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<List<Quote>> get allQuotes async => select(quoteTable).get();
-
-  @override
-  Stream<List<Quote>> get favorites =>
-      (select(quoteTable)..where((row) => row.isFavorite.equals(true))).watch();
-
-  @override
   Future<Quote?> getQuoteById(int id) {
     return (select(quoteTable)..where((row) => row.id.equals(id)))
         .getSingleOrNull();
   }
 
   @override
-  Future<Quote?> get randomQuote async {
+  Future<List<Quote>> getQuotesWithTagId(int tagId) async {
     final quotes = await allQuotes;
 
-    return quotes.getRandom();
+    return quotes.where((quote) => quote.tagsId.contains(tagId)).toList();
   }
 
   @override
-  Future<int> removeQuote(int id) {
-    return delete(quoteTable).delete(QuoteTableCompanion(id: Value(id)));
-  }
+  Future<Quote?> get randomQuote async => (await allQuotes).getRandom();
 
   @override
   Future<bool> updateQuote(Quote quote) {
@@ -90,23 +88,8 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<void> restoreQuotes(List<Quote> quotes) async {
-    batch((batch) {
-      batch.insertAllOnConflictUpdate(
-        quoteTable,
-        quotes.map((quote) => quote.toCompanion(true)),
-      );
-    });
-  }
-
-  @override
-  Future<void> restoreTags(List<Tag> tags) async {
-    batch(
-      (batch) => batch.insertAllOnConflictUpdate(
-        tagTable,
-        tags.map((tag) => tag.toCompanion(true)),
-      ),
-    );
+  Future<int> removeQuote(int id) {
+    return delete(quoteTable).delete(QuoteTableCompanion(id: Value(id)));
   }
 
   @override
@@ -115,13 +98,13 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<void> clearAllTags() async {
-    delete(tagTable).go();
-
-    for (final quote in await allQuotes) {
-      update(quoteTable)
-          .replace(quote.toCompanion(true).copyWith(tags: const Value(null)));
-    }
+  Future<void> restoreQuotes(List<Quote> quotes) async {
+    batch((batch) {
+      batch.insertAllOnConflictUpdate(
+        quoteTable,
+        quotes.map((quote) => quote.toCompanion(true)),
+      );
+    });
   }
 
   @override
@@ -148,6 +131,16 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
+  Future<bool> updateTag(Tag tag) {
+    return update(tagTable).replace(
+      TagTableCompanion.insert(
+        id: Value(tag.id),
+        name: tag.name,
+      ),
+    );
+  }
+
+  @override
   Future<int> deleteTag(int id) async {
     delete(tagTable).delete(TagTableCompanion(id: Value(id)));
 
@@ -168,19 +161,22 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<bool> updateTag(Tag tag) {
-    return update(tagTable).replace(
-      TagTableCompanion.insert(
-        id: Value(tag.id),
-        name: tag.name,
-      ),
-    );
+  Future<void> clearAllTags() async {
+    delete(tagTable).go();
+
+    for (final quote in await allQuotes) {
+      update(quoteTable)
+          .replace(quote.toCompanion(true).copyWith(tags: const Value(null)));
+    }
   }
 
   @override
-  Future<List<Quote>> getQuotesWithTagId(int tagId) async {
-    final quotes = await allQuotes;
-
-    return quotes.where((quote) => quote.tagsId.contains(tagId)).toList();
+  Future<void> restoreTags(List<Tag> tags) async {
+    batch(
+      (batch) => batch.insertAllOnConflictUpdate(
+        tagTable,
+        tags.map((tag) => tag.toCompanion(true)),
+      ),
+    );
   }
 }
