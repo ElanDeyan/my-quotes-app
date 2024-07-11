@@ -305,7 +305,7 @@ mixin QuoteFormMixin {
               () {
                 final result = formType == FormTypes.update
                     ? database.updateQuote(quoteFromForm)
-                    : database.addQuote(quoteFromForm);
+                    : database.createQuote(quoteFromForm);
 
                 result.then((value) {
                   if (value case true || int _) {

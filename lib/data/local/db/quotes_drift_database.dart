@@ -39,7 +39,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
       (select(quoteTable)..where((row) => row.isFavorite.equals(true))).watch();
 
   @override
-  Future<int> addQuote(Quote quote) async {
+  Future<int> createQuote(Quote quote) async {
     return into(quoteTable).insert(
       QuoteTableCompanion.insert(
         id: Value(quote.id),
@@ -88,7 +88,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<int> removeQuote(int id) {
+  Future<int> deleteQuote(int id) {
     return delete(quoteTable).delete(QuoteTableCompanion(id: Value(id)));
   }
 

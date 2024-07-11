@@ -16,8 +16,8 @@ final class DatabaseProvider extends ChangeNotifier
   Future<List<Quote>> get allQuotes => _appRepository.allQuotes;
 
   @override
-  Future<int> addQuote(Quote quote) {
-    final newId = _appRepository.addQuote(quote);
+  Future<int> createQuote(Quote quote) {
+    final newId = _appRepository.createQuote(quote);
     notifyListeners();
     return newId;
   }
@@ -32,8 +32,8 @@ final class DatabaseProvider extends ChangeNotifier
   Future<Quote?> get randomQuote => _appRepository.randomQuote;
 
   @override
-  Future<int> removeQuote(int id) {
-    final oldId = _appRepository.removeQuote(id);
+  Future<int> deleteQuote(int id) {
+    final oldId = _appRepository.deleteQuote(id);
     notifyListeners();
     return oldId;
   }

@@ -61,13 +61,13 @@ void main() {
           reason: 'Before add, the quote can have a null id.',
         );
 
-        await database.addQuote(sampleQuote);
+        await database.createQuote(sampleQuote);
 
         expect(await database.allQuotes, hasLength(1));
       });
 
       test('Quote after add have non-null id', () async {
-        await database.addQuote(sampleQuote);
+        await database.createQuote(sampleQuote);
 
         expect(await database.allQuotes, hasLength(1));
 
@@ -82,8 +82,8 @@ void main() {
           author: faker.person.name(),
         );
 
-        await database.addQuote(sampleQuote);
-        await database.addQuote(secondQuote);
+        await database.createQuote(sampleQuote);
+        await database.createQuote(secondQuote);
 
         final [first, second] = await database.allQuotes;
 
@@ -94,7 +94,7 @@ void main() {
       });
 
       test('Add quote with same id will replace', () async {
-        await database.addQuote(sampleQuote);
+        await database.createQuote(sampleQuote);
 
         final addedQuote = (await database.allQuotes).single;
 
@@ -109,7 +109,7 @@ void main() {
 
         expect(anotherQuote, isNot(addedQuote));
 
-        await database.addQuote(anotherQuote);
+        await database.createQuote(anotherQuote);
 
         expect(await database.allQuotes, hasLength(1));
 
@@ -123,7 +123,7 @@ void main() {
       test('Auto increment id doesnt make conflict', () async {
         sampleQuote = sampleQuote.copyWith(id: const Value(3));
 
-        await database.addQuote(sampleQuote);
+        await database.createQuote(sampleQuote);
 
         final addedQuoteWithId3 = (await database.allQuotes).single;
 
@@ -134,7 +134,7 @@ void main() {
         ];
 
         for (final quote in quotesToAdd) {
-          await database.addQuote(quote);
+          await database.createQuote(quote);
         }
 
         expect(
@@ -158,7 +158,7 @@ void main() {
 
     group('Get Quote:', () {
       test('Getting quote by id', () async {
-        await database.addQuote(sampleQuote);
+        await database.createQuote(sampleQuote);
 
         final addedQuote = (await database.allQuotes).single;
         final addedQuoteId = addedQuote.id!;
@@ -174,7 +174,7 @@ void main() {
       test(
         'Getting null for not found id',
         () async {
-          await database.addQuote(sampleQuote);
+          await database.createQuote(sampleQuote);
 
           final addedId = (await database.allQuotes).single.id!;
 
@@ -203,7 +203,7 @@ void main() {
       test(
         'Simple case',
         () async {
-          await database.addQuote(sampleQuote);
+          await database.createQuote(sampleQuote);
 
           final oldQuote = (await database.allQuotes).single;
 
@@ -222,8 +222,8 @@ void main() {
       );
 
       test('Updating in non-existent id doesnt add', () async {
-        await database.addQuote(sampleQuote);
-        await database.addQuote(_generateRandomQuote());
+        await database.createQuote(sampleQuote);
+        await database.createQuote(_generateRandomQuote());
 
         final quotesQuantity = (await database.allQuotes).length;
 
@@ -239,12 +239,12 @@ void main() {
 
     group('Deleting', () {
       test('Basic deleting', () async {
-        await database.addQuote(sampleQuote);
+        await database.createQuote(sampleQuote);
         expect(await database.allQuotes, hasLength(1));
 
         final addedQuote = (await database.allQuotes).single;
 
-        await database.removeQuote(addedQuote.id!);
+        await database.deleteQuote(addedQuote.id!);
 
         expect(await database.allQuotes, isEmpty);
 
@@ -255,7 +255,7 @@ void main() {
       });
 
       test('Delete non-existent id does nothing', () async {
-        await database.addQuote(sampleQuote);
+        await database.createQuote(sampleQuote);
 
         final addedQuote = (await database.allQuotes).single;
 
@@ -265,7 +265,7 @@ void main() {
 
         expect(addedId, isNot(nonExistentId));
 
-        await database.removeQuote(nonExistentId);
+        await database.deleteQuote(nonExistentId);
 
         expect(await database.allQuotes, hasLength(1));
 
@@ -282,7 +282,7 @@ void main() {
         ];
 
         for (final quote in quotesToAdd) {
-          await database.addQuote(quote);
+          await database.createQuote(quote);
         }
 
         expect(await database.allQuotes, hasLength(quotesToAdd.length));
@@ -308,7 +308,7 @@ void main() {
 
       final tagId = (await database.allTags).single.id;
 
-      await database.addQuote(sampleQuote.copyWith(tags: Value('$tagId')));
+      await database.createQuote(sampleQuote.copyWith(tags: Value('$tagId')));
 
       final addedQuote = (await database.allQuotes).single;
 

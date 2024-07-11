@@ -13,7 +13,7 @@ Future<void> deleteQuote(BuildContext context, Quote quote) async {
   result.then((value) {
     if (value == true) {
       final database = Provider.of<DatabaseProvider>(context, listen: false);
-      database.removeQuote(quote.id!);
+      database.deleteQuote(quote.id!);
       showToast(
         context,
         child: PillChip(label: Text(AppLocalizations.of(context)!.deleted)),
