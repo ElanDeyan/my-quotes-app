@@ -304,7 +304,7 @@ void main() {
     });
 
     test('Quote with some tag', () async {
-      await database.createTag(sampleTag);
+      await database.createTag(sampleTag.name);
 
       final tagId = (await database.allTags).single.id;
 

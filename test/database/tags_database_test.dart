@@ -31,7 +31,7 @@ void main() {
 
   group('Create', () {
     test('Basic', () async {
-      await appDatabase.createTag(_generateRandomTag());
+      await appDatabase.createTag(_generateRandomTag().name);
       expect(await appDatabase.allTags, isNotEmpty);
 
       final addedTag = (await appDatabase.allTags).single;
@@ -47,7 +47,7 @@ void main() {
             'Before add, it can have null id; will receive automatically when added.',
       );
 
-      await appDatabase.createTag(sampleTag);
+      await appDatabase.createTag(sampleTag.name);
 
       expect((await appDatabase.allTags).single.id, isNotNull);
     });
@@ -58,7 +58,7 @@ void main() {
         final tagsToAdd = [for (var i = 0; i < 5; i++) _generateRandomTag()];
 
         for (final tag in tagsToAdd) {
-          await appDatabase.createTag(tag);
+          await appDatabase.createTag(tag.name);
         }
 
         expect(await appDatabase.allTags, hasLength(tagsToAdd.length));
@@ -76,74 +76,22 @@ void main() {
         );
       },
     );
-
-    test('Add with existent id replaces', () async {
-      await appDatabase.createTag(sampleTag);
-
-      final firstTagAdded = (await appDatabase.allTags).first;
-
-      expect(firstTagAdded.id, equals(1));
-
-      expect(await appDatabase.allTags, hasLength(1));
-
-      await appDatabase
-          .createTag(_generateRandomTag().copyWith(id: const Value(1)));
-
-      expect(await appDatabase.allTags, hasLength(1));
-
-      expect((await appDatabase.allTags).single, isNot(firstTagAdded));
-    });
-
-    test('New tags id starts from the higher id', () async {
-      const hardCodedId = 3;
-      await appDatabase.createTag(
-        _generateRandomTag().copyWith(id: const Value(hardCodedId)),
-      );
-
-      final idsAfterFirstWithHardCodedId =
-          (await appDatabase.allTags).map((tag) => tag.id!).toSet();
-
-      const numberOfTagsToAdd = 5;
-
-      for (var i = 0; i < numberOfTagsToAdd; i++) {
-        await appDatabase.createTag(_generateRandomTag());
-      }
-
-      expect(await appDatabase.allTags, hasLength(numberOfTagsToAdd + 1));
-
-      expect(
-        (await appDatabase.allTags).last.id,
-        equals(hardCodedId + numberOfTagsToAdd),
-      );
-
-      final idsAfterHardCodedAndManyMore =
-          (await appDatabase.allTags).map((tag) => tag.id!).toSet();
-
-      expect(
-        idsAfterHardCodedAndManyMore.intersection(idsAfterFirstWithHardCodedId),
-        unorderedEquals({hardCodedId}),
-        reason:
-            'Since the higher id was 3, he started to add from 3, skipping 1 and 2.',
-      );
-    });
   });
 
   group('Get', () {
     test('by id', () async {
-      const hardCodedId = 3;
-      await appDatabase
-          .createTag(sampleTag.copyWith(id: const Value(hardCodedId)));
+      await appDatabase.createTag(sampleTag.name);
 
       expect(await appDatabase.allTags, hasLength(1));
 
       final addedTag = (await appDatabase.allTags).single;
 
-      expect(await appDatabase.getTagById(hardCodedId), equals(addedTag));
+      expect(await appDatabase.getTagById(addedTag.id!), equals(addedTag));
     });
 
     test('by id (null if doesnt have id)', () async {
       const hardCodedId = 3;
-      await appDatabase.createTag(sampleTag);
+      await appDatabase.createTag(sampleTag.name);
 
       expect(await appDatabase.allTags, hasLength(1));
 
@@ -158,7 +106,7 @@ void main() {
       final tagsToAdd = [for (var i = 0; i < 5; i++) _generateRandomTag()];
 
       for (final tag in tagsToAdd) {
-        await appDatabase.createTag(tag);
+        await appDatabase.createTag(tag.name);
       }
 
       final tagsIds = (await appDatabase.allTags).map((tag) => tag.id!).toList()
@@ -178,7 +126,7 @@ void main() {
 
       // ids from 1 to 5
       for (final tag in tagsToAdd) {
-        await appDatabase.createTag(tag);
+        await appDatabase.createTag(tag.name);
       }
 
       final randomInvalidIds = [
@@ -197,7 +145,7 @@ void main() {
       ];
 
       for (final tag in tagsToAdd) {
-        await appDatabase.createTag(tag);
+        await appDatabase.createTag(tag.name);
       }
 
       const oneToFiveInclusive = [1, 2, 3, 4, 5];
@@ -209,7 +157,7 @@ void main() {
 
   group('Update', () {
     test('Basic case', () async {
-      await appDatabase.createTag(_generateRandomTag(generateId: true));
+      await appDatabase.createTag(_generateRandomTag(generateId: true).name);
 
       final addedTag = (await appDatabase.allTags).single;
 
@@ -225,7 +173,7 @@ void main() {
     });
 
     test('Update non-existent id not adds', () async {
-      await appDatabase.createTag(sampleTag);
+      await appDatabase.createTag(sampleTag.name);
 
       final firstTag = (await appDatabase.allTags).single;
 
@@ -248,7 +196,7 @@ void main() {
 
   group('Delete', () {
     test('Basic', () async {
-      await appDatabase.createTag(sampleTag);
+      await appDatabase.createTag(sampleTag.name);
 
       final addedTag = (await appDatabase.allTags).single;
 
@@ -259,7 +207,7 @@ void main() {
     });
 
     test('Delete non-existent does nothing', () async {
-      await appDatabase.createTag(sampleTag);
+      await appDatabase.createTag(sampleTag.name);
 
       final firstTag = (await appDatabase.allTags).single;
 
@@ -276,7 +224,7 @@ void main() {
     test('Clear all tags', () async {
       const numberOftagsToAdd = 10;
       for (var i = 0; i < numberOftagsToAdd; i++) {
-        await appDatabase.createTag(_generateRandomTag(generateId: true));
+        await appDatabase.createTag(_generateRandomTag(generateId: true).name);
       }
 
       expect(await appDatabase.allTags, hasLength(numberOftagsToAdd));
