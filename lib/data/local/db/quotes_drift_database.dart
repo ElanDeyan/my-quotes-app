@@ -40,12 +40,13 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
 
   @override
   Future<int> createQuote(Quote quote) async {
+    final createdAt = quote.createdAt ?? DateTime.now();
     return into(quoteTable).insert(
       QuoteTableCompanion.insert(
-        id: Value(quote.id),
+        id: Value.absentIfNull(quote.id),
         content: quote.content,
         author: quote.author,
-        createdAt: Value(quote.createdAt),
+        createdAt: Value(createdAt),
         isFavorite: Value(quote.isFavorite),
         source: Value(quote.source),
         sourceUri: Value(quote.sourceUri),
@@ -74,16 +75,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   @override
   Future<bool> updateQuote(Quote quote) {
     return update(quoteTable).replace(
-      QuoteTableCompanion.insert(
-        id: Value(quote.id),
-        content: quote.content,
-        author: quote.author,
-        createdAt: Value(quote.createdAt),
-        isFavorite: Value(quote.isFavorite),
-        source: Value(quote.source),
-        sourceUri: Value(quote.sourceUri),
-        tags: Value(quote.tags),
-      ),
+      quote.toCompanion(true),
     );
   }
 
@@ -113,9 +105,8 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   @override
   Future<int> createTag(Tag tag) async {
     return into(tagTable).insert(
-      TagTableCompanion.insert(name: tag.name),
+      tag.toCompanion(true),
       mode: InsertMode.insertOrReplace,
-      onConflict: DoNothing(),
     );
   }
 
@@ -133,10 +124,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   @override
   Future<bool> updateTag(Tag tag) {
     return update(tagTable).replace(
-      TagTableCompanion.insert(
-        id: Value(tag.id),
-        name: tag.name,
-      ),
+      tag.toCompanion(true),
     );
   }
 
