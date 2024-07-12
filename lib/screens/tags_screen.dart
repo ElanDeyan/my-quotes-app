@@ -89,7 +89,6 @@ class TagsScreen extends StatelessWidget {
         trailing: PopupMenuButton<Tag>(
           itemBuilder: (context) => [
             const PopupMenuItem<Tag>(
-              value: Tag(name: 'name'),
               child: Text('Action'),
             ),
           ],
@@ -100,7 +99,7 @@ class TagsScreen extends StatelessWidget {
         onTap: () => context.pushNamed(
           quoteWithTagNavigationKey,
           pathParameters: {
-            'tagId': '${tags[index].id!}',
+            'tagId': '${tags[index].id}',
           },
         ),
         trailing: PopupMenuButton(

@@ -136,7 +136,7 @@ class ViewQuotePage extends StatelessWidget {
                       Text(
                         quote.createdAtLocaleMessageOf(context).capitalize(),
                       ),
-                      if (quote.isFavorite ?? false)
+                      if (quote.isFavorite)
                         IconWithLabel(
                           icon: const Icon(Icons.star),
                           horizontalGap: 10,
@@ -219,10 +219,6 @@ class QuoteScreenDialogBody extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          AppLocalizations.of(context)!.quoteInfo,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
                         Text('Id: ${quote.id}'),
                         Text(
                           '${AppLocalizations.of(context)!.quoteFormFieldContent}: ${quote.content}',
@@ -276,7 +272,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
                               }
                             },
                           ),
-                        if (quote.isFavorite ?? false)
+                        if (quote.isFavorite)
                           IconWithLabel(
                             icon: const Icon(Icons.star),
                             horizontalGap: 10,

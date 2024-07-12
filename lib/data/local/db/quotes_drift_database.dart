@@ -2,6 +2,7 @@ import 'package:basics/basics.dart';
 import 'package:drift/drift.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/connection/connection.dart' as impl;
+import 'package:my_quotes/data/local/db/daos/quotes_dao.dart';
 import 'package:my_quotes/data/tables/quote_table.dart';
 import 'package:my_quotes/data/tables/tag_table.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
@@ -9,14 +10,14 @@ import 'package:my_quotes/repository/app_repository.dart';
 
 part 'quotes_drift_database.g.dart';
 
-@DriftDatabase(tables: [QuoteTable, TagTable])
+@DriftDatabase(tables: [QuoteTable, TagTable], daos: [QuotesDao])
 final class AppDatabase extends _$AppDatabase implements AppRepository {
   AppDatabase() : super(impl.connect());
 
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -26,13 +27,19 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
         if (from < 3) {
           await m.deleteTable('tag_table');
           await m.createTable(tagTable);
+        } else if (from < 4) {
+          await m.deleteTable('quote_table');
+          await m.createTable(quoteTable);
+
+          await m.deleteTable('tag_table');
+          await m.createTable(tagTable);
         }
       },
     );
   }
 
   @override
-  Future<List<Quote>> get allQuotes async => select(quoteTable).get();
+  Future<List<Quote>> get allQuotes async => quotesDao.allQuotes;
 
   @override
   Stream<List<Quote>> get favorites =>
@@ -40,18 +47,8 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
 
   @override
   Future<int> createQuote(Quote quote) async {
-    final createdAt = quote.createdAt ?? DateTime.now();
     return into(quoteTable).insert(
-      QuoteTableCompanion.insert(
-        id: Value.absentIfNull(quote.id),
-        content: quote.content,
-        author: quote.author,
-        createdAt: Value(createdAt),
-        isFavorite: Value(quote.isFavorite),
-        source: Value(quote.source),
-        sourceUri: Value(quote.sourceUri),
-        tags: Value(quote.tags),
-      ),
+      quote.toCompanion(true),
       mode: InsertMode.insertOrReplace,
     );
   }
@@ -103,9 +100,9 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   Future<List<Tag>> get allTags async => select(tagTable).get();
 
   @override
-  Future<int> createTag(Tag tag) async {
+  Future<int> createTag(String tagName) async {
     return into(tagTable).insert(
-      tag.toCompanion(true),
+      TagTableCompanion.insert(name: tagName),
       mode: InsertMode.insertOrReplace,
     );
   }

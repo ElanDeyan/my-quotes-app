@@ -100,7 +100,7 @@ enum QuoteActions {
       switch (action) {
         QuoteActions.readMore => () => context.pushNamed(
               quoteByIdNavigationKey,
-              pathParameters: {'id': '${quote.id!}'},
+              pathParameters: {'id': '${quote.id}'},
             ),
         QuoteActions.create => () => showAddQuoteDialog(context),
         QuoteActions.info => () => showQuoteInfoDialog(context, quote),

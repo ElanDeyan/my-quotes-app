@@ -108,7 +108,7 @@ class QuoteCard extends StatelessWidget {
               onPressed: () {},
               iconSize: 16,
               icon: Icon(
-                quote.isFavorite ?? false ? Icons.star : Icons.star_outline,
+                quote.isFavorite ? Icons.star : Icons.star_outline,
                 size: 16,
               ),
             ),

@@ -52,7 +52,7 @@ class $QuoteTableTable extends QuoteTable
       const VerificationMeta('isFavorite');
   @override
   late final GeneratedColumn<bool> isFavorite = GeneratedColumn<bool>(
-      'is_favorite', aliasedName, true,
+      'is_favorite', aliasedName, false,
       type: DriftSqlType.bool,
       requiredDuringInsert: false,
       defaultConstraints:
@@ -65,7 +65,7 @@ class $QuoteTableTable extends QuoteTable
       'created_at', aliasedName, true,
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
-      defaultValue: Constant(DateTime.now()));
+      defaultValue: currentDateAndTime);
   static const VerificationMeta _tagsMeta = const VerificationMeta('tags');
   @override
   late final GeneratedColumn<String> tags = GeneratedColumn<String>(
@@ -141,7 +141,7 @@ class $QuoteTableTable extends QuoteTable
       sourceUri: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}source_uri']),
       isFavorite: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite']),
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
       tags: attachedDatabase.typeMapping
@@ -161,7 +161,7 @@ class Quote extends DataClass implements Insertable<Quote> {
   final String author;
   final String? source;
   final String? sourceUri;
-  final bool? isFavorite;
+  final bool isFavorite;
   final DateTime? createdAt;
   final String? tags;
   const Quote(
@@ -170,7 +170,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       required this.author,
       this.source,
       this.sourceUri,
-      this.isFavorite,
+      required this.isFavorite,
       this.createdAt,
       this.tags});
   @override
@@ -187,9 +187,7 @@ class Quote extends DataClass implements Insertable<Quote> {
     if (!nullToAbsent || sourceUri != null) {
       map['source_uri'] = Variable<String>(sourceUri);
     }
-    if (!nullToAbsent || isFavorite != null) {
-      map['is_favorite'] = Variable<bool>(isFavorite);
-    }
+    map['is_favorite'] = Variable<bool>(isFavorite);
     if (!nullToAbsent || createdAt != null) {
       map['created_at'] = Variable<DateTime>(createdAt);
     }
@@ -209,9 +207,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       sourceUri: sourceUri == null && nullToAbsent
           ? const Value.absent()
           : Value(sourceUri),
-      isFavorite: isFavorite == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isFavorite),
+      isFavorite: Value(isFavorite),
       createdAt: createdAt == null && nullToAbsent
           ? const Value.absent()
           : Value(createdAt),
@@ -228,7 +224,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       author: serializer.fromJson<String>(json['author']),
       source: serializer.fromJson<String?>(json['source']),
       sourceUri: serializer.fromJson<String?>(json['sourceUri']),
-      isFavorite: serializer.fromJson<bool?>(json['isFavorite']),
+      isFavorite: serializer.fromJson<bool>(json['isFavorite']),
       createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
       tags: serializer.fromJson<String?>(json['tags']),
     );
@@ -242,7 +238,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       'author': serializer.toJson<String>(author),
       'source': serializer.toJson<String?>(source),
       'sourceUri': serializer.toJson<String?>(sourceUri),
-      'isFavorite': serializer.toJson<bool?>(isFavorite),
+      'isFavorite': serializer.toJson<bool>(isFavorite),
       'createdAt': serializer.toJson<DateTime?>(createdAt),
       'tags': serializer.toJson<String?>(tags),
     };
@@ -254,7 +250,7 @@ class Quote extends DataClass implements Insertable<Quote> {
           String? author,
           Value<String?> source = const Value.absent(),
           Value<String?> sourceUri = const Value.absent(),
-          Value<bool?> isFavorite = const Value.absent(),
+          bool? isFavorite,
           Value<DateTime?> createdAt = const Value.absent(),
           Value<String?> tags = const Value.absent()}) =>
       Quote(
@@ -263,7 +259,7 @@ class Quote extends DataClass implements Insertable<Quote> {
         author: author ?? this.author,
         source: source.present ? source.value : this.source,
         sourceUri: sourceUri.present ? sourceUri.value : this.sourceUri,
-        isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
+        isFavorite: isFavorite ?? this.isFavorite,
         createdAt: createdAt.present ? createdAt.value : this.createdAt,
         tags: tags.present ? tags.value : this.tags,
       );
@@ -305,7 +301,7 @@ class QuoteTableCompanion extends UpdateCompanion<Quote> {
   final Value<String> author;
   final Value<String?> source;
   final Value<String?> sourceUri;
-  final Value<bool?> isFavorite;
+  final Value<bool> isFavorite;
   final Value<DateTime?> createdAt;
   final Value<String?> tags;
   const QuoteTableCompanion({
@@ -357,7 +353,7 @@ class QuoteTableCompanion extends UpdateCompanion<Quote> {
       Value<String>? author,
       Value<String?>? source,
       Value<String?>? sourceUri,
-      Value<bool?>? isFavorite,
+      Value<bool>? isFavorite,
       Value<DateTime?>? createdAt,
       Value<String?>? tags}) {
     return QuoteTableCompanion(
@@ -598,6 +594,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
   late final $QuoteTableTable quoteTable = $QuoteTableTable(this);
   late final $TagTableTable tagTable = $TagTableTable(this);
+  late final QuotesDao quotesDao = QuotesDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -611,7 +608,7 @@ typedef $$QuoteTableTableInsertCompanionBuilder = QuoteTableCompanion Function({
   required String author,
   Value<String?> source,
   Value<String?> sourceUri,
-  Value<bool?> isFavorite,
+  Value<bool> isFavorite,
   Value<DateTime?> createdAt,
   Value<String?> tags,
 });
@@ -621,7 +618,7 @@ typedef $$QuoteTableTableUpdateCompanionBuilder = QuoteTableCompanion Function({
   Value<String> author,
   Value<String?> source,
   Value<String?> sourceUri,
-  Value<bool?> isFavorite,
+  Value<bool> isFavorite,
   Value<DateTime?> createdAt,
   Value<String?> tags,
 });
@@ -651,7 +648,7 @@ class $$QuoteTableTableTableManager extends RootTableManager<
             Value<String> author = const Value.absent(),
             Value<String?> source = const Value.absent(),
             Value<String?> sourceUri = const Value.absent(),
-            Value<bool?> isFavorite = const Value.absent(),
+            Value<bool> isFavorite = const Value.absent(),
             Value<DateTime?> createdAt = const Value.absent(),
             Value<String?> tags = const Value.absent(),
           }) =>
@@ -671,7 +668,7 @@ class $$QuoteTableTableTableManager extends RootTableManager<
             required String author,
             Value<String?> source = const Value.absent(),
             Value<String?> sourceUri = const Value.absent(),
-            Value<bool?> isFavorite = const Value.absent(),
+            Value<bool> isFavorite = const Value.absent(),
             Value<DateTime?> createdAt = const Value.absent(),
             Value<String?> tags = const Value.absent(),
           }) =>

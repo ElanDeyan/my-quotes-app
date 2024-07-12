@@ -124,7 +124,7 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
                       context.pushNamed(
                         quoteWithTagNavigationKey,
                         pathParameters: {
-                          'tagId': '${searchResults[index].id!}',
+                          'tagId': '${searchResults[index].id}',
                         },
                       );
                     },

@@ -41,7 +41,7 @@ Future<Map<String, dynamic>> retrieveUserData(BuildContext context) async {
       LanguageRepository.languageKey: language,
     },
     "tags": [
-      for (final tag in tags) <String, String>{"${tag.id!}": tag.name},
+      for (final tag in tags) <String, String>{"${tag.id}": tag.name},
     ],
     "quotes": [
       for (final quote in quotes) quote.toJson(),

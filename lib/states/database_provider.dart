@@ -49,8 +49,8 @@ final class DatabaseProvider extends ChangeNotifier
   Future<List<Tag>> get allTags => _appRepository.allTags;
 
   @override
-  Future<int> createTag(Tag tag) {
-    final newId = _appRepository.createTag(tag);
+  Future<int> createTag(String tagName) {
+    final newId = _appRepository.createTag(tagName);
     notifyListeners();
     return newId;
   }

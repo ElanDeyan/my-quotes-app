@@ -38,7 +38,7 @@ Future<void> quoteToImage(BuildContext context, Quote quote) async {
         final directory = await getApplicationDocumentsDirectory();
 
         final quoteFilePath = await File(
-          '${directory.path}/quote-file-${quote.id!}.png',
+          '${directory.path}/quote-file-${quote.id}.png',
         ).create();
 
         await quoteFilePath.writeAsBytes(image);

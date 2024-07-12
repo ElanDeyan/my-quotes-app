@@ -291,7 +291,7 @@ mixin QuoteFormMixin {
                     .nonNulls
                     .join(idSeparatorChar);
 
-                return value.isNullOrBlank ? null : value;
+                return value.isNullOrBlank ? '' : value;
               },
             );
 
@@ -299,8 +299,8 @@ mixin QuoteFormMixin {
 
             if (formType == FormTypes.update) {
               quoteFromForm = Quote.fromJson(formValue).copyWith(
-                id: Value(quoteForUpdate!.id),
-                createdAt: Value(quoteForUpdate.createdAt),
+                id: Value.absentIfNull(quoteForUpdate!.id),
+                createdAt: Value.absentIfNull(quoteForUpdate.createdAt),
               );
             } else {
               quoteFromForm = Quote.fromJson(formValue);

@@ -67,7 +67,7 @@ ${sourceUri.isNotNullOrBlank ? '\n${AppLocalizations.of(context)!.quoteShareSeeM
         '"author": "$author", '
         '"source": ${source.isNotNullOrBlank ? '"$source"' : "null"}, '
         '"sourceUri": ${sourceUri.isNotNullOrBlank ? '"$sourceUri"' : "null"}, '
-        '"isFavorite": ${isFavorite ?? false}, '
+        '"isFavorite": $isFavorite, '
         '"tags": ${'[' '"${tagsName.join('", "')}"' ']'}'
         '}';
   }

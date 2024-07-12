@@ -30,7 +30,7 @@ Future<void> quoteToFile(BuildContext context, Quote quote) async {
   } else if (isAndroidOrIOS) {
     final directory = await getTemporaryDirectory();
     final quoteFilePath =
-        await File('${directory.path}/quote-file-${quote.id!}.json').create();
+        await File('${directory.path}/quote-file-${quote.id}.json').create();
     if (context.mounted) {
       await quoteFilePath.writeAsBytes(
         utf8.encode(await quote.toShareableJsonString(context)),

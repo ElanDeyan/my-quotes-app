@@ -65,7 +65,7 @@ class QuotesWithTag extends StatelessWidget {
                         ),
                         onTap: () => context.goNamed(
                           quoteByIdNavigationKey,
-                          pathParameters: {'id': '${data[index].id!}'},
+                          pathParameters: {'id': '${data[index].id}'},
                         ),
                       ),
                     );

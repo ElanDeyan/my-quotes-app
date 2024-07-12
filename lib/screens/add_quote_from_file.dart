@@ -86,7 +86,7 @@ class _AddQuoteFromFileFormState extends State<AddQuoteFromFileForm>
     tagsIds.addAll(
       allTags
           .where((tag) => tags.contains(tag.name))
-          .map((tag) => tag.id!.toString()),
+          .map((tag) => tag.id.toString()),
     );
 
     final allTagsNames = allTags.map((tag) => tag.name);
@@ -94,7 +94,7 @@ class _AddQuoteFromFileFormState extends State<AddQuoteFromFileForm>
         tags.where((tagName) => !allTagsNames.contains(tagName));
 
     for (final missingTag in missingTags) {
-      final newId = await database.createTag(Tag(name: missingTag));
+      final newId = await database.createTag(missingTag);
       tagsIds.add(newId.toString());
     }
 
