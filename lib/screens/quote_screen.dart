@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
@@ -115,12 +114,12 @@ class ViewQuotePage extends StatelessWidget {
                 return Text(snapshot.error.toString());
               } else {
                 final data = snapshot.data;
-                if (data.isNull) {
+                if (data == null) {
                   return Text(
                     AppLocalizations.of(context)!.quoteNotFoundWithId(quoteId),
                   );
                 } else {
-                  final quote = data!;
+                  final quote = data;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -208,13 +207,13 @@ class QuoteScreenDialogBody extends StatelessWidget {
                   );
                 case ConnectionState.done:
                   final data = snapshot.data;
-                  if (data.isNull) {
+                  if (data == null) {
                     return Text(
                       AppLocalizations.of(context)!
                           .quoteNotFoundWithId(quoteId),
                     );
                   } else {
-                    final quote = data!;
+                    final quote = data;
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +223,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
                           AppLocalizations.of(context)!.quoteInfo,
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
-                        Text('Id: ${quote.id!}'),
+                        Text('Id: ${quote.id}'),
                         Text(
                           '${AppLocalizations.of(context)!.quoteFormFieldContent}: ${quote.content}',
                         ),
