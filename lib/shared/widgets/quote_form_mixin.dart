@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:basics/basics.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -283,11 +284,15 @@ mixin QuoteFormMixin {
 
             formValue.putIfAbsent(
               'tags',
-              () => multipleTagSearchController
-                  .getPickedItems()
-                  .map((tag) => tag.id)
-                  .nonNulls
-                  .join(idSeparatorChar),
+              () {
+                final value = multipleTagSearchController
+                    .getPickedItems()
+                    .map((tag) => tag.id)
+                    .nonNulls
+                    .join(idSeparatorChar);
+
+                return value.isNullOrBlank ? null : value;
+              },
             );
 
             final Quote quoteFromForm;
