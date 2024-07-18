@@ -263,6 +263,20 @@ class Quote extends DataClass implements Insertable<Quote> {
         createdAt: createdAt.present ? createdAt.value : this.createdAt,
         tags: tags.present ? tags.value : this.tags,
       );
+  Quote copyWithCompanion(QuoteTableCompanion data) {
+    return Quote(
+      id: data.id.present ? data.id.value : this.id,
+      content: data.content.present ? data.content.value : this.content,
+      author: data.author.present ? data.author.value : this.author,
+      source: data.source.present ? data.source.value : this.source,
+      sourceUri: data.sourceUri.present ? data.sourceUri.value : this.sourceUri,
+      isFavorite:
+          data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      tags: data.tags.present ? data.tags.value : this.tags,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Quote(')
@@ -522,6 +536,13 @@ class Tag extends DataClass implements Insertable<Tag> {
         id: id.present ? id.value : this.id,
         name: name ?? this.name,
       );
+  Tag copyWithCompanion(TagTableCompanion data) {
+    return Tag(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Tag(')
@@ -591,10 +612,11 @@ class TagTableCompanion extends UpdateCompanion<Tag> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
-  _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
+  $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $QuoteTableTable quoteTable = $QuoteTableTable(this);
   late final $TagTableTable tagTable = $TagTableTable(this);
   late final QuotesDao quotesDao = QuotesDao(this as AppDatabase);
+  late final TagsDao tagsDao = TagsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -602,7 +624,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [quoteTable, tagTable];
 }
 
-typedef $$QuoteTableTableInsertCompanionBuilder = QuoteTableCompanion Function({
+typedef $$QuoteTableTableCreateCompanionBuilder = QuoteTableCompanion Function({
   Value<int?> id,
   required String content,
   required String author,
@@ -629,8 +651,7 @@ class $$QuoteTableTableTableManager extends RootTableManager<
     Quote,
     $$QuoteTableTableFilterComposer,
     $$QuoteTableTableOrderingComposer,
-    $$QuoteTableTableProcessedTableManager,
-    $$QuoteTableTableInsertCompanionBuilder,
+    $$QuoteTableTableCreateCompanionBuilder,
     $$QuoteTableTableUpdateCompanionBuilder> {
   $$QuoteTableTableTableManager(_$AppDatabase db, $QuoteTableTable table)
       : super(TableManagerState(
@@ -640,9 +661,7 @@ class $$QuoteTableTableTableManager extends RootTableManager<
               $$QuoteTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$QuoteTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$QuoteTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             Value<String> content = const Value.absent(),
             Value<String> author = const Value.absent(),
@@ -662,7 +681,7 @@ class $$QuoteTableTableTableManager extends RootTableManager<
             createdAt: createdAt,
             tags: tags,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             required String content,
             required String author,
@@ -683,18 +702,6 @@ class $$QuoteTableTableTableManager extends RootTableManager<
             tags: tags,
           ),
         ));
-}
-
-class $$QuoteTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $QuoteTableTable,
-    Quote,
-    $$QuoteTableTableFilterComposer,
-    $$QuoteTableTableOrderingComposer,
-    $$QuoteTableTableProcessedTableManager,
-    $$QuoteTableTableInsertCompanionBuilder,
-    $$QuoteTableTableUpdateCompanionBuilder> {
-  $$QuoteTableTableProcessedTableManager(super.$state);
 }
 
 class $$QuoteTableTableFilterComposer
@@ -785,7 +792,7 @@ class $$QuoteTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$TagTableTableInsertCompanionBuilder = TagTableCompanion Function({
+typedef $$TagTableTableCreateCompanionBuilder = TagTableCompanion Function({
   Value<int?> id,
   required String name,
 });
@@ -800,8 +807,7 @@ class $$TagTableTableTableManager extends RootTableManager<
     Tag,
     $$TagTableTableFilterComposer,
     $$TagTableTableOrderingComposer,
-    $$TagTableTableProcessedTableManager,
-    $$TagTableTableInsertCompanionBuilder,
+    $$TagTableTableCreateCompanionBuilder,
     $$TagTableTableUpdateCompanionBuilder> {
   $$TagTableTableTableManager(_$AppDatabase db, $TagTableTable table)
       : super(TableManagerState(
@@ -811,9 +817,7 @@ class $$TagTableTableTableManager extends RootTableManager<
               $$TagTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$TagTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$TagTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             Value<String> name = const Value.absent(),
           }) =>
@@ -821,7 +825,7 @@ class $$TagTableTableTableManager extends RootTableManager<
             id: id,
             name: name,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             required String name,
           }) =>
@@ -830,18 +834,6 @@ class $$TagTableTableTableManager extends RootTableManager<
             name: name,
           ),
         ));
-}
-
-class $$TagTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $TagTableTable,
-    Tag,
-    $$TagTableTableFilterComposer,
-    $$TagTableTableOrderingComposer,
-    $$TagTableTableProcessedTableManager,
-    $$TagTableTableInsertCompanionBuilder,
-    $$TagTableTableUpdateCompanionBuilder> {
-  $$TagTableTableProcessedTableManager(super.$state);
 }
 
 class $$TagTableTableFilterComposer
@@ -872,9 +864,9 @@ class $$TagTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class _$AppDatabaseManager {
+class $AppDatabaseManager {
   final _$AppDatabase _db;
-  _$AppDatabaseManager(this._db);
+  $AppDatabaseManager(this._db);
   $$QuoteTableTableTableManager get quoteTable =>
       $$QuoteTableTableTableManager(_db, _db.quoteTable);
   $$TagTableTableTableManager get tagTable =>

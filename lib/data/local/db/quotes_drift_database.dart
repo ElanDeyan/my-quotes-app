@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/connection/connection.dart' as impl;
 import 'package:my_quotes/data/local/db/daos/quotes_dao.dart';
+import 'package:my_quotes/data/local/db/daos/tags_dao.dart';
 import 'package:my_quotes/data/tables/quote_table.dart';
 import 'package:my_quotes/data/tables/tag_table.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
@@ -10,7 +11,7 @@ import 'package:my_quotes/repository/app_repository.dart';
 
 part 'quotes_drift_database.g.dart';
 
-@DriftDatabase(tables: [QuoteTable, TagTable], daos: [QuotesDao])
+@DriftDatabase(tables: [QuoteTable, TagTable], daos: [QuotesDao, TagsDao])
 final class AppDatabase extends _$AppDatabase implements AppRepository {
   AppDatabase() : super(impl.connect());
 
@@ -54,20 +55,14 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<Quote?> getQuoteById(int id) {
-    return (select(quoteTable)..where((row) => row.id.equals(id)))
-        .getSingleOrNull();
-  }
+  Future<Quote?> getQuoteById(int id) => quotesDao.getQuoteById(id);
 
   @override
-  Future<List<Quote>> getQuotesWithTagId(int tagId) async {
-    final quotes = await allQuotes;
-
-    return quotes.where((quote) => quote.tagsId.contains(tagId)).toList();
-  }
+  Future<List<Quote>> getQuotesWithTagId(int tagId) async =>
+      quotesDao.getQuotesWithTagId(tagId);
 
   @override
-  Future<Quote?> get randomQuote async => (await allQuotes).getRandom();
+  Future<Quote?> get randomQuote => quotesDao.randomQuote;
 
   @override
   Future<bool> updateQuote(Quote quote) {
@@ -88,7 +83,8 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
 
   @override
   Future<void> restoreQuotes(List<Quote> quotes) async {
-    batch((batch) {
+    await batch((batch) async {
+      await clearAllQuotes();
       batch.insertAllOnConflictUpdate(
         quoteTable,
         quotes.map((quote) => quote.toCompanion(true)),
@@ -97,7 +93,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<List<Tag>> get allTags async => select(tagTable).get();
+  Future<List<Tag>> get allTags => tagsDao.allTags;
 
   @override
   Future<int> createTag(String tagName) async {
@@ -108,15 +104,11 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<Tag?> getTagById(int id) {
-    return (select(tagTable)..where((row) => row.id.equals(id)))
-        .getSingleOrNull();
-  }
+  Future<Tag?> getTagById(int id) => tagsDao.getTagById(id);
 
   @override
-  Future<List<Tag>> getTagsByIds(Iterable<int> ids) {
-    return (select(tagTable)..where((row) => row.id.isIn(ids))).get();
-  }
+  Future<List<Tag>> getTagsByIds(Iterable<int> ids) =>
+      tagsDao.getTagsByIds(ids);
 
   @override
   Future<bool> updateTag(Tag tag) {
@@ -127,7 +119,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
 
   @override
   Future<int> deleteTag(int id) async {
-    delete(tagTable).delete(TagTableCompanion(id: Value(id)));
+    await delete(tagTable).delete(TagTableCompanion(id: Value(id)));
 
     final quotesWithThisTag =
         (await allQuotes).where((quote) => quote.tagsId.contains(id));
@@ -147,7 +139,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
 
   @override
   Future<void> clearAllTags() async {
-    delete(tagTable).go();
+    await delete(tagTable).go();
 
     for (final quote in await allQuotes) {
       update(quoteTable)
@@ -157,11 +149,18 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
 
   @override
   Future<void> restoreTags(List<Tag> tags) async {
-    batch(
-      (batch) => batch.insertAllOnConflictUpdate(
+    await batch((batch) async {
+      await clearAllTags();
+      batch.insertAllOnConflictUpdate(
         tagTable,
         tags.map((tag) => tag.toCompanion(true)),
-      ),
-    );
+      );
+    });
+  }
+
+  @override
+  Future<void> restoreData(List<Tag> tags, List<Quote> quotes) async {
+    await restoreTags(tags);
+    await restoreQuotes(quotes);
   }
 }
