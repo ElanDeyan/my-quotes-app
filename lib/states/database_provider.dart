@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/app_repository.dart';
-import 'package:my_quotes/repository/quotes_repository.dart';
-import 'package:my_quotes/repository/tags_repository.dart';
 
-final class DatabaseProvider extends ChangeNotifier
-    implements QuotesRepository, TagsRepository {
+final class DatabaseProvider extends ChangeNotifier implements AppRepository {
   DatabaseProvider({
     required AppRepository appRepository,
   }) : _appRepository = appRepository;
@@ -102,6 +99,12 @@ final class DatabaseProvider extends ChangeNotifier
   @override
   Future<void> restoreTags(List<Tag> tags) async {
     _appRepository.restoreTags(tags);
+    notifyListeners();
+  }
+
+  @override
+  Future<void> restoreData(List<Tag> tags, List<Quote> quotes) async {
+    _appRepository.restoreData(tags, quotes);
     notifyListeners();
   }
 }
