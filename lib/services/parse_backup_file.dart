@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/iterable_extension.dart';
 import 'package:share_plus/share_plus.dart';
 
 typedef UserPreferencesData = ({
@@ -82,8 +83,10 @@ bool _validateTagsData(List<dynamic> data) {
   return data.every(
     (item) =>
         item is Map<String, dynamic> &&
+        item.values.every((value) => value is String) &&
         item.keys.length == 1 &&
-        int.tryParse(item.keys.single) != null,
+        int.tryParse(item.keys.single) != null &&
+        (item.keys as Iterable<int>).isMadeOfUniques,
   );
 }
 
