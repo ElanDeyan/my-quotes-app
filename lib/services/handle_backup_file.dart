@@ -71,11 +71,7 @@ Future<void> handleBackupFile(BuildContext context, XFile? file) async {
 
             final (quotes, tags) = (backupData.quotes, backupData.tags);
 
-            await database.clearAllQuotes();
-            await database.clearAllTags();
-
-            await database.restoreTags(tags);
-            await database.restoreQuotes(quotes);
+            await database.restoreData(tags, quotes);
           }
         }
       }
