@@ -86,7 +86,7 @@ bool _validateTagsData(List<dynamic> data) {
         item.values.every((value) => value is String) &&
         item.keys.length == 1 &&
         int.tryParse(item.keys.single) != null &&
-        (item.keys as Iterable<int>).isMadeOfUniques,
+        item.keys.map(int.parse).isMadeOfUniques,
   );
 }
 
@@ -98,14 +98,14 @@ bool _validateQuotesData(List<dynamic> data) {
   for (final item in data) {
     if (item
         case {
-          "id": final int _,
-          "content": final String _,
-          "author": final String _,
-          "source": final String? _,
-          "sourceUri": final String? _,
-          "isFavorite": final bool _,
-          "createdAt": final int _,
-          "tags": final String? _,
+          "id": int _,
+          "content": String _,
+          "author": String _,
+          "source": String? _,
+          "sourceUri": String? _,
+          "isFavorite": bool _,
+          "createdAt": int _,
+          "tags": String? _,
         }) {
       return true;
     }
