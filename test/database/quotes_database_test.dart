@@ -4,31 +4,11 @@ import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 
-const _minRetryAttempts = 3;
+import '../fixtures/generate_random_quote.dart';
 
-Quote _generateRandomQuote({
-  bool generateId = false,
-  bool generateTags = false,
-}) {
-  const maxId = 100;
-  return Quote(
-    id: generateId ? Random().nextInt(maxId) : null,
-    content: faker.lorem.sentence(),
-    author: faker.person.name(),
-    createdAt: faker.date.dateTime(),
-    isFavorite: Random().nextBool(),
-    source: faker.conference.name(),
-    sourceUri: faker.internet.httpsUrl(),
-    tags: generateTags
-        ? RandomGenerator()
-            .amount((_) => Random().nextInt(maxId), 5)
-            .join(idSeparatorChar)
-        : null,
-  );
-}
+const _minRetryAttempts = 3;
 
 void main() {
   late AppDatabase database;
@@ -50,7 +30,7 @@ void main() {
   group('Quotes:', () {
     late Quote sampleQuote; // Id will be added automatically
     setUp(() {
-      sampleQuote = _generateRandomQuote();
+      sampleQuote = generateRandomQuote();
     });
 
     group('Add quote:', () {
@@ -103,7 +83,7 @@ void main() {
         expect(addedQuoteId, isNotNull);
 
         final anotherQuote =
-            _generateRandomQuote().copyWith(id: Value(addedQuoteId));
+            generateRandomQuote().copyWith(id: Value(addedQuoteId));
 
         expect(anotherQuote.id, equals(addedQuoteId));
 
@@ -130,7 +110,7 @@ void main() {
         expect(addedQuoteWithId3.id, equals(3));
 
         final quotesToAdd = [
-          for (var i = 0; i < 3; i++) _generateRandomQuote(),
+          for (var i = 0; i < 3; i++) generateRandomQuote(),
         ];
 
         for (final quote in quotesToAdd) {
@@ -223,14 +203,14 @@ void main() {
 
       test('Updating in non-existent id doesnt add', () async {
         await database.createQuote(sampleQuote);
-        await database.createQuote(_generateRandomQuote());
+        await database.createQuote(generateRandomQuote());
 
         final quotesQuantity = (await database.allQuotes).length;
 
         final nonExistentId = quotesQuantity + 1;
 
         await database.updateQuote(
-          _generateRandomQuote().copyWith(id: Value(nonExistentId)),
+          generateRandomQuote().copyWith(id: Value(nonExistentId)),
         );
 
         expect(await database.allQuotes, hasLength(quotesQuantity));
@@ -278,7 +258,7 @@ void main() {
         expect(await database.allQuotes, isEmpty);
 
         final quotesToAdd = [
-          for (var i = 0; i < 10; i++) _generateRandomQuote(),
+          for (var i = 0; i < 10; i++) generateRandomQuote(),
         ];
 
         for (final quote in quotesToAdd) {
@@ -299,7 +279,7 @@ void main() {
     late Tag sampleTag;
 
     setUp(() {
-      sampleQuote = _generateRandomQuote();
+      sampleQuote = generateRandomQuote();
       sampleTag = Tag(name: faker.lorem.word().toLowerCase());
     });
 

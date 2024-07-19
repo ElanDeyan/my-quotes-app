@@ -8,10 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart'
     show AppDatabase, Tag;
 
-Tag _generateRandomTag({bool generateId = false}) => Tag(
-      id: generateId ? Random().nextInt(50) : null,
-      name: faker.lorem.word().toLowerCase(),
-    );
+import '../fixtures/generate_random_tag.dart';
 
 void main() {
   late AppDatabase appDatabase;
@@ -20,7 +17,7 @@ void main() {
   setUp(() {
     final inMemory = DatabaseConnection(NativeDatabase.memory());
     appDatabase = AppDatabase.forTesting(inMemory);
-    sampleTag = _generateRandomTag();
+    sampleTag = generateRandomTag();
   });
 
   tearDown(() => appDatabase.close());
@@ -31,7 +28,7 @@ void main() {
 
   group('Create', () {
     test('Basic', () async {
-      await appDatabase.createTag(_generateRandomTag().name);
+      await appDatabase.createTag(generateRandomTag().name);
       expect(await appDatabase.allTags, isNotEmpty);
 
       final addedTag = (await appDatabase.allTags).single;
@@ -55,7 +52,7 @@ void main() {
     test(
       'When add two or more tags (with null id) they will have different ids',
       () async {
-        final tagsToAdd = [for (var i = 0; i < 5; i++) _generateRandomTag()];
+        final tagsToAdd = [for (var i = 0; i < 5; i++) generateRandomTag()];
 
         for (final tag in tagsToAdd) {
           await appDatabase.createTag(tag.name);
@@ -103,7 +100,7 @@ void main() {
     });
 
     test('Get tags by ids', () async {
-      final tagsToAdd = [for (var i = 0; i < 5; i++) _generateRandomTag()];
+      final tagsToAdd = [for (var i = 0; i < 5; i++) generateRandomTag()];
 
       for (final tag in tagsToAdd) {
         await appDatabase.createTag(tag.name);
@@ -122,7 +119,7 @@ void main() {
     });
 
     test('Tags by ids (when non existent ids => empty list)', () async {
-      final tagsToAdd = [for (var i = 0; i < 5; i++) _generateRandomTag()];
+      final tagsToAdd = [for (var i = 0; i < 5; i++) generateRandomTag()];
 
       // ids from 1 to 5
       for (final tag in tagsToAdd) {
@@ -141,7 +138,7 @@ void main() {
     test('Tags by ids (mixing valid and not valid ids)', () async {
       final tagsToAdd = [
         for (final id in [1, 3, 5])
-          _generateRandomTag().copyWith(id: Value(id)),
+          generateRandomTag().copyWith(id: Value(id)),
       ];
 
       for (final tag in tagsToAdd) {
@@ -157,7 +154,7 @@ void main() {
 
   group('Update', () {
     test('Basic case', () async {
-      await appDatabase.createTag(_generateRandomTag(generateId: true).name);
+      await appDatabase.createTag(generateRandomTag(generateId: true).name);
 
       final addedTag = (await appDatabase.allTags).single;
 
@@ -182,7 +179,7 @@ void main() {
       expect(randomNonExistentId, isNot(firstTag.id));
 
       final supposedTagToUpdate =
-          _generateRandomTag().copyWith(id: Value(randomNonExistentId));
+          generateRandomTag().copyWith(id: Value(randomNonExistentId));
 
       await appDatabase.updateTag(supposedTagToUpdate);
 
@@ -224,7 +221,7 @@ void main() {
     test('Clear all tags', () async {
       const numberOftagsToAdd = 10;
       for (var i = 0; i < numberOftagsToAdd; i++) {
-        await appDatabase.createTag(_generateRandomTag(generateId: true).name);
+        await appDatabase.createTag(generateRandomTag(generateId: true).name);
       }
 
       expect(await appDatabase.allTags, hasLength(numberOftagsToAdd));

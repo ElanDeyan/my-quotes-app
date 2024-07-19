@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:basics/basics.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -10,31 +8,8 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/list_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 
-Quote _generateRandomQuote({
-  bool generateId = false,
-  bool generateTags = false,
-}) {
-  const maxId = 100;
-  return Quote(
-    id: generateId ? Random().nextInt(maxId) : null,
-    content: faker.lorem.sentence(),
-    author: faker.person.name(),
-    createdAt: faker.date.dateTime().copyWith(millisecond: 0, microsecond: 0),
-    isFavorite: Random().nextBool(),
-    source: faker.conference.name(),
-    sourceUri: faker.internet.httpsUrl(),
-    tags: generateTags
-        ? RandomGenerator()
-            .amount((_) => Random().nextInt(maxId), 5)
-            .join(idSeparatorChar)
-        : null,
-  );
-}
-
-Tag _generateRandomTag({bool generateId = false}) => Tag(
-      id: generateId ? Random().nextInt(50) : null,
-      name: faker.lorem.word().toLowerCase(),
-    );
+import '../fixtures/generate_random_quote.dart';
+import '../fixtures/generate_random_tag.dart';
 
 void main() {
   late AppDatabase appDatabase;
@@ -55,7 +30,7 @@ void main() {
 
     for (var i = 0; i < numberOfQuotes; i++) {
       final quoteToAdd =
-          _generateRandomQuote().copyWith(tags: Value(addedTag.id.toString()));
+          generateRandomQuote().copyWith(tags: Value(addedTag.id.toString()));
 
       await appDatabase.createQuote(
         quoteToAdd,
@@ -77,7 +52,7 @@ void main() {
     final [tag1, tag2] = await appDatabase.allTags;
 
     await appDatabase.createQuote(
-      _generateRandomQuote().copyWith(tags: Value('${tag1.id},${tag2.id}')),
+      generateRandomQuote().copyWith(tags: Value('${tag1.id},${tag2.id}')),
     );
 
     final [quoteBeforeTagDelete] = await appDatabase.allQuotes;
@@ -103,7 +78,7 @@ void main() {
     const numberOfQuotesToAdd = 10;
     for (var i = 0; i < numberOfQuotesToAdd; i++) {
       await appDatabase.createQuote(
-        _generateRandomQuote().copyWith(
+        generateRandomQuote().copyWith(
           tags: Value((tags..shuffle()).take(3).join(idSeparatorChar)),
         ),
       );
@@ -126,12 +101,12 @@ void main() {
     setUp(() {
       sampleTags = [
         for (var i = 0; i < 5; i++)
-          _generateRandomTag().copyWith(id: Value(i + 1)),
+          generateRandomTag().copyWith(id: Value(i + 1)),
       ];
 
       sampleQuotesWithSampleTags = [
         for (var i = 0; i < 5; i++)
-          _generateRandomQuote().copyWith(
+          generateRandomQuote().copyWith(
             id: Value(i + 1),
             tags: Value(
               (sampleTags..shuffle())
@@ -158,14 +133,14 @@ void main() {
     test('Already filled db: clear all and replaces for the new one', () async {
       // Filling db to replace with [sampleTags] and [sampleQuotesWithSampleTags]
       for (var i = 0; i < 10; i++) {
-        await appDatabase.createTag(_generateRandomTag().name);
+        await appDatabase.createTag(generateRandomTag().name);
       }
 
       final tagsBeforeRestore = await appDatabase.allTags;
 
       for (var i = 0; i < 10; i++) {
         await appDatabase.createQuote(
-          _generateRandomQuote().copyWith(
+          generateRandomQuote().copyWith(
             tags: Value(
               tagsBeforeRestore.toShuffledView
                   .take(3)
