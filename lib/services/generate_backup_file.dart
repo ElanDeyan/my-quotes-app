@@ -10,7 +10,11 @@ import 'package:share_plus/share_plus.dart';
 
 Future<XFile?> generateBackupFile(BuildContext context) async {
   if (context.mounted) {
-    final userData = await retrieveUserData(context);
+    final database = Provider.of<DatabaseProvider>(context, listen: false);
+
+    final appPreferences = Provider.of<AppPreferences>(context, listen: false);
+
+    final userData = await retrieveUserData(appPreferences, database);
 
     final encodedData = utf8.encode(jsonEncode(userData));
 
@@ -19,10 +23,10 @@ Future<XFile?> generateBackupFile(BuildContext context) async {
   return null;
 }
 
-Future<Map<String, dynamic>> retrieveUserData(BuildContext context) async {
-  final database = Provider.of<DatabaseProvider>(context, listen: false);
-
-  final appPreferences = Provider.of<AppPreferences>(context, listen: false);
+Future<Map<String, dynamic>> retrieveUserData(
+  AppPreferences appPreferences,
+  DatabaseProvider database,
+) async {
   final tags = await database.allTags;
 
   final quotes = await database.allQuotes;
