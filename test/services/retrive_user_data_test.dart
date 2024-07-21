@@ -77,7 +77,7 @@ void main() {
     (appRepository as AppDatabase).close();
   });
 
-  group('Retriving user data > ', () {
+  group('Retrieving user data > ', () {
     test('Without changes', () async {
       expect(await databaseProvider.allQuotes, isEmpty);
       expect(await databaseProvider.allTags, isEmpty);
