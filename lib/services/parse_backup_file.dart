@@ -81,13 +81,15 @@ Future<BackupData?> parseBackupFile(XFile file) async {
 
 bool _validateTagsData(List<dynamic> data) {
   return data.every(
-    (item) =>
-        item is Map<String, dynamic> &&
-        item.values.every((value) => value is String) &&
-        item.keys.length == 1 &&
-        int.tryParse(item.keys.single) != null &&
-        item.keys.map(int.parse).isMadeOfUniques,
-  );
+        (item) =>
+            item is Map<String, dynamic> &&
+            item.keys.length == 1 &&
+            int.tryParse(item.keys.single) != null &&
+            item.values.every((value) => value is String),
+      ) &&
+      data
+          .map((item) => int.parse((item as Map<String, dynamic>).keys.single))
+          .isMadeOfUniques;
 }
 
 bool _validateQuotesData(List<dynamic> data) {
