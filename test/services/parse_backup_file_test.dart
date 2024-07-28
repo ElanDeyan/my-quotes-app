@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:basics/basics.dart';
+import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_quotes/helpers/tag_extension.dart';
 import 'package:my_quotes/services/parse_backup_file.dart';
@@ -23,22 +25,53 @@ const _nonMapValues = [
   1.755,
 ];
 
+void _expectQuoteJsonShapeAndTypes(Map<String, dynamic> json) {
+  expect(json.containsKey('id'), isTrue);
+  expect(json.get('id'), isA<int>());
+
+  expect(json.containsKey('content'), isTrue);
+  expect(json.get('content'), isA<String>());
+
+  expect(json.containsKey('author'), isTrue);
+  expect(json.get('author'), isA<String>());
+
+  expect(json.containsKey('source'), isTrue);
+  expect(json.get('source'), isA<String?>());
+
+  expect(json.containsKey('sourceUri'), isTrue);
+  expect(json.get('sourceUri'), isA<String?>());
+
+  expect(json.containsKey('isFavorite'), isTrue);
+  expect(json.get('isFavorite'), isA<bool>());
+
+  expect(json.containsKey('createdAt'), isTrue);
+  expect(json.get('createdAt'), isA<int>());
+
+  expect(json.containsKey('tags'), isTrue);
+  expect(json.get('tags'), isA<String?>());
+}
+
 void main() {
   late List<Map<String, dynamic>> tagsSample;
   late List<Map<String, dynamic>> quotesSample;
   setUp(() {
     tagsSample = [
       for (var i = 0; i < 10; i++)
-        generateRandomTag(generateId: true).asIdNamePair,
+        generateRandomTag().copyWith(id: Value(i)).asIdNamePair,
     ];
 
     quotesSample = [
       for (var i = 0; i < 10; i++)
-        generateRandomQuote(generateId: true, generateTags: true).toJson(),
+        generateRandomQuote()
+            .copyWith(
+              id: Value(i),
+              tags: Value(
+                tagsSample.take(3).map((item) => item.keys.single).join(','),
+              ),
+            )
+            .toJson(),
     ];
   });
-
-  tearDown(() {});
 
   test('With generateBackupFile', () {
     final correctSample = generateBackupFileContent(
@@ -187,6 +220,33 @@ void main() {
       );
 
       expect(parseBackupFile(_getSampleFile(sample)), completion(isNull));
+    });
+  });
+
+  group('Validating quotes data', () {
+    test('Items should be Map<String, dynamic>', () {
+      final sample = generateBackupFileContent(
+        tags: tagsSample,
+        quotes: _nonMapValues,
+      );
+
+      expect(parseBackupFile(_getSampleFile(sample)), completion(isNull));
+    });
+
+    test('Items should case fields and types', () {
+      for (final quoteSample in quotesSample) {
+        _expectQuoteJsonShapeAndTypes(quoteSample);
+      }
+
+      final sample = generateBackupFileContent(
+        tags: tagsSample,
+        quotes: quotesSample,
+      );
+
+      expect(
+        parseBackupFile(_getSampleFile(sample)),
+        completion(isA<BackupData>()),
+      );
     });
   });
 }
