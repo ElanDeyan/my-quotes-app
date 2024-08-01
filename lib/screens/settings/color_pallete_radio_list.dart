@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_quotes/constants/enums/color_scheme_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 

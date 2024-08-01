@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:my_quotes/constants/enums/color_scheme_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/helpers/string_to_color_pallete.dart';
 import 'package:my_quotes/helpers/string_to_theme_mode.dart';
 import 'package:my_quotes/repository/user_preferences_interfaces.dart';

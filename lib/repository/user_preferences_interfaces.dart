@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_quotes/constants/enums/color_scheme_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 
 abstract interface class UserPreferencesRepository
     implements

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/constants/enums/color_scheme_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/helpers/string_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/settings/color_pallete_radio_list.dart';
@@ -64,7 +64,6 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: ColorSchemePalette.primaryColor(
-                      context,
                       value.colorSchemePalette,
                       MediaQuery.platformBrightnessOf(context),
                     ),
