@@ -5,3 +5,11 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
+
+code-style:
+  format: true
+
+dart_code_linter:
+  extends:
+    - package:dart_code_linter/presets/all.yaml
+    - package:dart_code_linter/presets/metrics_recommended.yaml
