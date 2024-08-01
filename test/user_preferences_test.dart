@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_quotes/constants/enums/color_scheme_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/repository/user_preferences_interfaces.dart';
 import 'package:my_quotes/states/app_preferences.dart';
