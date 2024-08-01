@@ -1,6 +1,6 @@
-import 'package:english_words/english_words.dart' as EnglishWords;
+import 'package:english_words/english_words.dart' as englishWords;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_quotes/constants/enums/color_scheme_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/helpers/string_to_color_pallete.dart';
 
 void main() {
@@ -27,7 +27,7 @@ void main() {
   });
 
   test('Using random strings should be null', () {
-    final words = EnglishWords.all.take(10).where(
+    final words = englishWords.all.take(10).where(
       (word) {
         final colorSchemePaletteNames = ColorSchemePalette.values.map(
           (colorSchemePalette) =>
