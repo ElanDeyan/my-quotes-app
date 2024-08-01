@@ -1,26 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:my_quotes/repository/user_preferences_interfaces.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-Future<XFile?> generateBackupFile(BuildContext context) async {
-  if (context.mounted) {
-    final database = Provider.of<DatabaseProvider>(context, listen: false);
+Future<XFile> generateBackupFile(
+  DatabaseProvider database,
+  AppPreferences appPreferences,
+) async {
+  final userData = await retrieveUserData(appPreferences, database);
 
-    final appPreferences = Provider.of<AppPreferences>(context, listen: false);
+  final encodedData = utf8.encode(jsonEncode(userData));
 
-    final userData = await retrieveUserData(appPreferences, database);
-
-    final encodedData = utf8.encode(jsonEncode(userData));
-
-    return XFile.fromData(encodedData);
-  }
-  return null;
+  return XFile.fromData(encodedData);
 }
 
 Future<Map<String, dynamic>> retrieveUserData(

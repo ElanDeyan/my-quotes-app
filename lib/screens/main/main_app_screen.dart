@@ -15,6 +15,9 @@ import 'package:my_quotes/services/save_file.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_search.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
+import 'package:my_quotes/states/app_preferences.dart';
+import 'package:my_quotes/states/database_provider.dart';
+import 'package:provider/provider.dart';
 
 final class MainAppScreen extends StatefulWidget with DestinationsMixin {
   const MainAppScreen({
@@ -47,6 +50,17 @@ final class _MainAppScreenState extends State<MainAppScreen> {
   void _updateIndex(int value) => setState(() {
         _selectedIndex = value;
       });
+
+  Future<void> _handleGenerateBackupFile(BuildContext context) async {
+    final database = Provider.of<DatabaseProvider>(context, listen: false);
+    final appPreferences = Provider.of<AppPreferences>(context, listen: false);
+    final backupFile = await generateBackupFile(database, appPreferences);
+
+    await saveJsonFile(
+      backupFile,
+      'MyQuotes-Backup-${DateTime.now()}',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,20 +132,12 @@ final class _MainAppScreenState extends State<MainAppScreen> {
       PopupMenuButton<void>(
         itemBuilder: (context) => [
           PopupMenuItem(
+            onTap: () => _handleGenerateBackupFile(context),
             child: IconWithLabel(
               icon: const Icon(Icons.backup_outlined),
               horizontalGap: 10,
               label: Text(AppLocalizations.of(context)!.createBackup),
             ),
-            onTap: () async {
-              final backupFile = await generateBackupFile(context);
-              if (backupFile != null) {
-                await saveJsonFile(
-                  backupFile,
-                  'MyQuotes-Backup-${DateTime.now()}',
-                );
-              }
-            },
           ),
           PopupMenuItem(
             child: IconWithLabel(
