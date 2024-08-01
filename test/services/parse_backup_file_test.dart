@@ -83,83 +83,152 @@ void main() {
     expect(parseBackupFile(sampleFile), completion(isA<BackupData>()));
   });
 
-  test('Without preferences', () async {
-    final sample = generateBackupFileContent(
-      preferences: false,
+  test('Data mantains intact', () async {
+    final correctSample = generateBackupFileContent(
       tags: tagsSample,
       quotes: quotesSample,
     );
-    expect(sample.containsKey('preferences'), isFalse);
+    final sampleFile = _getSampleFile(correctSample);
 
-    final sampleFile = _getSampleFile(sample);
+    final backupData = await parseBackupFile(sampleFile);
 
-    expect(parseBackupFile(sampleFile), completion(isNull));
+    expect(
+      backupData,
+      isNotNull,
+    );
+
+    expect(
+      backupData!.userPreferencesData.themeMode,
+      // ignore: avoid_dynamic_calls
+      equals(correctSample['preferences']['themeMode']),
+    );
+
+    expect(
+      backupData.userPreferencesData.colorPalette,
+      // ignore: avoid_dynamic_calls
+      equals(correctSample['preferences']['colorPalette']),
+    );
+
+    expect(
+      backupData.userPreferencesData.language,
+      // ignore: avoid_dynamic_calls
+      equals(correctSample['preferences']['language']),
+    );
+
+    expect(
+      backupData.tags.map((tag) => tag.asIdNamePair),
+      containsAll(tagsSample),
+    );
+
+    expect(
+      backupData.quotes.map((quote) => quote.toJson()),
+      containsAll(quotesSample),
+    );
   });
 
-  test('Without theme mode', () {
-    final sample = generateBackupFileContent(
-      themeMode: false,
-      tags: tagsSample,
-      quotes: quotesSample,
-    );
-    expect(sample.containsKey('themeMode'), isFalse);
+  group('Validating user preferences', () {
+    test('Without preferences', () async {
+      final sample = generateBackupFileContent(
+        preferences: false,
+        tags: tagsSample,
+        quotes: quotesSample,
+      );
+      expect(sample.containsKey('preferences'), isFalse);
 
-    final sampleFile = _getSampleFile(sample);
+      final sampleFile = _getSampleFile(sample);
 
-    expect(parseBackupFile(sampleFile), completion(isNull));
-  });
+      expect(parseBackupFile(sampleFile), completion(isNull));
+    });
 
-  test('Without color palette', () {
-    final sample = generateBackupFileContent(
-      colorPalette: false,
-      tags: tagsSample,
-      quotes: quotesSample,
-    );
-    expect(sample.containsKey('colorPalette'), isFalse);
+    test('Without theme mode', () {
+      final sample = generateBackupFileContent(
+        themeMode: false,
+        tags: tagsSample,
+        quotes: quotesSample,
+      );
+      expect(sample.containsKey('themeMode'), isFalse);
 
-    final sampleFile = _getSampleFile(sample);
+      final sampleFile = _getSampleFile(sample);
 
-    expect(parseBackupFile(sampleFile), completion(isNull));
-  });
+      expect(parseBackupFile(sampleFile), completion(isNull));
+    });
 
-  test('Without language', () {
-    final sample = generateBackupFileContent(
-      language: false,
-      tags: tagsSample,
-      quotes: quotesSample,
-    );
-    expect(sample.containsKey('language'), isFalse);
+    test('With wrong theme mode', () async {
+      final sample = generateBackupFileContent(
+        themeMode: 'false',
+        tags: tagsSample,
+        quotes: quotesSample,
+      );
 
-    final sampleFile = _getSampleFile(sample);
+      final sampleFile = _getSampleFile(sample);
 
-    expect(parseBackupFile(sampleFile), completion(isNull));
-  });
+      await expectLater(parseBackupFile(sampleFile), completion(isNull));
+    });
 
-  test('Without tags', () {
-    final sample = generateBackupFileContent(
-      tags: false,
-      quotes: quotesSample,
-    );
-    expect(sample.containsKey('tags'), isFalse);
+    test('Without color palette', () {
+      final sample = generateBackupFileContent(
+        colorPalette: false,
+        tags: tagsSample,
+        quotes: quotesSample,
+      );
+      expect(sample.containsKey('colorPalette'), isFalse);
 
-    final sampleFile = _getSampleFile(sample);
+      final sampleFile = _getSampleFile(sample);
 
-    expect(parseBackupFile(sampleFile), completion(isNull));
-  });
+      expect(parseBackupFile(sampleFile), completion(isNull));
+    });
 
-  test('Without quotes', () {
-    final sample = generateBackupFileContent(
-      tags: tagsSample,
-      quotes: false,
-    );
-    expect(sample.containsKey('quotes'), isFalse);
+    test('With wrong color scheme palette', () async {
+      final sample = generateBackupFileContent(
+        colorPalette: 'false',
+        tags: tagsSample,
+        quotes: quotesSample,
+      );
 
-    final sampleFile = _getSampleFile(sample);
+      final sampleFile = _getSampleFile(sample);
 
-    expect(parseBackupFile(sampleFile), completion(isNull));
+      await expectLater(parseBackupFile(sampleFile), completion(isNull));
+    });
+
+    test('Without language', () {
+      final sample = generateBackupFileContent(
+        language: false,
+        tags: tagsSample,
+        quotes: quotesSample,
+      );
+      expect(sample.containsKey('language'), isFalse);
+
+      final sampleFile = _getSampleFile(sample);
+
+      expect(parseBackupFile(sampleFile), completion(isNull));
+    });
+
+    test('With wrong language', () async {
+      final sample = generateBackupFileContent(
+        language: 'false',
+        tags: tagsSample,
+        quotes: quotesSample,
+      );
+
+      final sampleFile = _getSampleFile(sample);
+
+      await expectLater(parseBackupFile(sampleFile), completion(isNull));
+    });
   });
 
   group('Validating tags data', () {
+    test('Without tags', () {
+      final sample = generateBackupFileContent(
+        tags: false,
+        quotes: quotesSample,
+      );
+      expect(sample.containsKey('tags'), isFalse);
+
+      final sampleFile = _getSampleFile(sample);
+
+      expect(parseBackupFile(sampleFile), completion(isNull));
+    });
+
     test('Not a list of maps', () {
       for (final notMapValue in _nonMapValues) {
         final sample = generateBackupFileContent(
@@ -224,6 +293,18 @@ void main() {
   });
 
   group('Validating quotes data', () {
+    test('Without quotes', () {
+      final sample = generateBackupFileContent(
+        tags: tagsSample,
+        quotes: false,
+      );
+      expect(sample.containsKey('quotes'), isFalse);
+
+      final sampleFile = _getSampleFile(sample);
+
+      expect(parseBackupFile(sampleFile), completion(isNull));
+    });
+
     test('Items should be Map<String, dynamic>', () {
       final sample = generateBackupFileContent(
         tags: tagsSample,
@@ -231,6 +312,15 @@ void main() {
       );
 
       expect(parseBackupFile(_getSampleFile(sample)), completion(isNull));
+    });
+
+    test('Items should have unique id', () {
+      final sample = generateBackupFileContent(
+        tags: tagsSample,
+        quotes: quotesSample..add(quotesSample.last),
+      );
+
+      expectLater(parseBackupFile(_getSampleFile(sample)), completion(isNull));
     });
 
     test('Items should case fields and types', () {
@@ -243,7 +333,7 @@ void main() {
         quotes: quotesSample,
       );
 
-      expect(
+      expectLater(
         parseBackupFile(_getSampleFile(sample)),
         completion(isA<BackupData>()),
       );
