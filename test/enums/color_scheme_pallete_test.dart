@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_quotes/constants/enums/color_scheme_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 
 void main() {
   test('Is light color scheme?', () {
