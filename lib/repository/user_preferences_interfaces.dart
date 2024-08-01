@@ -13,6 +13,8 @@ abstract interface class ColorSchemePaletteRepository {
 
   static const defaultColorSchemePalette = ColorSchemePalette.blue;
 
+  static const values = ColorSchemePalette.values;
+
   Future<String> get colorSchemePalette;
 
   Future<bool> setColorSchemePalette(String colorSchemePalette);
@@ -25,6 +27,9 @@ abstract interface class LanguageRepository {
       .where((element) => element == const Locale('en'))
       .single;
 
+  static final values =
+      AppLocalizations.supportedLocales.map((locale) => locale.languageCode);
+
   Future<String> get language;
 
   Future<bool> setLanguage(String language);
@@ -34,6 +39,8 @@ abstract interface class ThemeModeRepository {
   static const themeModeKey = 'themeMode';
 
   static const defaultThemeMode = ThemeMode.system;
+
+  static const values = ThemeMode.values;
 
   Future<String> get themeMode;
 

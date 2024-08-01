@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/iterable_extension.dart';
+import 'package:my_quotes/repository/user_preferences_interfaces.dart';
 import 'package:share_plus/share_plus.dart';
 
 typedef UserPreferencesData = ({
@@ -15,6 +16,12 @@ typedef BackupData = ({
   List<Tag> tags,
   List<Quote> quotes
 });
+
+final _themeModeValues =
+    ThemeModeRepository.values.map((themeMode) => themeMode.name);
+final _colorSchemePaletteValues = ColorSchemePaletteRepository.values
+    .map((colorSchemePalette) => colorSchemePalette.storageName);
+final _languageValues = LanguageRepository.values;
 
 Future<BackupData?> parseBackupFile(XFile file) async {
   late final dynamic decodedFile;
@@ -40,7 +47,10 @@ Future<BackupData?> parseBackupFile(XFile file) async {
           "themeMode": final String themeMode,
           "colorPalette": final String colorPalette,
           "language": final String language,
-        }) {
+        }
+        when _themeModeValues.contains(themeMode) &&
+            _colorSchemePaletteValues.contains(colorPalette) &&
+            _languageValues.contains(language)) {
       userPreferences = (
         themeMode: themeMode,
         colorPalette: colorPalette,
@@ -94,6 +104,12 @@ bool _validateTagsData(List<dynamic> data) {
 
 bool _validateQuotesData(List<dynamic> data) {
   if (!data.every((item) => item is Map<String, dynamic>)) {
+    return false;
+  }
+
+  if (!data
+      .map((element) => (element as Map<String, dynamic>)['id'])
+      .isMadeOfUniques) {
     return false;
   }
 
