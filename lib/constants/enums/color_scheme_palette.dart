@@ -85,7 +85,6 @@ enum ColorSchemePalette {
       };
 
   static Color primaryColor(
-    BuildContext context,
     ColorSchemePalette colorScheme,
     Brightness localBrightness,
   ) =>
