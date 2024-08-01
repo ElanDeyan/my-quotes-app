@@ -57,14 +57,14 @@ void main() {
   setUp(() {
     tagsSample = [
       for (var i = 0; i < 10; i++)
-        generateRandomTag().copyWith(id: Value(i)).asIdNamePair,
+        generateRandomTag().copyWith(id: Value(i + 1)).asIdNamePair,
     ];
 
     quotesSample = [
       for (var i = 0; i < 10; i++)
         generateRandomQuote()
             .copyWith(
-              id: Value(i),
+              id: Value(i + 1),
               tags: Value(
                 tagsSample.take(3).map((item) => item.keys.single).join(','),
               ),
@@ -73,7 +73,7 @@ void main() {
     ];
   });
 
-  test('With generateBackupFile', () {
+  test('With generateBackupFileContent', () {
     final correctSample = generateBackupFileContent(
       tags: tagsSample,
       quotes: quotesSample,
