@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,9 +14,7 @@ import 'package:share_plus/share_plus.dart';
 
 Future<void> handleBackupFile(BuildContext context, XFile? file) async {
   if (file != null) {
-    final backupData = await (kIsWeb
-        ? parseBackupFile(file)
-        : Isolate.run(() => parseBackupFile(file)));
+    final backupData = await compute(parseBackupFile, file);
 
     if (backupData != null) {
       if (context.mounted) {

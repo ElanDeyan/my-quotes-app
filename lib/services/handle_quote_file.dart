@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,9 +11,7 @@ Future<void> handleQuoteFile(BuildContext context) async {
   final quoteFile = await getJsonFile();
 
   if (quoteFile != null) {
-    final data = kIsWeb
-        ? await parseQuoteFile(quoteFile)
-        : await Isolate.run(() async => await parseQuoteFile(quoteFile));
+    final data = await compute(parseQuoteFile, quoteFile);
 
     if (data != null) {
       final (:quote, :tags) = data;
