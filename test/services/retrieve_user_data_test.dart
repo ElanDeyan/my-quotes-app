@@ -27,12 +27,12 @@ const defaultColorSchemePalette =
 const languageKey = LanguageRepository.languageKey;
 final defaultLanguage = LanguageRepository.defaultLanguage;
 
-void _expectUserDataStructure(Map<String, dynamic> userData) {
+void _expectUserDataStructure(Map<String, Object?> userData) {
   expect(userData.containsKey('preferences'), isTrue);
   expect(userData.containsKey('tags'), isTrue);
   expect(userData.containsKey('quotes'), isTrue);
 
-  expect(userData['preferences'], isA<Map<String, dynamic>>());
+  expect(userData['preferences'], isA<Map<String, Object?>>());
   expect(userData['tags'], isA<List<dynamic>>());
   expect(userData['quotes'], isA<List<dynamic>>());
 }
@@ -87,15 +87,15 @@ void main() {
       _expectUserDataStructure(userData);
 
       expect(
-        userData['preferences'][themeModeKey],
+        (userData['preferences']! as Map<String, Object?>)[themeModeKey],
         equals(defaultThemeMode.name),
       );
       expect(
-        userData['preferences'][colorSchemePaletteKey],
+        (userData['preferences']! as Map<String, Object?>)[colorSchemePaletteKey],
         equals(defaultColorSchemePalette.storageName),
       );
       expect(
-        userData['preferences'][languageKey],
+        (userData['preferences']! as Map<String, Object?>)[languageKey],
         equals(defaultLanguage.languageCode),
       );
 

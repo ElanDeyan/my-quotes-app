@@ -17,7 +17,7 @@ Future<XFile> generateBackupFile(
   return XFile.fromData(encodedData);
 }
 
-Future<Map<String, dynamic>> retrieveUserData(
+Future<Map<String, Object?>> retrieveUserData(
   AppPreferences appPreferences,
   DatabaseProvider database,
 ) async {

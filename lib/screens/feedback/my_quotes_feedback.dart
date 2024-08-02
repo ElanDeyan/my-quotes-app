@@ -12,7 +12,7 @@ final class MyQuotesFeedbackFormArea extends StatefulWidget {
 
   final BuildContext context;
   final ScrollController? scrollController;
-  final Future<void> Function(String, {Map<String, dynamic>? extras}) fn;
+  final Future<void> Function(String, {Map<String, Object?>? extras}) fn;
 
   @override
   State<MyQuotesFeedbackFormArea> createState() =>

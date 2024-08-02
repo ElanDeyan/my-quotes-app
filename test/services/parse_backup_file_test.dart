@@ -11,7 +11,7 @@ import '../fixtures/generate_backup_file_content.dart';
 import '../fixtures/generate_random_quote.dart';
 import '../fixtures/generate_random_tag.dart';
 
-XFile _getSampleFile(Map<String, dynamic> data) =>
+XFile _getSampleFile(Map<String, Object?> data) =>
     XFile.fromData(utf8.encode(jsonEncode(data)));
 
 const _nonMapValues = [
@@ -25,7 +25,7 @@ const _nonMapValues = [
   1.755,
 ];
 
-void _expectQuoteJsonShapeAndTypes(Map<String, dynamic> json) {
+void _expectQuoteJsonShapeAndTypes(Map<String, Object?> json) {
   expect(json.containsKey('id'), isTrue);
   expect(json.get('id'), isA<int>());
 
@@ -52,8 +52,8 @@ void _expectQuoteJsonShapeAndTypes(Map<String, dynamic> json) {
 }
 
 void main() {
-  late List<Map<String, dynamic>> tagsSample;
-  late List<Map<String, dynamic>> quotesSample;
+  late List<Map<String, Object?>> tagsSample;
+  late List<Map<String, Object?>> quotesSample;
   setUp(() {
     tagsSample = [
       for (var i = 0; i < 10; i++)
@@ -99,20 +99,23 @@ void main() {
 
     expect(
       backupData!.userPreferencesData.themeMode,
-      // ignore: avoid_dynamic_calls
-      equals(correctSample['preferences']['themeMode']),
+      equals(
+        (correctSample['preferences']! as Map<String, Object?>)['themeMode'],
+      ),
     );
 
     expect(
       backupData.userPreferencesData.colorPalette,
-      // ignore: avoid_dynamic_calls
-      equals(correctSample['preferences']['colorPalette']),
+      equals(
+        (correctSample['preferences']! as Map<String, Object?>)['colorPalette'],
+      ),
     );
 
     expect(
       backupData.userPreferencesData.language,
-      // ignore: avoid_dynamic_calls
-      equals(correctSample['preferences']['language']),
+      equals(
+        (correctSample['preferences']! as Map<String, Object?>)['language'],
+      ),
     );
 
     expect(
@@ -305,7 +308,7 @@ void main() {
       expect(parseBackupFile(sampleFile), completion(isNull));
     });
 
-    test('Items should be Map<String, dynamic>', () {
+    test('Items should be Map<String, Object?>', () {
       final sample = generateBackupFileContent(
         tags: tagsSample,
         quotes: _nonMapValues,

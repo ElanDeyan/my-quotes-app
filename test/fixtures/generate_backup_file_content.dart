@@ -1,4 +1,4 @@
-Map<String, dynamic> generateBackupFileContent({
+Map<String, Object?> generateBackupFileContent({
   bool preferences = true,
   dynamic themeMode = 'system',
   dynamic colorPalette = 'blue',

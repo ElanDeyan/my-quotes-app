@@ -101,7 +101,7 @@ class _AddQuoteFromFileFormState extends State<AddQuoteFromFileForm>
     return tagsIds;
   }
 
-  Map<String, dynamic> get quoteAsJson => widget.quote.toJson();
+  Map<String, Object?> get quoteAsJson => widget.quote.toJson();
 
   @override
   FormTypes get formType => FormTypes.addFromFile;

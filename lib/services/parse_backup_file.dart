@@ -34,7 +34,7 @@ Future<BackupData?> parseBackupFile(XFile file) async {
 
   if (decodedFile
       case {
-        "preferences": final Map<String, dynamic> preferencesMap,
+        "preferences": final Map<String, Object?> preferencesMap,
         "tags": final List<dynamic> tags,
         "quotes": final List<dynamic> quotes,
       }) {
@@ -64,7 +64,7 @@ Future<BackupData?> parseBackupFile(XFile file) async {
       tagsList = tags
           .map(
             (item) => Tag(
-              id: int.parse((item as Map<String, dynamic>).keys.single),
+              id: int.parse((item as Map<String, Object?>).keys.single),
               name: item.values.single.toString(),
             ),
           )
@@ -92,23 +92,23 @@ Future<BackupData?> parseBackupFile(XFile file) async {
 bool _validateTagsData(List<dynamic> data) {
   return data.every(
         (item) =>
-            item is Map<String, dynamic> &&
+            item is Map<String, Object?> &&
             item.keys.length == 1 &&
             int.tryParse(item.keys.single) != null &&
             item.values.every((value) => value is String),
       ) &&
       data
-          .map((item) => int.parse((item as Map<String, dynamic>).keys.single))
+          .map((item) => int.parse((item as Map<String, Object?>).keys.single))
           .isMadeOfUniques;
 }
 
 bool _validateQuotesData(List<dynamic> data) {
-  if (!data.every((item) => item is Map<String, dynamic>)) {
+  if (!data.every((item) => item is Map<String, Object?>)) {
     return false;
   }
 
   if (!data
-      .map((element) => (element as Map<String, dynamic>)['id'])
+      .map((element) => (element as Map<String, Object?>)['id'])
       .isMadeOfUniques) {
     return false;
   }
@@ -134,6 +134,6 @@ bool _validateQuotesData(List<dynamic> data) {
 
 List<Quote> _createQuotesFromJson(List<dynamic> data) {
   return data
-      .map((item) => Quote.fromJson(item as Map<String, dynamic>))
+      .map((item) => Quote.fromJson(item as Map<String, Object?>))
       .toList();
 }

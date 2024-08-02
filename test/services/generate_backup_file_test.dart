@@ -62,7 +62,7 @@ void main() {
         await generateBackupFile(databaseProvider, appPreferences);
     expect(
       jsonDecode(utf8.decode(await backupFile.readAsBytes())),
-      isA<Map<String, dynamic>>(),
+      isA<Map<String, Object?>>(),
     );
   });
 

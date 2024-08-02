@@ -93,7 +93,7 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm> with QuoteFormMixin {
     super.dispose();
   }
 
-  Map<String, dynamic> get quoteAsJson => widget.quote.toJson()
+  Map<String, Object?> get quoteAsJson => widget.quote.toJson()
     ..update(
       'tags',
       (value) => switch (value) {
