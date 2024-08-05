@@ -21,13 +21,22 @@ extension QuoteExtension on Quote {
   Iterable<int> get tagsId =>
       tags?.split(idSeparatorChar).map(int.tryParse).nonNulls ?? const <int>[];
 
-  String shareableFormatOf(BuildContext context) => '''
-${AppLocalizations.of(context)!.quoteShareHeader}
-"$content"
-\u2014 $author${source.isNotNullOrBlank ? ", $source" : ''}.
-${sourceUri.isNotNullOrBlank ? '\n${AppLocalizations.of(context)!.quoteShareSeeMore(sourceUri!)}' : ''}
-'''
-      .trim();
+  String shareableFormatOf(BuildContext context) {
+    final stringBuffer = StringBuffer();
+
+    stringBuffer.writeAll(
+      [
+        AppLocalizations.of(context)!.quoteShareHeader,
+        '"$content"',
+        '\u2014 $author${source.isNotNullOrBlank ? ", $source" : ''}.',
+        if (sourceUri.isNotNullOrBlank)
+          AppLocalizations.of(context)!.quoteShareSeeMore(sourceUri!),
+      ],
+      '\n',
+    );
+
+    return stringBuffer.toString();
+  }
 
   bool canPerform(QuoteActions action) => switch (action) {
         QuoteActions.copyLink || QuoteActions.goToLink => hasSourceUri,
