@@ -25,6 +25,7 @@ enum ShareActions {
       (action) {
         if (action == ShareActions.link && !quote.hasSourceUri) return false;
         if (action == ShareActions.image && isWeb) return false;
+        // TODO: Adds handling for web (just downloads the file)
         if (action == ShareActions.file && isWeb) return false;
         return true;
       },

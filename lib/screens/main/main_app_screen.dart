@@ -154,6 +154,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             },
           ),
         ],
+        // TODO: Adds handling for web (just downloads the file)
         icon: const Icon(Icons.import_export_outlined),
         tooltip: AppLocalizations.of(context)!.backupOptionsTooltip,
       ),
