@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:my_quotes/constants/platforms.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -18,8 +19,9 @@ Future<void> quoteToFile(BuildContext context, Quote quote) async {
     );
 
     if (pathToSave != null) {
+      final endsWithJsonExtension = p.extension(pathToSave) == '.json';
       final file = await File(
-        '$pathToSave${!RegExp(r'.json$', caseSensitive: false).hasMatch(pathToSave) ? '.json' : ''}',
+        '$pathToSave${!endsWithJsonExtension ? '.json' : ''}',
       ).create();
       if (context.mounted) {
         await file.writeAsBytes(
