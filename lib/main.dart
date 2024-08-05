@@ -22,6 +22,7 @@ import 'package:sentry/sentry.dart';
 void main() async {
   runZonedGuarded(
     () async {
+      // TODO: switches from dotenv to Envied package (adds obfuscate)
       await dotenv.load();
 
       final sentryDsn = switch ((
