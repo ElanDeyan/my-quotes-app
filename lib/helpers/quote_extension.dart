@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -62,13 +64,13 @@ ${sourceUri.isNotNullOrBlank ? '\n${AppLocalizations.of(context)!.quoteShareSeeM
   Future<String> toShareableJsonString(BuildContext context) async {
     final tagsName = await _getTagsName(context);
 
-    return '{'
-        '"content": "$content", '
-        '"author": "$author", '
-        '"source": ${source.isNotNullOrBlank ? '"$source"' : "null"}, '
-        '"sourceUri": ${sourceUri.isNotNullOrBlank ? '"$sourceUri"' : "null"}, '
-        '"isFavorite": $isFavorite, '
-        '"tags": ${'[' '"${tagsName.join('", "')}"' ']'}'
-        '}';
+    return jsonEncode(<String, Object?>{
+      'content': content,
+      'author': author,
+      'source': source.isNotNullOrBlank ? source : null,
+      'sourceUri': sourceUri.isNotNullOrBlank ? sourceUri : null,
+      'isFavorite': isFavorite,
+      'tags': tagsName,
+    });
   }
 }
