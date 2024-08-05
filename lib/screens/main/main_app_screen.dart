@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/destinations.dart';
+import 'package:my_quotes/constants/enums/parse_quote_file_errors.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
@@ -13,8 +14,11 @@ import 'package:my_quotes/services/handle_backup_file.dart';
 import 'package:my_quotes/services/handle_quote_file.dart';
 import 'package:my_quotes/services/save_file.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
+import 'package:my_quotes/shared/actions/quotes/show_add_quote_from_file_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_search.dart';
+import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
+import 'package:my_quotes/shared/widgets/pill_chip.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +64,33 @@ final class _MainAppScreenState extends State<MainAppScreen> {
       backupFile,
       'MyQuotes-Backup-${DateTime.now()}',
     );
+  }
+
+  Future<void> _handleQuoteFile(BuildContext context) async {
+    final result = await handleQuoteFile();
+    if (result.data != null) {
+      if (context.mounted) {
+        await showAddQuoteFromFileDialog(
+          context,
+          result.data!.quote,
+          result.data!.tags,
+        );
+      }
+    } else if (result.error != null) {
+      if (context.mounted) {
+        showToast(
+          context,
+          child: PillChip(
+            label: Text(
+              ParseQuoteFileErrors.localizedErrorMessageOf(
+                context,
+                result.error!,
+              ),
+            ),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -127,7 +158,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
       IconButton(
         icon: const Icon(Icons.upload_file_outlined),
         tooltip: AppLocalizations.of(context)!.addFromFile,
-        onPressed: () async => await handleQuoteFile(context),
+        onPressed: () => _handleQuoteFile(context),
       ),
       PopupMenuButton<void>(
         itemBuilder: (context) => [

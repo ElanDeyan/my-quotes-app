@@ -164,6 +164,10 @@
       }
     }
   },
+  "parseQuoteFileErrorMessageNotJsonFormat": "Conteúdo não é um JSON válido",
+  "parseQuoteFileErrorMessageNotJsonMap": "Conteúdo não é um objeto JSON",
+  "parseQuoteFileErrorMessageNotCaseFields": "Erro: Dados inconsistentes. Verifique os campos e dados",
+  "parseQuoteFileErrorMessageNoChosenFile": "Nenhum arquivo selecionado",
   "addFromFile": "Adicionar de um arquivo",
   "quoteFileParseError": "Não foi possível processar o arquivo",
   "backupFileParseError": "Não foi possível processar o arquivo de backup",

@@ -144,13 +144,13 @@
   "updated": "Updated!",
   "isFavorite": "{isFavorite, select, other{Invalid} true{Is favorited.} false{Is not favorited.}}",
   "@isFavorite": {
-      "description": "Is favorite",
-      "placeholders": {
-          "isFavorite": {
-            "type": "String",
-            "example":"1" 
-          }
+    "description": "Is favorite",
+    "placeholders": {
+      "isFavorite": {
+        "type": "String",
+        "example": "1"
       }
+    }
   },
   "noQuotesAddedYet": "You don''t have any quotes yet.",
   "noTagsAddedYet": "You don''t have any tags yet.",
@@ -161,11 +161,15 @@
   "@quoteShareSeeMore": {
     "description": "Quote share see more",
     "placeholders": {
-      "url":{
+      "url": {
         "type": "String"
       }
     }
   },
+  "parseQuoteFileErrorMessageNotJsonFormat": "The content is not a JSON data",
+  "parseQuoteFileErrorMessageNotJsonMap": "The content is not a JSON map",
+  "parseQuoteFileErrorMessageNotCaseFields": "JSON error: Data mismatch. Check fields and types",
+  "parseQuoteFileErrorMessageNoChosenFile": "No file selected",
   "addFromFile": "Upload from file",
   "quoteFileParseError": "An error occurred when parsing the file",
   "backupFileParseError": "An error occurred when parsing the backup file",
