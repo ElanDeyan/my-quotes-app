@@ -101,6 +101,8 @@
   },
   "created": "Adicionado!",
   "tagName": "Nome da etiqueta",
+  "tagNameFieldHint": "Caracteres com acentos serão substituídos por equivalentes",
+  "tagNameFieldRules":"Nome deve ter apenas letras, números, hífens ou sublinha",
   "requiredFieldAlert": "Campo obrigatório",
   "emptyOrBlankAlert": "Não pode ter somente espaços em branco",
   "disallowedCommasAlert": "Não pode ter vírgulas",

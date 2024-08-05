@@ -104,6 +104,8 @@
   },
   "created": "Created!",
   "tagName": "Tag name",
+  "tagNameFieldHint": "Characters with accents will be replaced with equivalents",
+  "tagNameFieldRules":"Tag name should have only letters, digits, dashes or underlines",
   "requiredFieldAlert": "Required field",
   "emptyOrBlankAlert": "Can''t have only blank spaces",
   "disallowedCommasAlert": "Commas aren''t allowed",
