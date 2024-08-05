@@ -105,13 +105,34 @@ void main() {
       expect(tags, containsAll(sampleTagsName));
     });
 
-    test('Non-string tags data will be stringfied', () async {
+    test('Non-string tags data wont pass', () async {
       final sampleNonStringData = [
         1,
         true,
         null,
         ['oi', 'hello'],
       ];
+
+      quoteAsJson.update(
+        'tags',
+        (value) => sampleNonStringData,
+        ifAbsent: () => sampleNonStringData,
+      );
+
+      quoteFile = XFile.fromData(utf8.encode(jsonEncode(quoteAsJson)));
+
+      final result = await parseQuoteFile(quoteFile);
+
+      expect(result, isA<ErrorWithoutData>());
+    });
+
+    test('Tags data should be a list of String', () async {
+      final sampleNonStringData = [
+        1,
+        true,
+        null,
+        ['oi', 'hello'],
+      ].map((item) => item.toString()).toList();
 
       quoteAsJson.update(
         'tags',
@@ -135,7 +156,7 @@ void main() {
 
       expect(
         tags,
-        containsAll(sampleNonStringData.map((item) => item.toString())),
+        containsAll(sampleNonStringData.map((item) => item)),
       );
     });
   });
