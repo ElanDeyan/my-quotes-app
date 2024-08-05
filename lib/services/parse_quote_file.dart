@@ -33,7 +33,7 @@ Future<QuoteFileParsingResult> parseQuoteFile(
         "sourceUri": String? _,
         "isFavorite": bool _,
         "tags": final List<Object?>? tags,
-      } when tags?.every((item) => item is! String) ?? true) {
+      } when tags?.every((item) => item is String) ?? true) {
     final jsonFile = decodedFile;
 
     jsonFile.update(
