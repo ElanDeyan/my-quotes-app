@@ -12,12 +12,14 @@ Future<void> deleteQuote(BuildContext context, Quote quote) async {
 
   result.then((value) {
     if (value == true) {
-      final database = Provider.of<DatabaseProvider>(context, listen: false);
-      database.deleteQuote(quote.id!);
-      showToast(
-        context,
-        child: PillChip(label: Text(AppLocalizations.of(context)!.deleted)),
-      );
+      if (context.mounted) {
+        final database = Provider.of<DatabaseProvider>(context, listen: false);
+        database.deleteQuote(quote.id!);
+        showToast(
+          context,
+          child: PillChip(label: Text(AppLocalizations.of(context)!.deleted)),
+        );
+      }
     }
   });
 }

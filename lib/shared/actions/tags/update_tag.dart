@@ -15,10 +15,12 @@ void updateTag(BuildContext context, Tag tag) {
     (value) {
       if (value.isNotNullOrBlank) {
         database.updateTag(tag.copyWith(name: value));
-        showToast(
-          context,
-          child: PillChip(label: Text(AppLocalizations.of(context)!.updated)),
-        );
+        if (context.mounted) {
+          showToast(
+            context,
+            child: PillChip(label: Text(AppLocalizations.of(context)!.updated)),
+          );
+        }
       }
     },
   );

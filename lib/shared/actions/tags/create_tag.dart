@@ -14,12 +14,15 @@ void createTag(BuildContext context) {
   if (result.isNotNull) {
     result!.then((value) {
       if (value.isNotNullOrBlank) {
-        final database = Provider.of<DatabaseProvider>(context, listen: false);
-        database.createTag(value!);
-        showToast(
-          context,
-          child: PillChip(label: Text(AppLocalizations.of(context)!.created)),
-        );
+        if (context.mounted) {
+          final database =
+              Provider.of<DatabaseProvider>(context, listen: false);
+          database.createTag(value!);
+          showToast(
+            context,
+            child: PillChip(label: Text(AppLocalizations.of(context)!.created)),
+          );
+        }
       }
     });
   }

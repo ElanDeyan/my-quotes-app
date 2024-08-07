@@ -13,12 +13,15 @@ void deleteTag(BuildContext context, Tag tag) {
   result.then(
     (value) {
       if (value == true) {
-        final database = Provider.of<DatabaseProvider>(context, listen: false);
-        database.deleteTag(tag.id!);
-        showToast(
-          context,
-          child: PillChip(label: Text(AppLocalizations.of(context)!.deleted)),
-        );
+        if (context.mounted) {
+          final database =
+              Provider.of<DatabaseProvider>(context, listen: false);
+          database.deleteTag(tag.id!);
+          showToast(
+            context,
+            child: PillChip(label: Text(AppLocalizations.of(context)!.deleted)),
+          );
+        }
       }
     },
   );
