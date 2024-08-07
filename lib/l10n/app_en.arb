@@ -78,6 +78,7 @@
   "noResultsFound": "No results found",
   "addQuoteTitle": "Add quote",
   "editQuoteTitle": "Edit quote",
+  "quoteFormError": "An error occurred",
   "quoteFormFieldContent": "Content",
   "quoteFormFieldAuthor": "Author",
   "quoteFormFieldAnonymAuthor": "Anonym",

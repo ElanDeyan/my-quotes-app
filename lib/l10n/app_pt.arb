@@ -75,6 +75,7 @@
   "noResultsFound": "Nenhum resultado encontrado",
   "addQuoteTitle":"Adicionar frase",
   "editQuoteTitle":"Editar frase",
+  "quoteFormError": "Ocorreu um erro",
   "quoteFormFieldContent": "Frase",
   "quoteFormFieldAuthor":"Autor(a)",
   "quoteFormFieldAnonymAuthor":"Anônimo",

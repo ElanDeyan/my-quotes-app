@@ -5,7 +5,6 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:my_quotes/constants/enums/form_types.dart';
@@ -13,6 +12,8 @@ import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/shared/actions/show_toast.dart';
+import 'package:my_quotes/shared/widgets/pill_chip.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -314,28 +315,28 @@ mixin QuoteFormMixin {
 
                 result.then((value) {
                   if (value case true || int _) {
-                    final successfulMessage = formType == FormTypes.update
-                        ? AppLocalizations.of(context)!.quoteFormSuccessfulEdit
-                        : AppLocalizations.of(context)!.quoteFormSuccessfulAdd;
-                    FToast().init(context).showToast(
-                          child: Chip(
-                            label: Text(
-                              successfulMessage,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(99),
-                            ),
-                          ),
-                        );
+                    if (context.mounted) {
+                      final successfulMessage = formType == FormTypes.update
+                          ? AppLocalizations.of(context)!
+                              .quoteFormSuccessfulEdit
+                          : AppLocalizations.of(context)!
+                              .quoteFormSuccessfulAdd;
+                      showToast(
+                        context,
+                        child: PillChip(label: Text(successfulMessage)),
+                      );
+                    }
                   } else {
-                    FToast().init(context).showToast(
-                          child: Chip(
-                            label: const Text('Error'),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(99),
-                            ),
+                    if (context.mounted) {
+                      showToast(
+                        context,
+                        child: PillChip(
+                          label: Text(
+                            AppLocalizations.of(context)!.quoteFormError,
                           ),
-                        );
+                        ),
+                      );
+                    }
                   }
                 });
               },
