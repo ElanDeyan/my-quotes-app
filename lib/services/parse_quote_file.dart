@@ -44,7 +44,6 @@ Future<QuoteFileParsingResult> parseQuoteFile(
 
     final jsonFileAsQuote = Quote.fromJson(jsonFile);
 
-    // TODO: adds more validation for tag name creation (like remove special chars, disallow spaces)
     return (
       data: (
         quote: jsonFileAsQuote,
