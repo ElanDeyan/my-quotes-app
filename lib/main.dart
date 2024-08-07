@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:basics/basics.dart';
 import 'package:feedback_sentry/feedback_sentry.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/constants/keys.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/env/env.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
 import 'package:my_quotes/screens/feedback/my_quotes_feedback.dart';
@@ -22,12 +22,9 @@ import 'package:sentry/sentry.dart';
 void main() async {
   runZonedGuarded(
     () async {
-      // TODO: switches from dotenv to Envied package (adds obfuscate)
-      await dotenv.load();
-
       final sentryDsn = switch ((
         const String.fromEnvironment(sentryDsnKey),
-        dotenv.env[sentryDsnKey]
+        Env.sentryDsn,
       )) {
         (final a, _) when a != '' => a,
         (_, final b) when b.isNotNullOrBlank => b,
