@@ -89,7 +89,8 @@ void main() {
         equals(defaultThemeMode.name),
       );
       expect(
-        (userData['preferences']! as Map<String, Object?>)[colorSchemePaletteKey],
+        (userData['preferences']!
+            as Map<String, Object?>)[colorSchemePaletteKey],
         equals(defaultColorSchemePalette.storageName),
       );
       expect(

@@ -137,8 +137,7 @@ void main() {
 
     test('Tags by ids (mixing valid and not valid ids)', () async {
       final tagsToAdd = [
-        for (final id in [1, 3, 5])
-          generateRandomTag().copyWith(id: Value(id)),
+        for (final id in [1, 3, 5]) generateRandomTag().copyWith(id: Value(id)),
       ];
 
       for (final tag in tagsToAdd) {
