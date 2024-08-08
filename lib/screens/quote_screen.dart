@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
@@ -74,83 +75,87 @@ class ViewQuotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(top: 8.0),
       child: Center(
-        child: _quoteInfoWithCard(),
-      ),
-    );
-  }
+        child: Consumer<DatabaseProvider>(
+          builder: (context, database, child) => FutureBuilder(
+            future: database.getQuoteById(quoteId),
+            builder: (context, snapshot) {
+              final connectionState = snapshot.connectionState;
 
-  Consumer<DatabaseProvider> _quoteInfoWithCard() {
-    return Consumer<DatabaseProvider>(
-      builder: (context, database, child) => FutureBuilder(
-        future: database.getQuoteById(quoteId),
-        builder: (context, snapshot) {
-          final connectionState = snapshot.connectionState;
-
-          switch (connectionState) {
-            case ConnectionState.none:
-              return Text(
-                AppLocalizations.of(context)!.noDatabaseConnectionMessage,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              );
-            case ConnectionState.active || ConnectionState.waiting:
-              final isDarkTheme =
-                  MediaQuery.platformBrightnessOf(context) == Brightness.dark;
-
-              return ShimmerPro.sized(
-                scaffoldBackgroundColor: Theme.of(context).colorScheme.surface,
-                light: isDarkTheme ? ShimmerProLight.lighter : null,
-                height: 200,
-                width: 300,
-              );
-
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              } else {
-                final data = snapshot.data;
-                if (data == null) {
+              switch (connectionState) {
+                case ConnectionState.none:
                   return Text(
-                    AppLocalizations.of(context)!.quoteNotFoundWithId(quoteId),
+                    AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   );
-                } else {
-                  final quote = data;
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.sizeOf(context).width * 0.9,
-                        ),
-                        child: QuoteCard(
-                          quote: quote,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        quote.createdAtLocaleMessageOf(context).capitalize(),
-                      ),
-                      if (quote.isFavorite)
-                        IconWithLabel(
-                          icon: const Icon(Icons.star),
-                          horizontalGap: 10,
-                          label: Text(
-                            AppLocalizations.of(context)!
-                                .isFavorite(quote.isFavorite.toString()),
+                case ConnectionState.active || ConnectionState.waiting:
+                  final isDarkTheme =
+                      MediaQuery.platformBrightnessOf(context) ==
+                          Brightness.dark;
+
+                  return ShimmerPro.sized(
+                    scaffoldBackgroundColor:
+                        Theme.of(context).colorScheme.surface,
+                    light: isDarkTheme ? ShimmerProLight.lighter : null,
+                    height: 200,
+                    width: 300,
+                  );
+
+                case ConnectionState.done:
+                  if (snapshot.hasError) {
+                    return Text(snapshot.error.toString());
+                  } else {
+                    final data = snapshot.data;
+                    if (data == null) {
+                      return Text(
+                        AppLocalizations.of(context)!
+                            .quoteNotFoundWithId(quoteId),
+                      );
+                    } else {
+                      final quote = data;
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.sizeOf(context).width * 0.9,
+                            ),
+                            child: QuoteCard(
+                              quote: quote,
+                            ),
                           ),
-                        ),
-                    ],
-                  );
-                }
+                          const SizedBox(height: 16),
+                          Text(
+                            quote
+                                .createdAtLocaleMessageOf(
+                                  Locale(appLocalizations.localeName),
+                                )
+                                .capitalize(),
+                          ),
+                          if (quote.isFavorite)
+                            IconWithLabel(
+                              icon: const Icon(Icons.star),
+                              horizontalGap: 10,
+                              label: Text(
+                                AppLocalizations.of(context)!
+                                    .isFavorite(quote.isFavorite.toString()),
+                              ),
+                            ),
+                        ],
+                      );
+                    }
+                  }
               }
-          }
-        },
+            },
+          ),
+        ),
       ),
     );
   }
@@ -235,7 +240,11 @@ class QuoteScreenDialogBody extends StatelessWidget {
                             '${AppLocalizations.of(context)!.quoteFormFieldSourceUri}: ${quote.sourceUri}',
                           ),
                         Text(
-                          quote.createdAtLocaleMessageOf(context).capitalize(),
+                          quote
+                              .createdAtLocaleMessageOf(
+                                Locale(context.appLocalizations.localeName),
+                              )
+                              .capitalize(),
                         ),
                         if (quote.tagsId.isEmpty)
                           Text(

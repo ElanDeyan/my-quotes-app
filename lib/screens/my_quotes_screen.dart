@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -84,6 +85,9 @@ class QuoteTileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final databaseProvider =
+        Provider.of<DatabaseProvider>(context, listen: false);
+
     return Card.outlined(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusDirectional.circular(10),
@@ -123,6 +127,8 @@ class QuoteTileCard extends StatelessWidget {
           tooltip: AppLocalizations.of(context)!.quoteActionsPopupButtonTooltip,
           position: PopupMenuPosition.under,
           itemBuilder: (context) => QuoteActions.popupMenuItems(
+            context.appLocalizations,
+            databaseProvider,
             context,
             data,
             actions: QuoteActions.values.where(

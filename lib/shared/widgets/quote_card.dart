@@ -15,6 +15,8 @@ class QuoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
+
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 500, maxHeight: 250),
       child: Stack(
@@ -116,22 +118,25 @@ class QuoteCard extends StatelessWidget {
           if (showActions)
             Positioned(
               right: 0,
-              child: PopupMenuButton(
-                tooltip: AppLocalizations.of(context)!
-                    .quoteActionsPopupButtonTooltip,
-                icon: const Icon(Icons.more_horiz_outlined),
-                position: PopupMenuPosition.under,
-                itemBuilder: (context) => QuoteActions.popupMenuItems(
-                  context,
-                  quote,
-                  actions: QuoteActions.values.where(
-                    (action) => switch (action) {
-                      QuoteActions.create ||
-                      QuoteActions.share ||
-                      QuoteActions.delete =>
-                        false,
-                      _ => true
-                    },
+              child: Consumer<DatabaseProvider>(
+                builder: (context, database, child) => PopupMenuButton(
+                  tooltip: appLocalizations.quoteActionsPopupButtonTooltip,
+                  icon: const Icon(Icons.more_horiz_outlined),
+                  position: PopupMenuPosition.under,
+                  itemBuilder: (context) => QuoteActions.popupMenuItems(
+                    appLocalizations,
+                    database,
+                    context,
+                    quote,
+                    actions: QuoteActions.values.where(
+                      (action) => switch (action) {
+                        QuoteActions.create ||
+                        QuoteActions.share ||
+                        QuoteActions.delete =>
+                          false,
+                        _ => true
+                      },
+                    ),
                   ),
                 ),
               ),
