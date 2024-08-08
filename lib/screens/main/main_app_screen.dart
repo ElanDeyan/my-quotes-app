@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/destinations.dart';
 import 'package:my_quotes/constants/enums/parse_quote_file_errors.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
@@ -119,7 +119,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
           : _notCompactWindowSizeBody(context),
       floatingActionButton: isCompactWindowSize
           ? FloatingActionButton(
-              tooltip: AppLocalizations.of(context)!.navigationAddQuote,
+              tooltip: context.appLocalizations.navigationAddQuote,
               onPressed: () => showAddQuoteDialog(context),
               backgroundColor: Theme.of(context).colorScheme.secondary,
               child: Icon(
@@ -137,27 +137,26 @@ final class _MainAppScreenState extends State<MainAppScreen> {
     return <Widget>[
       if (bodyContent is MyQuotesScreen) ...<Widget>[
         IconButton(
-          tooltip: AppLocalizations.of(context)!.navigationSearchQuote,
+          tooltip: context.appLocalizations.navigationSearchQuote,
           onPressed: () => showQuoteSearch(
             context,
             SearchQuoteDelegate(
               context: context,
               keyboardType: TextInputType.text,
-              searchFieldLabel:
-                  AppLocalizations.of(context)!.navigationSearchLabel,
+              searchFieldLabel: context.appLocalizations.navigationSearchLabel,
             ),
           ),
           icon: const Icon(Icons.search_outlined),
         ),
         IconButton(
           icon: const Icon(Icons.label_outlined),
-          tooltip: AppLocalizations.of(context)!.navigationTags,
+          tooltip: context.appLocalizations.navigationTags,
           onPressed: () => context.pushNamed(tagsNavigationKey),
         ),
       ],
       IconButton(
         icon: const Icon(Icons.upload_file_outlined),
-        tooltip: AppLocalizations.of(context)!.addFromFile,
+        tooltip: context.appLocalizations.addFromFile,
         onPressed: () => _handleQuoteFile(context),
       ),
       PopupMenuButton<void>(
@@ -167,14 +166,14 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             child: IconWithLabel(
               icon: const Icon(Icons.backup_outlined),
               horizontalGap: 10,
-              label: Text(AppLocalizations.of(context)!.createBackup),
+              label: Text(context.appLocalizations.createBackup),
             ),
           ),
           PopupMenuItem(
             child: IconWithLabel(
               icon: const Icon(Icons.settings_backup_restore_outlined),
               horizontalGap: 10,
-              label: Text(AppLocalizations.of(context)!.restoreBackup),
+              label: Text(context.appLocalizations.restoreBackup),
             ),
             onTap: () async {
               final backupFile = await getJsonFile();
@@ -187,7 +186,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
         ],
         // TODO: Adds handling for web (just downloads the file)
         icon: const Icon(Icons.import_export_outlined),
-        tooltip: AppLocalizations.of(context)!.backupOptionsTooltip,
+        tooltip: context.appLocalizations.backupOptionsTooltip,
       ),
       if (isCompactWindowSize) ..._actionsForCompactWindow(context),
     ];
@@ -223,7 +222,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             onDestinationSelected: _updateIndex,
             leading: !isCompactWindowSize
                 ? FloatingActionButton(
-                    tooltip: AppLocalizations.of(context)!.navigationAddQuote,
+                    tooltip: context.appLocalizations.navigationAddQuote,
                     backgroundColor:
                         Theme.of(context).colorScheme.surfaceContainerHighest,
                     onPressed: () => showAddQuoteDialog(context),

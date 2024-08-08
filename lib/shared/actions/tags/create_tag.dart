@@ -1,6 +1,6 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/actions/tags/show_create_tag_dialog.dart';
@@ -20,7 +20,7 @@ void createTag(BuildContext context) {
           database.createTag(value!);
           showToast(
             context,
-            child: PillChip(label: Text(AppLocalizations.of(context)!.created)),
+            child: PillChip(label: Text(context.appLocalizations.created)),
           );
         }
       }

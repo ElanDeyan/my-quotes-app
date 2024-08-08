@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
 
@@ -10,7 +10,7 @@ Future<void> copyToClipBoard(BuildContext context, String text) async {
         ? showToast(
             context,
             child: PillChip(
-              label: Text(AppLocalizations.of(context)!.copiedToClipboard),
+              label: Text(context.appLocalizations.copiedToClipboard),
             ),
           )
         : null,

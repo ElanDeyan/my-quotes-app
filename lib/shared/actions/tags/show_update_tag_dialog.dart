@@ -1,8 +1,8 @@
 import 'package:basics/string_basics.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/widgets/tag_name_field.dart';
 
 Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
@@ -52,7 +52,7 @@ class _UpdateTagDialogState extends State<UpdateTagDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.updateTag),
+      title: Text(context.appLocalizations.updateTag),
       content: Form(
         key: _updateTagFormKey,
         autovalidateMode: AutovalidateMode.always,
@@ -61,7 +61,7 @@ class _UpdateTagDialogState extends State<UpdateTagDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(AppLocalizations.of(context)!.delete),
+          child: Text(context.appLocalizations.delete),
         ),
         TextButton(
           onPressed: () {
@@ -72,7 +72,7 @@ class _UpdateTagDialogState extends State<UpdateTagDialog> {
               );
             }
           },
-          child: Text(AppLocalizations.of(context)!.save),
+          child: Text(context.appLocalizations.save),
         ),
       ],
     );

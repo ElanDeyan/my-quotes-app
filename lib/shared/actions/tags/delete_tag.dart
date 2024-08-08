@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/actions/tags/show_delete_tag_dialog.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
@@ -19,7 +19,7 @@ void deleteTag(BuildContext context, Tag tag) {
           database.deleteTag(tag.id!);
           showToast(
             context,
-            child: PillChip(label: Text(AppLocalizations.of(context)!.deleted)),
+            child: PillChip(label: Text(context.appLocalizations.deleted)),
           );
         }
       }

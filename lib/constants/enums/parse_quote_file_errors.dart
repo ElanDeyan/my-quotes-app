@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 
 enum ParseQuoteFileErrors {
   notJsonFormat(0, 'invalid_json_format'),
@@ -18,12 +18,12 @@ enum ParseQuoteFileErrors {
   ) =>
       switch (error) {
         ParseQuoteFileErrors.noChosenFile =>
-          AppLocalizations.of(context)!.parseQuoteFileErrorMessageNoChosenFile,
+          context.appLocalizations.parseQuoteFileErrorMessageNoChosenFile,
         ParseQuoteFileErrors.notJsonFormat =>
-          AppLocalizations.of(context)!.parseQuoteFileErrorMessageNotJsonFormat,
+          context.appLocalizations.parseQuoteFileErrorMessageNotJsonFormat,
         ParseQuoteFileErrors.notJsonMap =>
-          AppLocalizations.of(context)!.parseQuoteFileErrorMessageNotJsonMap,
+          context.appLocalizations.parseQuoteFileErrorMessageNotJsonMap,
         ParseQuoteFileErrors.notCaseFieldsAndTypes =>
-          AppLocalizations.of(context)!.parseQuoteFileErrorMessageNotCaseFields,
+          context.appLocalizations.parseQuoteFileErrorMessageNotCaseFields,
       };
 }

@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -25,12 +25,12 @@ final class AddQuoteFromFileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.addQuoteTitle),
+        title: Text(context.appLocalizations.addQuoteTitle),
         actions: [
           IconButton(
             onPressed: () => createTag(context),
             icon: const Icon(Icons.new_label),
-            tooltip: AppLocalizations.of(context)!.createTag,
+            tooltip: context.appLocalizations.createTag,
           ),
         ],
       ),
@@ -138,7 +138,7 @@ class _AddQuoteFromFileFormState extends State<AddQuoteFromFileForm>
           );
         } else if (snapshot.hasError) {
           return Center(
-            child: Text(AppLocalizations.of(context)!.errorOccurred),
+            child: Text(context.appLocalizations.errorOccurred),
           );
         } else {
           return const Center(

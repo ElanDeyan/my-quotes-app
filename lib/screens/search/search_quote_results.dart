@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
@@ -33,8 +32,7 @@ class SearchQuoteResults extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           trailing: PopupMenuButton(
-            tooltip:
-                AppLocalizations.of(context)!.quoteActionsPopupButtonTooltip,
+            tooltip: context.appLocalizations.quoteActionsPopupButtonTooltip,
             position: PopupMenuPosition.under,
             itemBuilder: (context) => QuoteActions.popupMenuItems(
               context.appLocalizations,

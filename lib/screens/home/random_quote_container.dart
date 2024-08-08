@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/shared/widgets/quote_card.dart';
@@ -27,7 +26,7 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
         switch (connectionState) {
           case ConnectionState.none:
             return Text(
-              AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+              context.appLocalizations.noDatabaseConnectionMessage,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
@@ -45,12 +44,12 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
             );
           case ConnectionState.done:
             if (snapshot.hasError) {
-              return Text(AppLocalizations.of(context)!.errorOccurred);
+              return Text(context.appLocalizations.errorOccurred);
             }
             final quote = snapshot.data;
 
             if (quote == null) {
-              return Text(AppLocalizations.of(context)!.noQuotesAddedYet);
+              return Text(context.appLocalizations.noQuotesAddedYet);
             } else {
               return Column(
                 mainAxisSize: MainAxisSize.min,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/string_extension.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ final class _ThemeModeRadioListState extends State<ThemeModeRadioList> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            AppLocalizations.of(context)!.chooseThemeModeMessage,
+            context.appLocalizations.chooseThemeModeMessage,
             style: TextStyle(
               fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
             ),
@@ -38,7 +38,7 @@ final class _ThemeModeRadioListState extends State<ThemeModeRadioList> {
               }),
               selected: _themeModeGroupValue == themeMode,
               title: Text(
-                AppLocalizations.of(context)!
+                context.appLocalizations
                     .themeModeName(themeMode.name)
                     .toTitleCase(),
               ),

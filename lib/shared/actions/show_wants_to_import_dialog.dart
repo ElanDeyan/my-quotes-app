@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 
 Future<bool?> showWantsToImportDialog(BuildContext context) => showDialog<bool>(
       context: context,
@@ -7,20 +7,20 @@ Future<bool?> showWantsToImportDialog(BuildContext context) => showDialog<bool>(
         actions: [
           TextButton.icon(
             onPressed: () => Navigator.pop(context, false),
-            label: Text(AppLocalizations.of(context)!.cancel),
+            label: Text(context.appLocalizations.cancel),
           ),
           TextButton.icon(
             onPressed: () => Navigator.pop(context, true),
-            label: Text(AppLocalizations.of(context)!.restoreData),
+            label: Text(context.appLocalizations.restoreData),
           ),
         ],
         icon: const Icon(Icons.backup_outlined),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(AppLocalizations.of(context)!.restoreQuestion),
+            Text(context.appLocalizations.restoreQuestion),
             Text(
-              AppLocalizations.of(context)!.restoreAdvice,
+              context.appLocalizations.restoreAdvice,
             ),
           ],
         ),

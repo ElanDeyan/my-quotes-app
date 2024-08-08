@@ -1,8 +1,8 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/constants/tag_name_regexp.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 
 class TagNameField extends StatelessWidget {
   const TagNameField({
@@ -17,26 +17,26 @@ class TagNameField extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        labelText: AppLocalizations.of(context)!.tagName,
-        helperText: AppLocalizations.of(context)!.tagNameFieldHint,
+        labelText: context.appLocalizations.tagName,
+        helperText: context.appLocalizations.tagNameFieldHint,
         helperMaxLines: 3,
       ),
       controller: textEditingController,
       validator: (value) {
         if (value == null) {
-          return AppLocalizations.of(context)!.requiredFieldAlert;
+          return context.appLocalizations.requiredFieldAlert;
         }
 
         if (value.isBlank) {
-          return AppLocalizations.of(context)!.emptyOrBlankAlert;
+          return context.appLocalizations.emptyOrBlankAlert;
         }
 
         if (value.isNotNullOrBlank && value.contains(idSeparatorChar)) {
-          return AppLocalizations.of(context)!.disallowedCommasAlert;
+          return context.appLocalizations.disallowedCommasAlert;
         }
 
         if (value.isNotNullOrBlank && !tagNameRegExp.hasMatch(value)) {
-          return AppLocalizations.of(context)!.tagNameFieldRules;
+          return context.appLocalizations.tagNameFieldRules;
         }
 
         return null;

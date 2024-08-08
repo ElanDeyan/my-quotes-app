@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,7 @@ final class _ColorSchemePaletteRadioListState
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context)!.chooseColorPaletteMessage,
+              context.appLocalizations.chooseColorPaletteMessage,
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               ),
@@ -41,7 +41,7 @@ final class _ColorSchemePaletteRadioListState
                 }),
                 selected: _colorSchemePaletteGroupValue == colorSchemePalette,
                 title: Text(
-                  AppLocalizations.of(context)!
+                  context.appLocalizations
                       .colorPaletteName(colorSchemePalette.storageName),
                 ),
               ),

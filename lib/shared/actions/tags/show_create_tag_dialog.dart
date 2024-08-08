@@ -1,7 +1,7 @@
 import 'package:basics/basics.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/widgets/tag_name_field.dart';
 
 Future<String?>? showCreateTagDialog(
@@ -56,7 +56,7 @@ class _CreateTagDialogState extends State<CreateTagDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.createTag),
+      title: Text(context.appLocalizations.createTag),
       content: Form(
         key: _createTagFormKey,
         autovalidateMode: AutovalidateMode.always,
@@ -65,7 +65,7 @@ class _CreateTagDialogState extends State<CreateTagDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(AppLocalizations.of(context)!.cancel),
+          child: Text(context.appLocalizations.cancel),
         ),
         TextButton(
           onPressed: () {
@@ -76,7 +76,7 @@ class _CreateTagDialogState extends State<CreateTagDialog> {
               );
             }
           },
-          child: Text(AppLocalizations.of(context)!.save),
+          child: Text(context.appLocalizations.save),
         ),
       ],
     );

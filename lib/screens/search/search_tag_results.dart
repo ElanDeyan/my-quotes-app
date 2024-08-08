@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/tags/tag_actions.dart';
 
 class SearchTagResults extends StatelessWidget {
@@ -16,7 +16,7 @@ class SearchTagResults extends StatelessWidget {
         itemBuilder: (context, index) => ListTile(
           title: Text(searchResults[index].name),
           trailing: PopupMenuButton(
-            tooltip: AppLocalizations.of(context)!.tagActionsPopupButtonTooltip,
+            tooltip: context.appLocalizations.tagActionsPopupButtonTooltip,
             itemBuilder: (context) =>
                 TagActions.popupMenuItems(context, searchResults[index]),
           ),

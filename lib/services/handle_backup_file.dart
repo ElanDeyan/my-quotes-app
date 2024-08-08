@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/string_to_color_pallete.dart';
 import 'package:my_quotes/helpers/string_to_theme_mode.dart';
 import 'package:my_quotes/repository/user_preferences_interfaces.dart';
@@ -53,7 +53,7 @@ Future<void> handleBackupFile(BuildContext context, XFile? file) async {
         showToast(
           context,
           child: PillChip(
-            label: Text(AppLocalizations.of(context)!.backupFileParseError),
+            label: Text(context.appLocalizations.backupFileParseError),
           ),
         );
       }

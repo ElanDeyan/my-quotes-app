@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_tag_delegate.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
@@ -17,24 +17,24 @@ class TagsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.tags),
+        title: Text(context.appLocalizations.tags),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            tooltip: AppLocalizations.of(context)!.navigationSearchTag,
+            tooltip: context.appLocalizations.navigationSearchTag,
             onPressed: () => showTagSearch(
               context,
               SearchTagDelegate(
                 context: context,
                 keyboardType: TextInputType.text,
                 searchFieldLabel:
-                    AppLocalizations.of(context)!.navigationSearchLabel,
+                    context.appLocalizations.navigationSearchLabel,
               ),
             ),
           ),
         ],
         leading: IconButton(
-          tooltip: AppLocalizations.of(context)!.navigationBack,
+          tooltip: context.appLocalizations.navigationBack,
           icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () => context.canPop()
               ? context.pop(context)
@@ -42,7 +42,7 @@ class TagsScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: AppLocalizations.of(context)!.navigationAddTag,
+        tooltip: context.appLocalizations.navigationAddTag,
         onPressed: () => createTag(context),
         child: const Icon(Icons.new_label),
       ),
@@ -55,7 +55,7 @@ class TagsScreen extends StatelessWidget {
               return switch (snapshot.connectionState) {
                 ConnectionState.none => Center(
                     child: Text(
-                      AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                      context.appLocalizations.noDatabaseConnectionMessage,
                     ),
                   ),
                 ConnectionState.active ||
@@ -65,8 +65,7 @@ class TagsScreen extends StatelessWidget {
                   ),
                 ConnectionState.done => snapshot.hasError
                     ? Center(
-                        child:
-                            Text(AppLocalizations.of(context)!.errorOccurred),
+                        child: Text(context.appLocalizations.errorOccurred),
                       )
                     : _tagsList(context, snapshot.data!),
               };
@@ -103,7 +102,7 @@ class TagsScreen extends StatelessWidget {
           },
         ),
         trailing: PopupMenuButton(
-          tooltip: AppLocalizations.of(context)!.tagActionsPopupButtonTooltip,
+          tooltip: context.appLocalizations.tagActionsPopupButtonTooltip,
           itemBuilder: (context) =>
               TagActions.popupMenuItems(context, tags[index]),
         ),

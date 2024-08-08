@@ -1,6 +1,5 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
@@ -25,7 +24,7 @@ final class QuoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.quoteInfo),
+        title: Text(context.appLocalizations.quoteInfo),
         leading: BackButton(
           onPressed: () => context.canPop()
               ? context.pop()
@@ -43,7 +42,7 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
     builder: (context) => AlertDialog(
       icon: const Icon(Icons.info),
       scrollable: true,
-      title: Text(AppLocalizations.of(context)!.quoteInfo),
+      title: Text(context.appLocalizations.quoteInfo),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
         child: QuoteScreenDialogBody(quoteId: quote.id!),
@@ -54,11 +53,11 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
             Navigator.pop(context);
             showUpdateQuoteDialog(context, quote);
           },
-          child: Text(AppLocalizations.of(context)!.edit),
+          child: Text(context.appLocalizations.edit),
         ),
         OutlinedButton(
           onPressed: () => context.pop(),
-          child: Text(AppLocalizations.of(context)!.ok),
+          child: Text(context.appLocalizations.ok),
         ),
       ],
     ),
@@ -75,7 +74,7 @@ class ViewQuotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context)!;
+    final appLocalizations = context.appLocalizations;
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(top: 8.0),
@@ -89,7 +88,7 @@ class ViewQuotePage extends StatelessWidget {
               switch (connectionState) {
                 case ConnectionState.none:
                   return Text(
-                    AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                    context.appLocalizations.noDatabaseConnectionMessage,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
@@ -114,8 +113,7 @@ class ViewQuotePage extends StatelessWidget {
                     final data = snapshot.data;
                     if (data == null) {
                       return Text(
-                        AppLocalizations.of(context)!
-                            .quoteNotFoundWithId(quoteId),
+                        context.appLocalizations.quoteNotFoundWithId(quoteId),
                       );
                     } else {
                       final quote = data;
@@ -144,7 +142,7 @@ class ViewQuotePage extends StatelessWidget {
                               icon: const Icon(Icons.star),
                               horizontalGap: 10,
                               label: Text(
-                                AppLocalizations.of(context)!
+                                context.appLocalizations
                                     .isFavorite(quote.isFavorite.toString()),
                               ),
                             ),
@@ -183,7 +181,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
               switch (connectionState) {
                 case ConnectionState.none:
                   return Text(
-                    AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                    context.appLocalizations.noDatabaseConnectionMessage,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
@@ -214,8 +212,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
                   final data = snapshot.data;
                   if (data == null) {
                     return Text(
-                      AppLocalizations.of(context)!
-                          .quoteNotFoundWithId(quoteId),
+                      context.appLocalizations.quoteNotFoundWithId(quoteId),
                     );
                   } else {
                     final quote = data;
@@ -226,18 +223,18 @@ class QuoteScreenDialogBody extends StatelessWidget {
                       children: [
                         Text('Id: ${quote.id}'),
                         Text(
-                          '${AppLocalizations.of(context)!.quoteFormFieldContent}: ${quote.content}',
+                          '${context.appLocalizations.quoteFormFieldContent}: ${quote.content}',
                         ),
                         Text(
-                          '${AppLocalizations.of(context)!.quoteFormFieldAuthor}: ${quote.author}',
+                          '${context.appLocalizations.quoteFormFieldAuthor}: ${quote.author}',
                         ),
                         if (quote.source.isNotNullOrBlank)
                           Text(
-                            '${AppLocalizations.of(context)!.quoteFormFieldSource}: ${quote.source!}',
+                            '${context.appLocalizations.quoteFormFieldSource}: ${quote.source!}',
                           ),
                         if (quote.sourceUri.isNotNullOrBlank)
                           Text(
-                            '${AppLocalizations.of(context)!.quoteFormFieldSourceUri}: ${quote.sourceUri}',
+                            '${context.appLocalizations.quoteFormFieldSourceUri}: ${quote.sourceUri}',
                           ),
                         Text(
                           quote
@@ -248,7 +245,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
                         ),
                         if (quote.tagsId.isEmpty)
                           Text(
-                            AppLocalizations.of(context)!.quoteWithoutTags,
+                            context.appLocalizations.quoteWithoutTags,
                           )
                         else
                           FutureBuilder(
@@ -260,18 +257,18 @@ class QuoteScreenDialogBody extends StatelessWidget {
                                   final tags = snapshot.data!;
                                   if (tags.isEmpty) {
                                     return Text(
-                                      AppLocalizations.of(context)!.noTagsFound,
+                                      context.appLocalizations.noTagsFound,
                                     );
                                   } else {
                                     final tagsNames =
                                         tags.map((tag) => tag.name).join(', ');
                                     return Text(
-                                      '${AppLocalizations.of(context)!.tags}: $tagsNames',
+                                      '${context.appLocalizations.tags}: $tagsNames',
                                     );
                                   }
                                 }
                                 return Text(
-                                  AppLocalizations.of(context)!.noTagsFound,
+                                  context.appLocalizations.noTagsFound,
                                 );
                               } else {
                                 return ShimmerPro.text(
@@ -286,7 +283,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
                             icon: const Icon(Icons.star),
                             horizontalGap: 10,
                             label: Text(
-                              AppLocalizations.of(context)!
+                              context.appLocalizations
                                   .isFavorite(quote.isFavorite.toString()),
                             ),
                           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
 
@@ -11,12 +11,12 @@ final class AddQuoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.addQuoteTitle),
+        title: Text(context.appLocalizations.addQuoteTitle),
         actions: [
           IconButton(
             onPressed: () => createTag(context),
             icon: const Icon(Icons.new_label),
-            tooltip: AppLocalizations.of(context)!.createTag,
+            tooltip: context.appLocalizations.createTag,
           ),
         ],
       ),
