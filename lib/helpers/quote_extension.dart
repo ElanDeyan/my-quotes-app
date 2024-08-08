@@ -73,7 +73,7 @@ extension QuoteExtension on Quote {
       'source': source.isNotNullOrBlank ? source : null,
       'sourceUri': sourceUri.isNotNullOrBlank ? sourceUri : null,
       'isFavorite': isFavorite,
-      'tags': tagsName,
+      'tags': tagsName.toList(),
     });
   }
 }
