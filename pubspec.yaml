@@ -34,6 +34,7 @@ dependencies:
   share_plus: ^9.0.0
   shared_preferences: ^2.2.3
   shimmer_pro: ^0.0.6
+  skeletonizer: ^1.4.2
   sqlite3: ^2.4.3
   sqlite3_flutter_libs: ^0.5.21
   timeago: ^3.6.1
