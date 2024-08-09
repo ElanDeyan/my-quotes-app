@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -22,6 +24,11 @@ final class UpdateQuoteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.appLocalizations.editQuoteTitle),
+        leading: BackButton(
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.goNamed(homeNavigationKey),
+        ),
         actions: [
           IconButton(
             onPressed: () => createTag(context),
@@ -46,27 +53,25 @@ class _UpdateQuoteScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = Provider.of<DatabaseProvider>(context, listen: false);
 
-    return SingleChildScrollView(
-      child: FutureBuilder(
-        future: database.getQuoteById(quoteId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.hasData) {
-            final maybeQuote = snapshot.data;
-            if (maybeQuote == null) {
-              return Text(
-                context.appLocalizations.quoteNotFoundWithId(quoteId),
-              );
-            } else {
-              return UpdateQuoteForm(quote: maybeQuote);
-            }
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
+    return FutureBuilder(
+      future: database.getQuoteById(quoteId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          final maybeQuote = snapshot.data;
+          if (maybeQuote == null) {
+            return Text(
+              context.appLocalizations.quoteNotFoundWithId(quoteId),
             );
+          } else {
+            return UpdateQuoteForm(quote: maybeQuote);
           }
-        },
-      ),
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }
@@ -108,12 +113,15 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm> with QuoteFormMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilder(
-      key: formKey,
-      onChanged: formKey.currentState?.validate,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      initialValue: quoteAsJson,
-      child: quoteFormBody(context, quoteForUpdate: widget.quote),
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: FormBuilder(
+        key: formKey,
+        onChanged: formKey.currentState?.validate,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        initialValue: quoteAsJson,
+        child: quoteFormBody(context, quoteForUpdate: widget.quote),
+      ),
     );
   }
 }

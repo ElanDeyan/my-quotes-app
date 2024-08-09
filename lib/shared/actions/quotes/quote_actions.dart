@@ -8,9 +8,7 @@ import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/shared/actions/copy_to_clipboard.dart';
 import 'package:my_quotes/shared/actions/quotes/delete_quote.dart';
-import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_share_actions.dart';
-import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -106,7 +104,7 @@ enum QuoteActions {
               quoteByIdNavigationKey,
               pathParameters: {'id': '${quote.id}'},
             ),
-        QuoteActions.create => () => showAddQuoteDialog(context),
+        QuoteActions.create => () => context.pushNamed(addQuoteNavigationKey),
         QuoteActions.info => () => showQuoteInfoDialog(context, quote),
         QuoteActions.delete => () => deleteQuote(context, quote),
         QuoteActions.copy => () =>
@@ -120,7 +118,10 @@ enum QuoteActions {
               quote,
             ),
         QuoteActions.goToLink => () => launchUrl(Uri.parse(quote.sourceUri!)),
-        QuoteActions.update => () => showUpdateQuoteDialog(context, quote)
+        QuoteActions.update => () => context.pushNamed(
+              updateQuoteNavigationKey,
+              pathParameters: {'id': quote.id.toString()},
+            ),
       };
 
   static PopupMenuButton<Quote> popupMenuButton(

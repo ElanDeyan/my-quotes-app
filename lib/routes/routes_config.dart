@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/routes/routes_names.dart';
+import 'package:my_quotes/screens/add_quote/add_quote_screen.dart';
 import 'package:my_quotes/screens/error_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/main/main_app_screen.dart';
@@ -9,6 +10,7 @@ import 'package:my_quotes/screens/quotes_with_tag.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
 import 'package:my_quotes/screens/settings/settings_screen.dart';
 import 'package:my_quotes/screens/tags_screen.dart';
+import 'package:my_quotes/screens/update_quote/update_quote_screen.dart';
 
 final routesConfig = GoRouter(
   errorBuilder: (context, state) => const ErrorScreen(),
@@ -36,6 +38,18 @@ final routesConfig = GoRouter(
             initialLocationIndex: 1,
           ),
           routes: [
+            GoRoute(
+              path: 'add',
+              name: addQuoteNavigationKey,
+              builder: (context, state) => const AddQuoteScreen(),
+            ),
+            GoRoute(
+              path: 'update/:id',
+              name: updateQuoteNavigationKey,
+              builder: (context, state) => UpdateQuoteScreen(
+                quoteId: int.parse(state.pathParameters['id']!),
+              ),
+            ),
             GoRoute(
               path: 'quote/:id',
               name: quoteByIdNavigationKey,

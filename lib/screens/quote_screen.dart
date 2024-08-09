@@ -5,7 +5,6 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
-import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/shared/widgets/quote_card.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -51,7 +50,10 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
         OutlinedButton(
           onPressed: () {
             Navigator.pop(context);
-            showUpdateQuoteDialog(context, quote);
+            context.pushReplacementNamed(
+              updateQuoteNavigationKey,
+              pathParameters: {'id': quote.id.toString()},
+            );
           },
           child: Text(context.appLocalizations.edit),
         ),
