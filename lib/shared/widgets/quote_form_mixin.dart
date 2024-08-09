@@ -241,7 +241,7 @@ mixin QuoteFormMixin {
                   ),
                 ),
                 itemsVisibility: ShowedItemsVisibility.onType,
-                itemBuilder: (tag, _) => Padding(
+                itemBuilder: (tag, index, isPicked) => Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(tag.name),
                 ),
