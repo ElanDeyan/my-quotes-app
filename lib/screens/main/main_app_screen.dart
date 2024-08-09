@@ -6,7 +6,7 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
-import 'package:my_quotes/screens/my_quotes_screen.dart';
+import 'package:my_quotes/screens/my_quotes/my_quotes_screen.dart';
 import 'package:my_quotes/screens/search/search_quote_delegate.dart';
 import 'package:my_quotes/services/file_picker.dart';
 import 'package:my_quotes/services/generate_backup_file.dart';
