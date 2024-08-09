@@ -186,5 +186,6 @@
   "provideFeedback": "Provide feedback",
   "feedbackInstructions": "Navigate through the app and type below what do you want.",
   "feedbackTextLabel": "Your feedback",
-  "feedbackSend": "Send feedback"
+  "feedbackSend": "Send feedback",
+  "successfulOperation": "Successful operation!"
 }

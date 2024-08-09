@@ -184,5 +184,6 @@
   "provideFeedback": "Feedback",
   "feedbackInstructions": "Navegue até a tela desejada e escreva abaixo o que quer que melhore",
   "feedbackTextLabel": "Seu feedback",
-  "feedbackSend": "Enviar feedback"
+  "feedbackSend": "Enviar feedback",
+  "successfulOperation": "Operação realizada com sucesso!"
 }

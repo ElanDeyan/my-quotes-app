@@ -60,10 +60,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
     final appPreferences = Provider.of<AppPreferences>(context, listen: false);
     final backupFile = await generateBackupFile(database, appPreferences);
 
-    await saveJsonFile(
-      backupFile,
-      'MyQuotes-Backup-${DateTime.now()}',
-    );
+    await saveJsonFile(backupFile);
   }
 
   Future<void> _handleQuoteFile(BuildContext context) async {
