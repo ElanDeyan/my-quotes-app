@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,7 @@ final class _LanguageRadioListState extends State<LanguageRadioList> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context)!.chooseAppLanguage,
+              context.appLocalizations.chooseAppLanguage,
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               ),
@@ -39,8 +40,7 @@ final class _LanguageRadioListState extends State<LanguageRadioList> {
                   preferences.language = value;
                 }),
                 selected: _languageGroupValue == language,
-                title:
-                    Text(AppLocalizations.of(context)!.languageName(language)),
+                title: Text(context.appLocalizations.languageName(language)),
               ),
           ],
         ),

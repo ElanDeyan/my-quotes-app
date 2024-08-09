@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ final class MyQuotesScreen extends StatelessWidget {
           switch (connectionState) {
             case ConnectionState.none:
               return Text(
-                AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                context.appLocalizations.noDatabaseConnectionMessage,
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               );
@@ -51,7 +51,7 @@ final class MyQuotesScreen extends StatelessWidget {
               final data = snapshot.data!;
               if (data case <Quote>[]) {
                 return Center(
-                  child: Text(AppLocalizations.of(context)!.noQuotesAddedYet),
+                  child: Text(context.appLocalizations.noQuotesAddedYet),
                 );
               }
               return ListView.builder(
@@ -84,6 +84,9 @@ class QuoteTileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final databaseProvider =
+        Provider.of<DatabaseProvider>(context, listen: false);
+
     return Card.outlined(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusDirectional.circular(10),
@@ -120,9 +123,11 @@ class QuoteTileCard extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
         trailing: PopupMenuButton(
-          tooltip: AppLocalizations.of(context)!.quoteActionsPopupButtonTooltip,
+          tooltip: context.appLocalizations.quoteActionsPopupButtonTooltip,
           position: PopupMenuPosition.under,
           itemBuilder: (context) => QuoteActions.popupMenuItems(
+            context.appLocalizations,
+            databaseProvider,
             context,
             data,
             actions: QuoteActions.values.where(

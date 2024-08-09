@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/iterable_extension.dart';
+import 'package:my_quotes/repository/user_preferences_interfaces.dart';
 import 'package:share_plus/share_plus.dart';
 
 typedef UserPreferencesData = ({
@@ -15,6 +17,12 @@ typedef BackupData = ({
   List<Quote> quotes
 });
 
+final _themeModeValues =
+    ThemeModeRepository.values.map((themeMode) => themeMode.name);
+final _colorSchemePaletteValues = ColorSchemePaletteRepository.values
+    .map((colorSchemePalette) => colorSchemePalette.storageName);
+final _languageValues = LanguageRepository.values;
+
 Future<BackupData?> parseBackupFile(XFile file) async {
   late final dynamic decodedFile;
 
@@ -26,7 +34,7 @@ Future<BackupData?> parseBackupFile(XFile file) async {
 
   if (decodedFile
       case {
-        "preferences": final Map<String, dynamic> preferencesMap,
+        "preferences": final Map<String, Object?> preferencesMap,
         "tags": final List<dynamic> tags,
         "quotes": final List<dynamic> quotes,
       }) {
@@ -39,7 +47,10 @@ Future<BackupData?> parseBackupFile(XFile file) async {
           "themeMode": final String themeMode,
           "colorPalette": final String colorPalette,
           "language": final String language,
-        }) {
+        }
+        when _themeModeValues.contains(themeMode) &&
+            _colorSchemePaletteValues.contains(colorPalette) &&
+            _languageValues.contains(language)) {
       userPreferences = (
         themeMode: themeMode,
         colorPalette: colorPalette,
@@ -53,7 +64,7 @@ Future<BackupData?> parseBackupFile(XFile file) async {
       tagsList = tags
           .map(
             (item) => Tag(
-              id: int.parse((item as Map<String, dynamic>).keys.single),
+              id: int.parse((item as Map<String, Object?>).keys.single),
               name: item.values.single.toString(),
             ),
           )
@@ -80,29 +91,39 @@ Future<BackupData?> parseBackupFile(XFile file) async {
 
 bool _validateTagsData(List<dynamic> data) {
   return data.every(
-    (item) =>
-        item is Map<String, dynamic> &&
-        item.keys.length == 1 &&
-        int.tryParse(item.keys.single) != null,
-  );
+        (item) =>
+            item is Map<String, Object?> &&
+            item.keys.length == 1 &&
+            int.tryParse(item.keys.single) != null &&
+            item.values.every((value) => value is String),
+      ) &&
+      data
+          .map((item) => int.parse((item as Map<String, Object?>).keys.single))
+          .isMadeOfUniques;
 }
 
 bool _validateQuotesData(List<dynamic> data) {
-  if (!data.every((item) => item is Map<String, dynamic>)) {
+  if (!data.every((item) => item is Map<String, Object?>)) {
+    return false;
+  }
+
+  if (!data
+      .map((element) => (element as Map<String, Object?>)['id'])
+      .isMadeOfUniques) {
     return false;
   }
 
   for (final item in data) {
     if (item
         case {
-          "id": final int _,
-          "content": final String _,
-          "author": final String _,
-          "source": final String? _,
-          "sourceUri": final String? _,
-          "isFavorite": final bool _,
-          "createdAt": final int _,
-          "tags": final String? _,
+          "id": int _,
+          "content": String _,
+          "author": String _,
+          "source": String? _,
+          "sourceUri": String? _,
+          "isFavorite": bool _,
+          "createdAt": int _,
+          "tags": String? _,
         }) {
       return true;
     }
@@ -113,6 +134,6 @@ bool _validateQuotesData(List<dynamic> data) {
 
 List<Quote> _createQuotesFromJson(List<dynamic> data) {
   return data
-      .map((item) => Quote.fromJson(item as Map<String, dynamic>))
+      .map((item) => Quote.fromJson(item as Map<String, Object?>))
       .toList();
 }

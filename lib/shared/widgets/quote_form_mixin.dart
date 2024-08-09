@@ -1,18 +1,19 @@
 import 'dart:async';
 
+import 'package:basics/basics.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
+import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/enums/form_types.dart';
-import 'package:my_quotes/helpers/iterable_extension.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/shared/actions/show_toast.dart';
+import 'package:my_quotes/shared/widgets/pill_chip.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,7 @@ mixin QuoteFormMixin {
               name: 'content',
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText: AppLocalizations.of(context)!.quoteFormFieldContent,
+                labelText: context.appLocalizations.quoteFormFieldContent,
               ),
               maxLines: null,
               smartQuotesType: SmartQuotesType.enabled,
@@ -46,8 +47,8 @@ mixin QuoteFormMixin {
               enableSuggestions: true,
               smartDashesType: SmartDashesType.enabled,
               validator: FormBuilderValidators.required(
-                errorText: AppLocalizations.of(context)!.nonEmptyField(
-                  AppLocalizations.of(context)!.quoteFormFieldContent,
+                errorText: context.appLocalizations.nonEmptyField(
+                  context.appLocalizations.quoteFormFieldContent,
                 ),
               ),
               valueTransformer: (value) => value?.trim(),
@@ -63,9 +64,8 @@ mixin QuoteFormMixin {
               name: 'source',
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText: AppLocalizations.of(context)!.quoteFormFieldSource,
-                hintText:
-                    AppLocalizations.of(context)!.quoteFormFieldSourceHintText,
+                labelText: context.appLocalizations.quoteFormFieldSource,
+                hintText: context.appLocalizations.quoteFormFieldSourceHintText,
               ),
               keyboardType: TextInputType.text,
               enableSuggestions: true,
@@ -80,10 +80,9 @@ mixin QuoteFormMixin {
               name: 'sourceUri',
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText:
-                    AppLocalizations.of(context)!.quoteFormFieldSourceUri,
-                hintText: AppLocalizations.of(context)!
-                    .quoteFormFieldSourceUriHintText,
+                labelText: context.appLocalizations.quoteFormFieldSourceUri,
+                hintText:
+                    context.appLocalizations.quoteFormFieldSourceUriHintText,
               ),
               validator: FormBuilderValidators.url(),
               enableSuggestions: true,
@@ -97,8 +96,7 @@ mixin QuoteFormMixin {
             ),
             FormBuilderCheckbox(
               name: 'isFavorite',
-              title:
-                  Text(AppLocalizations.of(context)!.quoteFormFieldIsFavorite),
+              title: Text(context.appLocalizations.quoteFormFieldIsFavorite),
               shape: StarBorder(
                 squash: .5,
                 innerRadiusRatio: .5,
@@ -127,7 +125,7 @@ mixin QuoteFormMixin {
   }
 
   FormBuilderTextField _authorTextField(BuildContext context) {
-    final fieldName = AppLocalizations.of(context)!.quoteFormFieldAuthor;
+    final fieldName = context.appLocalizations.quoteFormFieldAuthor;
     return formType != FormTypes.add
         ? FormBuilderTextField(
             name: 'author',
@@ -140,7 +138,7 @@ mixin QuoteFormMixin {
             enableSuggestions: true,
             smartDashesType: SmartDashesType.enabled,
             validator: FormBuilderValidators.required(
-              errorText: AppLocalizations.of(context)!.nonEmptyField(
+              errorText: context.appLocalizations.nonEmptyField(
                 fieldName,
               ),
             ),
@@ -152,14 +150,13 @@ mixin QuoteFormMixin {
               border: const OutlineInputBorder(),
               labelText: fieldName,
             ),
-            initialValue:
-                AppLocalizations.of(context)!.quoteFormFieldAnonymAuthor,
+            initialValue: context.appLocalizations.quoteFormFieldAnonymAuthor,
             smartQuotesType: SmartQuotesType.enabled,
             enableSuggestions: true,
             smartDashesType: SmartDashesType.enabled,
             keyboardType: TextInputType.name,
             validator: FormBuilderValidators.required(
-              errorText: AppLocalizations.of(context)!.nonEmptyField(fieldName),
+              errorText: context.appLocalizations.nonEmptyField(fieldName),
             ),
             valueTransformer: (value) => value?.trim(),
           );
@@ -189,9 +186,9 @@ mixin QuoteFormMixin {
               return MultipleSearchSelection(
                 searchField: TextField(
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.quoteFormFieldTags,
-                    hintText: AppLocalizations.of(context)!
-                        .quoteFormFieldTagsHintText,
+                    labelText: context.appLocalizations.quoteFormFieldTags,
+                    hintText:
+                        context.appLocalizations.quoteFormFieldTagsHintText,
                     border: const OutlineInputBorder(),
                   ),
                   smartDashesType: SmartDashesType.enabled,
@@ -204,14 +201,14 @@ mixin QuoteFormMixin {
                 clearSearchFieldOnSelect: true,
                 noResultsWidget: Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Text(AppLocalizations.of(context)!.noResultsFound),
+                  child: Text(context.appLocalizations.noResultsFound),
                 ),
                 showSelectAllButton: false,
                 showClearAllButton: false,
-                initialPickedItems: <Tag>[
+                initialPickedItems: <Tag>{
                   ...?snapshot.data!.last,
                   ..._pickedItems,
-                ].uniques.toList(),
+                }.toList(),
                 onPickedChange: (tags) => _pickedItems
                   ..clear()
                   ..addAll(tags),
@@ -244,7 +241,7 @@ mixin QuoteFormMixin {
                   ),
                 ),
                 itemsVisibility: ShowedItemsVisibility.onType,
-                itemBuilder: (tag, _) => Padding(
+                itemBuilder: (tag, index, isPicked) => Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(tag.name),
                 ),
@@ -265,8 +262,8 @@ mixin QuoteFormMixin {
     Quote? quoteForUpdate,
   ) {
     final actionButtonText = formType == FormTypes.update
-        ? AppLocalizations.of(context)!.quoteFormActionButtonEdit
-        : AppLocalizations.of(context)!.quoteFormActionButtonAdd;
+        ? context.appLocalizations.quoteFormActionButtonEdit
+        : context.appLocalizations.quoteFormActionButtonAdd;
 
     final actionButtonIcon = formType == FormTypes.update
         ? const Icon(Icons.save_outlined)
@@ -284,19 +281,23 @@ mixin QuoteFormMixin {
 
             formValue.putIfAbsent(
               'tags',
-              () => multipleTagSearchController
-                  .getPickedItems()
-                  .map((tag) => tag.id)
-                  .nonNulls
-                  .join(idSeparatorChar),
+              () {
+                final value = multipleTagSearchController
+                    .getPickedItems()
+                    .map((tag) => tag.id)
+                    .nonNulls
+                    .join(idSeparatorChar);
+
+                return value.isNullOrBlank ? '' : value;
+              },
             );
 
             final Quote quoteFromForm;
 
             if (formType == FormTypes.update) {
               quoteFromForm = Quote.fromJson(formValue).copyWith(
-                id: Value(quoteForUpdate!.id),
-                createdAt: Value(quoteForUpdate.createdAt),
+                id: Value.absentIfNull(quoteForUpdate!.id),
+                createdAt: Value.absentIfNull(quoteForUpdate.createdAt),
               );
             } else {
               quoteFromForm = Quote.fromJson(formValue);
@@ -306,32 +307,30 @@ mixin QuoteFormMixin {
               () {
                 final result = formType == FormTypes.update
                     ? database.updateQuote(quoteFromForm)
-                    : database.addQuote(quoteFromForm);
+                    : database.createQuote(quoteFromForm);
 
                 result.then((value) {
                   if (value case true || int _) {
-                    final successfulMessage = formType == FormTypes.update
-                        ? AppLocalizations.of(context)!.quoteFormSuccessfulEdit
-                        : AppLocalizations.of(context)!.quoteFormSuccessfulAdd;
-                    FToast().init(context).showToast(
-                          child: Chip(
-                            label: Text(
-                              successfulMessage,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(99),
-                            ),
-                          ),
-                        );
+                    if (context.mounted) {
+                      final successfulMessage = formType == FormTypes.update
+                          ? context.appLocalizations.quoteFormSuccessfulEdit
+                          : context.appLocalizations.quoteFormSuccessfulAdd;
+                      showToast(
+                        context,
+                        child: PillChip(label: Text(successfulMessage)),
+                      );
+                    }
                   } else {
-                    FToast().init(context).showToast(
-                          child: Chip(
-                            label: const Text('Error'),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(99),
-                            ),
+                    if (context.mounted) {
+                      showToast(
+                        context,
+                        child: PillChip(
+                          label: Text(
+                            context.appLocalizations.quoteFormError,
                           ),
-                        );
+                        ),
+                      );
+                    }
                   }
                 });
               },

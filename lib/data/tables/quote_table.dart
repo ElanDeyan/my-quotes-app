@@ -12,11 +12,10 @@ class QuoteTable extends Table {
 
   TextColumn get sourceUri => text().nullable()();
 
-  BoolColumn get isFavorite =>
-      boolean().nullable().withDefault(const Constant(false))();
+  BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
 
   DateTimeColumn get createdAt =>
-      dateTime().nullable().withDefault(Constant(DateTime.now()))();
+      dateTime().nullable().withDefault(currentDateAndTime)();
 
   TextColumn get tags => text().nullable()();
 }

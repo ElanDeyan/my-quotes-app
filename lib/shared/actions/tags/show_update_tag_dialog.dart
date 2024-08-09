@@ -1,58 +1,80 @@
-import 'package:basics/basics.dart';
+import 'package:basics/string_basics.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/nullable_extension.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/shared/widgets/tag_name_field.dart';
 
 Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
-  final textEditingController =
-      TextEditingController.fromValue(TextEditingValue(text: tag.name));
-  final updateTagFormKey = GlobalKey<FormState>();
   return showDialog<String?>(
     context: context,
-    builder: (context) => AlertDialog(
-      title: Text(AppLocalizations.of(context)!.updateTag),
+    builder: (context) => UpdateTagDialog(
+      tagName: tag.name,
+    ),
+  );
+}
+
+class UpdateTagDialog extends StatefulWidget {
+  const UpdateTagDialog({
+    super.key,
+    required this.tagName,
+  });
+
+  final String tagName;
+
+  @override
+  State<UpdateTagDialog> createState() => _UpdateTagDialogState();
+}
+
+class _UpdateTagDialogState extends State<UpdateTagDialog> {
+  final _updateTagFormKey = GlobalKey<FormState>();
+
+  late final TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.tagName.isNotNullOrBlank) {
+      _textEditingController = TextEditingController.fromValue(
+        TextEditingValue(text: widget.tagName),
+      );
+    } else {
+      _textEditingController = TextEditingController();
+    }
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(context.appLocalizations.updateTag),
       content: Form(
-        key: updateTagFormKey,
+        key: _updateTagFormKey,
         autovalidateMode: AutovalidateMode.always,
-        child: TextFormField(
-          controller: textEditingController,
-          decoration: InputDecoration(
-            labelText: AppLocalizations.of(context)!.newTagName,
-            border: const OutlineInputBorder(),
-          ),
-          validator: (value) {
-            if (value.isNull) {
-              return AppLocalizations.of(context)!.requiredFieldAlert;
-            }
-
-            if (value?.isBlank ?? true) {
-              return AppLocalizations.of(context)!.emptyOrBlankAlert;
-            }
-
-            if (value.isNotNullOrBlank && value!.contains(idSeparatorChar)) {
-              return AppLocalizations.of(context)!.disallowedCommasAlert;
-            }
-
-            return null;
-          },
-        ),
+        child: TagNameField(textEditingController: _textEditingController),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(AppLocalizations.of(context)!.delete),
+          child: Text(context.appLocalizations.delete),
         ),
         TextButton(
           onPressed: () {
-            if (updateTagFormKey.currentState?.validate() ?? false) {
-              Navigator.pop(context, textEditingController.text);
+            if (_updateTagFormKey.currentState?.validate() ?? false) {
+              Navigator.pop(
+                context,
+                removeDiacritics(_textEditingController.text.trim()),
+              );
             }
           },
-          child: Text(AppLocalizations.of(context)!.save),
+          child: Text(context.appLocalizations.save),
         ),
       ],
-    ),
-  );
+    );
+  }
 }

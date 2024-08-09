@@ -78,6 +78,7 @@
   "noResultsFound": "No results found",
   "addQuoteTitle": "Add quote",
   "editQuoteTitle": "Edit quote",
+  "quoteFormError": "An error occurred",
   "quoteFormFieldContent": "Content",
   "quoteFormFieldAuthor": "Author",
   "quoteFormFieldAnonymAuthor": "Anonym",
@@ -104,6 +105,8 @@
   },
   "created": "Created!",
   "tagName": "Tag name",
+  "tagNameFieldHint": "Characters with accents will be replaced with equivalents",
+  "tagNameFieldRules":"Tag name should have only letters, digits, dashes or underlines",
   "requiredFieldAlert": "Required field",
   "emptyOrBlankAlert": "Can''t have only blank spaces",
   "disallowedCommasAlert": "Commas aren''t allowed",
@@ -144,13 +147,13 @@
   "updated": "Updated!",
   "isFavorite": "{isFavorite, select, other{Invalid} true{Is favorited.} false{Is not favorited.}}",
   "@isFavorite": {
-      "description": "Is favorite",
-      "placeholders": {
-          "isFavorite": {
-            "type": "String",
-            "example":"1" 
-          }
+    "description": "Is favorite",
+    "placeholders": {
+      "isFavorite": {
+        "type": "String",
+        "example": "1"
       }
+    }
   },
   "noQuotesAddedYet": "You don''t have any quotes yet.",
   "noTagsAddedYet": "You don''t have any tags yet.",
@@ -161,11 +164,15 @@
   "@quoteShareSeeMore": {
     "description": "Quote share see more",
     "placeholders": {
-      "url":{
+      "url": {
         "type": "String"
       }
     }
   },
+  "parseQuoteFileErrorMessageNotJsonFormat": "The content is not a JSON data",
+  "parseQuoteFileErrorMessageNotJsonMap": "The content is not a JSON map",
+  "parseQuoteFileErrorMessageNotCaseFields": "JSON error: Data mismatch. Check fields and types",
+  "parseQuoteFileErrorMessageNoChosenFile": "No file selected",
   "addFromFile": "Upload from file",
   "quoteFileParseError": "An error occurred when parsing the file",
   "backupFileParseError": "An error occurred when parsing the backup file",
@@ -179,5 +186,6 @@
   "provideFeedback": "Provide feedback",
   "feedbackInstructions": "Navigate through the app and type below what do you want.",
   "feedbackTextLabel": "Your feedback",
-  "feedbackSend": "Send feedback"
+  "feedbackSend": "Send feedback",
+  "successfulOperation": "Successful operation!"
 }

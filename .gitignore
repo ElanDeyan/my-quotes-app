@@ -11,6 +11,10 @@
 migrate_working_dir/
 
 *.env
+env.g.dart
+metrics/
+
+test/example.dart
 
 # IntelliJ related
 *.iml

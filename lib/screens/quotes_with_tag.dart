@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class QuotesWithTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.quotesWithThisTag),
+        title: Text(context.appLocalizations.quotesWithThisTag),
         leading: BackButton(
           onPressed: () => context.canPop()
               ? context.pop()
@@ -31,7 +31,7 @@ class QuotesWithTag extends StatelessWidget {
               case ConnectionState.none:
                 return Center(
                   child: Text(
-                    AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                    context.appLocalizations.noDatabaseConnectionMessage,
                   ),
                 );
 
@@ -44,8 +44,7 @@ class QuotesWithTag extends StatelessWidget {
                 if (!snapshot.hasError) {
                   if (snapshot.data!.isEmpty) {
                     return Center(
-                      child:
-                          Text(AppLocalizations.of(context)!.noQuotesWithTag),
+                      child: Text(context.appLocalizations.noQuotesWithTag),
                     );
                   } else {
                     final data = snapshot.data!;
@@ -65,14 +64,14 @@ class QuotesWithTag extends StatelessWidget {
                         ),
                         onTap: () => context.goNamed(
                           quoteByIdNavigationKey,
-                          pathParameters: {'id': '${data[index].id!}'},
+                          pathParameters: {'id': '${data[index].id}'},
                         ),
                       ),
                     );
                   }
                 } else {
                   return Center(
-                    child: Text(AppLocalizations.of(context)!.errorOccurred),
+                    child: Text(context.appLocalizations.errorOccurred),
                   );
                 }
             }

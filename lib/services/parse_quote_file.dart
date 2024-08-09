@@ -1,20 +1,28 @@
 import 'dart:convert';
 
+import 'package:my_quotes/constants/enums/parse_quote_file_errors.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:share_plus/share_plus.dart';
 
 typedef QuoteAndTags = ({Quote quote, List<String> tags});
+typedef QuoteFileParsingResult = ({
+  QuoteAndTags? data,
+  ParseQuoteFileErrors? error
+});
 
-Future<QuoteAndTags?> parseQuoteFile(
+Future<QuoteFileParsingResult> parseQuoteFile(
   XFile file,
 ) async {
-  late final dynamic decodedFile;
+  late final Object? decodedFile;
 
   try {
-    decodedFile =
-        jsonDecode(utf8.decode((await file.readAsString()).codeUnits));
+    decodedFile = jsonDecode(utf8.decode(await file.readAsBytes()));
   } catch (_) {
-    return null;
+    return (data: null, error: ParseQuoteFileErrors.notJsonFormat);
+  }
+
+  if (decodedFile is! Map<String, Object?>) {
+    return (data: null, error: ParseQuoteFileErrors.notJsonMap);
   }
 
   if (decodedFile
@@ -24,9 +32,9 @@ Future<QuoteAndTags?> parseQuoteFile(
         "source": String? _,
         "sourceUri": String? _,
         "isFavorite": bool _,
-        "tags": final List<dynamic>? tags,
-      }) {
-    final jsonFile = decodedFile as Map<String, dynamic>;
+        "tags": final List<Object?>? tags,
+      } when tags?.every((item) => item is String) ?? true) {
+    final jsonFile = decodedFile;
 
     jsonFile.update(
       "tags",
@@ -37,9 +45,12 @@ Future<QuoteAndTags?> parseQuoteFile(
     final jsonFileAsQuote = Quote.fromJson(jsonFile);
 
     return (
-      quote: jsonFileAsQuote,
-      tags: tags?.cast<String>() ?? const <String>[],
+      data: (
+        quote: jsonFileAsQuote,
+        tags: tags?.map((item) => item.toString()).toList() ?? const <String>[],
+      ),
+      error: null
     );
   }
-  return null;
+  return (data: null, error: ParseQuoteFileErrors.notCaseFieldsAndTypes);
 }

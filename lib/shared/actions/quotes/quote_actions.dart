@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/quote_screen.dart';
@@ -11,6 +12,7 @@ import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_share_actions.dart';
 import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
+import 'package:my_quotes/states/database_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum QuoteActions {
@@ -93,6 +95,8 @@ enum QuoteActions {
       actions.where(quote.canPerform).toList();
 
   static void Function() actionCallback(
+    AppLocalizations appLocalizations,
+    DatabaseProvider databaseProvider,
     BuildContext context,
     QuoteActions action,
     Quote quote,
@@ -100,31 +104,42 @@ enum QuoteActions {
       switch (action) {
         QuoteActions.readMore => () => context.pushNamed(
               quoteByIdNavigationKey,
-              pathParameters: {'id': '${quote.id!}'},
+              pathParameters: {'id': '${quote.id}'},
             ),
         QuoteActions.create => () => showAddQuoteDialog(context),
         QuoteActions.info => () => showQuoteInfoDialog(context, quote),
         QuoteActions.delete => () => deleteQuote(context, quote),
         QuoteActions.copy => () =>
-            copyToClipBoard(context, quote.shareableFormatOf(context)),
+            copyToClipBoard(context, quote.shareableFormatOf(appLocalizations)),
         QuoteActions.copyLink => () =>
             copyToClipBoard(context, quote.sourceUri ?? ''),
-        QuoteActions.share => () => showQuoteShareActions(context, quote),
+        QuoteActions.share => () => showQuoteShareActions(
+              appLocalizations,
+              databaseProvider,
+              context,
+              quote,
+            ),
         QuoteActions.goToLink => () => launchUrl(Uri.parse(quote.sourceUri!)),
         QuoteActions.update => () => showUpdateQuoteDialog(context, quote)
       };
 
   static PopupMenuButton<Quote> popupMenuButton(
+    AppLocalizations appLocalizations,
+    DatabaseProvider databaseProvider,
     BuildContext context,
     Quote quote,
   ) =>
       PopupMenuButton(
-        tooltip: AppLocalizations.of(context)!.quoteActionsPopupButtonTooltip,
+        tooltip: context.appLocalizations.quoteActionsPopupButtonTooltip,
         position: PopupMenuPosition.under,
-        itemBuilder: (context) => popupMenuItems(context, quote).toList(),
+        itemBuilder: (context) =>
+            popupMenuItems(appLocalizations, databaseProvider, context, quote)
+                .toList(),
       );
 
   static List<PopupMenuItem<Quote>> popupMenuItems(
+    AppLocalizations appLocalizations,
+    DatabaseProvider databaseProvider,
     BuildContext context,
     Quote quote, {
     Iterable<QuoteActions> actions = QuoteActions.values,
@@ -133,12 +148,18 @@ enum QuoteActions {
           .map(
             (action) => PopupMenuItem(
               value: quote,
-              onTap: QuoteActions.actionCallback(context, action, quote),
+              onTap: QuoteActions.actionCallback(
+                appLocalizations,
+                databaseProvider,
+                context,
+                action,
+                quote,
+              ),
               child: IconWithLabel(
                 icon: action.icon,
                 horizontalGap: 10,
                 label: Text(
-                  AppLocalizations.of(context)!.quoteActions(action.debugLabel),
+                  context.appLocalizations.quoteActions(action.debugLabel),
                 ),
               ),
             ),

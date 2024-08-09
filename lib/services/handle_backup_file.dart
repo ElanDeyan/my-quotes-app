@@ -1,13 +1,12 @@
-import 'dart:isolate';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/string_to_color_pallete.dart';
 import 'package:my_quotes/helpers/string_to_theme_mode.dart';
 import 'package:my_quotes/repository/user_preferences_interfaces.dart';
 import 'package:my_quotes/services/parse_backup_file.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
+import 'package:my_quotes/shared/actions/show_wants_to_import_dialog.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -16,37 +15,11 @@ import 'package:share_plus/share_plus.dart';
 
 Future<void> handleBackupFile(BuildContext context, XFile? file) async {
   if (file != null) {
-    final backupData = await (kIsWeb
-        ? parseBackupFile(file)
-        : Isolate.run(() => parseBackupFile(file)));
+    final backupData = await compute(parseBackupFile, file);
 
     if (backupData != null) {
       if (context.mounted) {
-        final wantsToImport = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            actions: [
-              TextButton.icon(
-                onPressed: () => Navigator.pop(context, false),
-                label: Text(AppLocalizations.of(context)!.cancel),
-              ),
-              TextButton.icon(
-                onPressed: () => Navigator.pop(context, true),
-                label: Text(AppLocalizations.of(context)!.restoreData),
-              ),
-            ],
-            icon: const Icon(Icons.backup_outlined),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(AppLocalizations.of(context)!.restoreQuestion),
-                Text(
-                  AppLocalizations.of(context)!.restoreAdvice,
-                ),
-              ],
-            ),
-          ),
-        );
+        final wantsToImport = await showWantsToImportDialog(context);
 
         if (wantsToImport ?? false) {
           if (context.mounted) {
@@ -71,11 +44,7 @@ Future<void> handleBackupFile(BuildContext context, XFile? file) async {
 
             final (quotes, tags) = (backupData.quotes, backupData.tags);
 
-            await database.clearAllQuotes();
-            await database.clearAllTags();
-
-            await database.restoreTags(tags);
-            await database.restoreQuotes(quotes);
+            await database.restoreData(tags, quotes);
           }
         }
       }
@@ -84,7 +53,7 @@ Future<void> handleBackupFile(BuildContext context, XFile? file) async {
         showToast(
           context,
           child: PillChip(
-            label: Text(AppLocalizations.of(context)!.backupFileParseError),
+            label: Text(context.appLocalizations.backupFileParseError),
           ),
         );
       }

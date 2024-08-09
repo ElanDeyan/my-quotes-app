@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/destinations.dart';
+import 'package:my_quotes/constants/enums/parse_quote_file_errors.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
@@ -13,8 +14,14 @@ import 'package:my_quotes/services/handle_backup_file.dart';
 import 'package:my_quotes/services/handle_quote_file.dart';
 import 'package:my_quotes/services/save_file.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_dialog.dart';
+import 'package:my_quotes/shared/actions/quotes/show_add_quote_from_file_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_search.dart';
+import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
+import 'package:my_quotes/shared/widgets/pill_chip.dart';
+import 'package:my_quotes/states/app_preferences.dart';
+import 'package:my_quotes/states/database_provider.dart';
+import 'package:provider/provider.dart';
 
 final class MainAppScreen extends StatefulWidget with DestinationsMixin {
   const MainAppScreen({
@@ -48,6 +55,41 @@ final class _MainAppScreenState extends State<MainAppScreen> {
         _selectedIndex = value;
       });
 
+  Future<void> _handleGenerateBackupFile(BuildContext context) async {
+    final database = Provider.of<DatabaseProvider>(context, listen: false);
+    final appPreferences = Provider.of<AppPreferences>(context, listen: false);
+    final backupFile = await generateBackupFile(database, appPreferences);
+
+    await saveJsonFile(backupFile);
+  }
+
+  Future<void> _handleQuoteFile(BuildContext context) async {
+    final result = await handleQuoteFile();
+    if (result.data != null) {
+      if (context.mounted) {
+        await showAddQuoteFromFileDialog(
+          context,
+          result.data!.quote,
+          result.data!.tags,
+        );
+      }
+    } else if (result.error != null) {
+      if (context.mounted) {
+        showToast(
+          context,
+          child: PillChip(
+            label: Text(
+              ParseQuoteFileErrors.localizedErrorMessageOf(
+                context,
+                result.error!,
+              ),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final windowSize = MediaQuery.sizeOf(context);
@@ -74,7 +116,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
           : _notCompactWindowSizeBody(context),
       floatingActionButton: isCompactWindowSize
           ? FloatingActionButton(
-              tooltip: AppLocalizations.of(context)!.navigationAddQuote,
+              tooltip: context.appLocalizations.navigationAddQuote,
               onPressed: () => showAddQuoteDialog(context),
               backgroundColor: Theme.of(context).colorScheme.secondary,
               child: Icon(
@@ -92,52 +134,43 @@ final class _MainAppScreenState extends State<MainAppScreen> {
     return <Widget>[
       if (bodyContent is MyQuotesScreen) ...<Widget>[
         IconButton(
-          tooltip: AppLocalizations.of(context)!.navigationSearchQuote,
+          tooltip: context.appLocalizations.navigationSearchQuote,
           onPressed: () => showQuoteSearch(
             context,
             SearchQuoteDelegate(
               context: context,
               keyboardType: TextInputType.text,
-              searchFieldLabel:
-                  AppLocalizations.of(context)!.navigationSearchLabel,
+              searchFieldLabel: context.appLocalizations.navigationSearchLabel,
             ),
           ),
           icon: const Icon(Icons.search_outlined),
         ),
         IconButton(
           icon: const Icon(Icons.label_outlined),
-          tooltip: AppLocalizations.of(context)!.navigationTags,
+          tooltip: context.appLocalizations.navigationTags,
           onPressed: () => context.pushNamed(tagsNavigationKey),
         ),
       ],
       IconButton(
         icon: const Icon(Icons.upload_file_outlined),
-        tooltip: AppLocalizations.of(context)!.addFromFile,
-        onPressed: () async => await handleQuoteFile(context),
+        tooltip: context.appLocalizations.addFromFile,
+        onPressed: () => _handleQuoteFile(context),
       ),
       PopupMenuButton<void>(
         itemBuilder: (context) => [
           PopupMenuItem(
+            onTap: () => _handleGenerateBackupFile(context),
             child: IconWithLabel(
               icon: const Icon(Icons.backup_outlined),
               horizontalGap: 10,
-              label: Text(AppLocalizations.of(context)!.createBackup),
+              label: Text(context.appLocalizations.createBackup),
             ),
-            onTap: () async {
-              final backupFile = await generateBackupFile(context);
-              if (backupFile != null) {
-                await saveJsonFile(
-                  backupFile,
-                  'MyQuotes-Backup-${DateTime.now()}',
-                );
-              }
-            },
           ),
           PopupMenuItem(
             child: IconWithLabel(
               icon: const Icon(Icons.settings_backup_restore_outlined),
               horizontalGap: 10,
-              label: Text(AppLocalizations.of(context)!.restoreBackup),
+              label: Text(context.appLocalizations.restoreBackup),
             ),
             onTap: () async {
               final backupFile = await getJsonFile();
@@ -148,8 +181,9 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             },
           ),
         ],
+        // TODO: Adds handling for web (just downloads the file)
         icon: const Icon(Icons.import_export_outlined),
-        tooltip: AppLocalizations.of(context)!.backupOptionsTooltip,
+        tooltip: context.appLocalizations.backupOptionsTooltip,
       ),
       if (isCompactWindowSize) ..._actionsForCompactWindow(context),
     ];
@@ -185,7 +219,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             onDestinationSelected: _updateIndex,
             leading: !isCompactWindowSize
                 ? FloatingActionButton(
-                    tooltip: AppLocalizations.of(context)!.navigationAddQuote,
+                    tooltip: context.appLocalizations.navigationAddQuote,
                     backgroundColor:
                         Theme.of(context).colorScheme.surfaceContainerHighest,
                     onPressed: () => showAddQuoteDialog(context),

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 
 Future<bool?> showDeleteQuoteDialog(BuildContext context, Quote quote) {
   return showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text(AppLocalizations.of(context)!.areYouSure),
+      title: Text(context.appLocalizations.areYouSure),
       icon: const Icon(Icons.delete_forever),
-      content: Text(AppLocalizations.of(context)!.irreversibleAction),
+      content: Text(context.appLocalizations.irreversibleAction),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text(AppLocalizations.of(context)!.cancel),
+          child: Text(context.appLocalizations.cancel),
         ),
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(true),
@@ -22,7 +22,7 @@ Future<bool?> showDeleteQuoteDialog(BuildContext context, Quote quote) {
             ),
           ),
           child: Text(
-            AppLocalizations.of(context)!.delete,
+            context.appLocalizations.delete,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onErrorContainer,
             ),

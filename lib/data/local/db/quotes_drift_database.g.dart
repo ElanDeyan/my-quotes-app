@@ -52,7 +52,7 @@ class $QuoteTableTable extends QuoteTable
       const VerificationMeta('isFavorite');
   @override
   late final GeneratedColumn<bool> isFavorite = GeneratedColumn<bool>(
-      'is_favorite', aliasedName, true,
+      'is_favorite', aliasedName, false,
       type: DriftSqlType.bool,
       requiredDuringInsert: false,
       defaultConstraints:
@@ -65,7 +65,7 @@ class $QuoteTableTable extends QuoteTable
       'created_at', aliasedName, true,
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
-      defaultValue: Constant(DateTime.now()));
+      defaultValue: currentDateAndTime);
   static const VerificationMeta _tagsMeta = const VerificationMeta('tags');
   @override
   late final GeneratedColumn<String> tags = GeneratedColumn<String>(
@@ -141,7 +141,7 @@ class $QuoteTableTable extends QuoteTable
       sourceUri: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}source_uri']),
       isFavorite: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite']),
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
       tags: attachedDatabase.typeMapping
@@ -161,7 +161,7 @@ class Quote extends DataClass implements Insertable<Quote> {
   final String author;
   final String? source;
   final String? sourceUri;
-  final bool? isFavorite;
+  final bool isFavorite;
   final DateTime? createdAt;
   final String? tags;
   const Quote(
@@ -170,7 +170,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       required this.author,
       this.source,
       this.sourceUri,
-      this.isFavorite,
+      required this.isFavorite,
       this.createdAt,
       this.tags});
   @override
@@ -187,9 +187,7 @@ class Quote extends DataClass implements Insertable<Quote> {
     if (!nullToAbsent || sourceUri != null) {
       map['source_uri'] = Variable<String>(sourceUri);
     }
-    if (!nullToAbsent || isFavorite != null) {
-      map['is_favorite'] = Variable<bool>(isFavorite);
-    }
+    map['is_favorite'] = Variable<bool>(isFavorite);
     if (!nullToAbsent || createdAt != null) {
       map['created_at'] = Variable<DateTime>(createdAt);
     }
@@ -209,9 +207,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       sourceUri: sourceUri == null && nullToAbsent
           ? const Value.absent()
           : Value(sourceUri),
-      isFavorite: isFavorite == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isFavorite),
+      isFavorite: Value(isFavorite),
       createdAt: createdAt == null && nullToAbsent
           ? const Value.absent()
           : Value(createdAt),
@@ -228,7 +224,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       author: serializer.fromJson<String>(json['author']),
       source: serializer.fromJson<String?>(json['source']),
       sourceUri: serializer.fromJson<String?>(json['sourceUri']),
-      isFavorite: serializer.fromJson<bool?>(json['isFavorite']),
+      isFavorite: serializer.fromJson<bool>(json['isFavorite']),
       createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
       tags: serializer.fromJson<String?>(json['tags']),
     );
@@ -242,7 +238,7 @@ class Quote extends DataClass implements Insertable<Quote> {
       'author': serializer.toJson<String>(author),
       'source': serializer.toJson<String?>(source),
       'sourceUri': serializer.toJson<String?>(sourceUri),
-      'isFavorite': serializer.toJson<bool?>(isFavorite),
+      'isFavorite': serializer.toJson<bool>(isFavorite),
       'createdAt': serializer.toJson<DateTime?>(createdAt),
       'tags': serializer.toJson<String?>(tags),
     };
@@ -254,7 +250,7 @@ class Quote extends DataClass implements Insertable<Quote> {
           String? author,
           Value<String?> source = const Value.absent(),
           Value<String?> sourceUri = const Value.absent(),
-          Value<bool?> isFavorite = const Value.absent(),
+          bool? isFavorite,
           Value<DateTime?> createdAt = const Value.absent(),
           Value<String?> tags = const Value.absent()}) =>
       Quote(
@@ -263,10 +259,24 @@ class Quote extends DataClass implements Insertable<Quote> {
         author: author ?? this.author,
         source: source.present ? source.value : this.source,
         sourceUri: sourceUri.present ? sourceUri.value : this.sourceUri,
-        isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
+        isFavorite: isFavorite ?? this.isFavorite,
         createdAt: createdAt.present ? createdAt.value : this.createdAt,
         tags: tags.present ? tags.value : this.tags,
       );
+  Quote copyWithCompanion(QuoteTableCompanion data) {
+    return Quote(
+      id: data.id.present ? data.id.value : this.id,
+      content: data.content.present ? data.content.value : this.content,
+      author: data.author.present ? data.author.value : this.author,
+      source: data.source.present ? data.source.value : this.source,
+      sourceUri: data.sourceUri.present ? data.sourceUri.value : this.sourceUri,
+      isFavorite:
+          data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      tags: data.tags.present ? data.tags.value : this.tags,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Quote(')
@@ -305,7 +315,7 @@ class QuoteTableCompanion extends UpdateCompanion<Quote> {
   final Value<String> author;
   final Value<String?> source;
   final Value<String?> sourceUri;
-  final Value<bool?> isFavorite;
+  final Value<bool> isFavorite;
   final Value<DateTime?> createdAt;
   final Value<String?> tags;
   const QuoteTableCompanion({
@@ -357,7 +367,7 @@ class QuoteTableCompanion extends UpdateCompanion<Quote> {
       Value<String>? author,
       Value<String?>? source,
       Value<String?>? sourceUri,
-      Value<bool?>? isFavorite,
+      Value<bool>? isFavorite,
       Value<DateTime?>? createdAt,
       Value<String?>? tags}) {
     return QuoteTableCompanion(
@@ -526,6 +536,13 @@ class Tag extends DataClass implements Insertable<Tag> {
         id: id.present ? id.value : this.id,
         name: name ?? this.name,
       );
+  Tag copyWithCompanion(TagTableCompanion data) {
+    return Tag(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Tag(')
@@ -595,9 +612,11 @@ class TagTableCompanion extends UpdateCompanion<Tag> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
-  _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
+  $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $QuoteTableTable quoteTable = $QuoteTableTable(this);
   late final $TagTableTable tagTable = $TagTableTable(this);
+  late final QuotesDao quotesDao = QuotesDao(this as AppDatabase);
+  late final TagsDao tagsDao = TagsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -605,13 +624,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [quoteTable, tagTable];
 }
 
-typedef $$QuoteTableTableInsertCompanionBuilder = QuoteTableCompanion Function({
+typedef $$QuoteTableTableCreateCompanionBuilder = QuoteTableCompanion Function({
   Value<int?> id,
   required String content,
   required String author,
   Value<String?> source,
   Value<String?> sourceUri,
-  Value<bool?> isFavorite,
+  Value<bool> isFavorite,
   Value<DateTime?> createdAt,
   Value<String?> tags,
 });
@@ -621,7 +640,7 @@ typedef $$QuoteTableTableUpdateCompanionBuilder = QuoteTableCompanion Function({
   Value<String> author,
   Value<String?> source,
   Value<String?> sourceUri,
-  Value<bool?> isFavorite,
+  Value<bool> isFavorite,
   Value<DateTime?> createdAt,
   Value<String?> tags,
 });
@@ -632,8 +651,7 @@ class $$QuoteTableTableTableManager extends RootTableManager<
     Quote,
     $$QuoteTableTableFilterComposer,
     $$QuoteTableTableOrderingComposer,
-    $$QuoteTableTableProcessedTableManager,
-    $$QuoteTableTableInsertCompanionBuilder,
+    $$QuoteTableTableCreateCompanionBuilder,
     $$QuoteTableTableUpdateCompanionBuilder> {
   $$QuoteTableTableTableManager(_$AppDatabase db, $QuoteTableTable table)
       : super(TableManagerState(
@@ -643,15 +661,13 @@ class $$QuoteTableTableTableManager extends RootTableManager<
               $$QuoteTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$QuoteTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$QuoteTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             Value<String> content = const Value.absent(),
             Value<String> author = const Value.absent(),
             Value<String?> source = const Value.absent(),
             Value<String?> sourceUri = const Value.absent(),
-            Value<bool?> isFavorite = const Value.absent(),
+            Value<bool> isFavorite = const Value.absent(),
             Value<DateTime?> createdAt = const Value.absent(),
             Value<String?> tags = const Value.absent(),
           }) =>
@@ -665,13 +681,13 @@ class $$QuoteTableTableTableManager extends RootTableManager<
             createdAt: createdAt,
             tags: tags,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             required String content,
             required String author,
             Value<String?> source = const Value.absent(),
             Value<String?> sourceUri = const Value.absent(),
-            Value<bool?> isFavorite = const Value.absent(),
+            Value<bool> isFavorite = const Value.absent(),
             Value<DateTime?> createdAt = const Value.absent(),
             Value<String?> tags = const Value.absent(),
           }) =>
@@ -686,18 +702,6 @@ class $$QuoteTableTableTableManager extends RootTableManager<
             tags: tags,
           ),
         ));
-}
-
-class $$QuoteTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $QuoteTableTable,
-    Quote,
-    $$QuoteTableTableFilterComposer,
-    $$QuoteTableTableOrderingComposer,
-    $$QuoteTableTableProcessedTableManager,
-    $$QuoteTableTableInsertCompanionBuilder,
-    $$QuoteTableTableUpdateCompanionBuilder> {
-  $$QuoteTableTableProcessedTableManager(super.$state);
 }
 
 class $$QuoteTableTableFilterComposer
@@ -788,7 +792,7 @@ class $$QuoteTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$TagTableTableInsertCompanionBuilder = TagTableCompanion Function({
+typedef $$TagTableTableCreateCompanionBuilder = TagTableCompanion Function({
   Value<int?> id,
   required String name,
 });
@@ -803,8 +807,7 @@ class $$TagTableTableTableManager extends RootTableManager<
     Tag,
     $$TagTableTableFilterComposer,
     $$TagTableTableOrderingComposer,
-    $$TagTableTableProcessedTableManager,
-    $$TagTableTableInsertCompanionBuilder,
+    $$TagTableTableCreateCompanionBuilder,
     $$TagTableTableUpdateCompanionBuilder> {
   $$TagTableTableTableManager(_$AppDatabase db, $TagTableTable table)
       : super(TableManagerState(
@@ -814,9 +817,7 @@ class $$TagTableTableTableManager extends RootTableManager<
               $$TagTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$TagTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$TagTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             Value<String> name = const Value.absent(),
           }) =>
@@ -824,7 +825,7 @@ class $$TagTableTableTableManager extends RootTableManager<
             id: id,
             name: name,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             required String name,
           }) =>
@@ -833,18 +834,6 @@ class $$TagTableTableTableManager extends RootTableManager<
             name: name,
           ),
         ));
-}
-
-class $$TagTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $TagTableTable,
-    Tag,
-    $$TagTableTableFilterComposer,
-    $$TagTableTableOrderingComposer,
-    $$TagTableTableProcessedTableManager,
-    $$TagTableTableInsertCompanionBuilder,
-    $$TagTableTableUpdateCompanionBuilder> {
-  $$TagTableTableProcessedTableManager(super.$state);
 }
 
 class $$TagTableTableFilterComposer
@@ -875,9 +864,9 @@ class $$TagTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class _$AppDatabaseManager {
+class $AppDatabaseManager {
   final _$AppDatabase _db;
-  _$AppDatabaseManager(this._db);
+  $AppDatabaseManager(this._db);
   $$QuoteTableTableTableManager get quoteTable =>
       $$QuoteTableTableTableManager(_db, _db.quoteTable);
   $$TagTableTableTableManager get tagTable =>

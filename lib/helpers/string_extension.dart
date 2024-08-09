@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
+
 extension StringExtension on String {
-  String toTitleCase() {
-    return this[0].toUpperCase() + substring(1).toLowerCase();
-  }
+  String toTitleCase() => (StringBuffer()
+        ..writeAll(
+          [this[0].toUpperCase(), characters.getRange(1).toLowerCase()],
+        ))
+      .toString();
 }

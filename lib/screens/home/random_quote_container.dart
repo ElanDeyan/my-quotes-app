@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/shared/widgets/quote_card.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -16,15 +16,17 @@ final class RandomQuoteContainer extends StatefulWidget {
 final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
   @override
   Widget build(BuildContext context) {
-    final database = Provider.of<DatabaseProvider>(context, listen: false);
+    final databaseProvider =
+        Provider.of<DatabaseProvider>(context, listen: false);
+
     return FutureBuilder(
-      future: database.randomQuote,
+      future: databaseProvider.randomQuote,
       builder: (context, snapshot) {
         final connectionState = snapshot.connectionState;
         switch (connectionState) {
           case ConnectionState.none:
             return Text(
-              AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+              context.appLocalizations.noDatabaseConnectionMessage,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
@@ -42,12 +44,12 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
             );
           case ConnectionState.done:
             if (snapshot.hasError) {
-              return Text(AppLocalizations.of(context)!.errorOccurred);
+              return Text(context.appLocalizations.errorOccurred);
             }
             final quote = snapshot.data;
 
             if (quote == null) {
-              return Text(AppLocalizations.of(context)!.noQuotesAddedYet);
+              return Text(context.appLocalizations.noQuotesAddedYet);
             } else {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -70,6 +72,8 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
                       ),
                       OutlinedButton(
                         onPressed: QuoteActions.actionCallback(
+                          context.appLocalizations,
+                          databaseProvider,
                           context,
                           QuoteActions.share,
                           quote,

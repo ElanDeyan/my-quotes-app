@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/enums/form_types.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -21,12 +21,12 @@ final class UpdateQuoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.editQuoteTitle),
+        title: Text(context.appLocalizations.editQuoteTitle),
         actions: [
           IconButton(
             onPressed: () => createTag(context),
             icon: const Icon(Icons.new_label),
-            tooltip: AppLocalizations.of(context)!.createTag,
+            tooltip: context.appLocalizations.createTag,
           ),
         ],
       ),
@@ -55,7 +55,7 @@ class _UpdateQuoteScreenBody extends StatelessWidget {
             final maybeQuote = snapshot.data;
             if (maybeQuote == null) {
               return Text(
-                AppLocalizations.of(context)!.quoteNotFoundWithId(quoteId),
+                context.appLocalizations.quoteNotFoundWithId(quoteId),
               );
             } else {
               return UpdateQuoteForm(quote: maybeQuote);
@@ -93,7 +93,7 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm> with QuoteFormMixin {
     super.dispose();
   }
 
-  Map<String, dynamic> get quoteAsJson => widget.quote.toJson()
+  Map<String, Object?> get quoteAsJson => widget.quote.toJson()
     ..update(
       'tags',
       (value) => switch (value) {

@@ -1,9 +1,9 @@
 import 'package:feedback_sentry/feedback_sentry.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/constants/color_pallete.dart';
+import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/string_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/settings/color_pallete_radio_list.dart';
@@ -28,14 +28,14 @@ class SettingsScreen extends StatelessWidget {
               ? context.pop(context)
               : context.pushNamed(homeNavigationKey),
         ),
-        title: Text(AppLocalizations.of(context)!.settings),
+        title: Text(context.appLocalizations.settings),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => BetterFeedback.of(context).showAndUploadToSentry(),
         label: IconWithLabel(
           icon: const Icon(Icons.feedback_outlined),
           horizontalGap: 10,
-          label: Text(AppLocalizations.of(context)!.feedbackButtonLabel),
+          label: Text(context.appLocalizations.feedbackButtonLabel),
         ),
       ),
       body: Consumer<AppPreferences>(
@@ -44,9 +44,9 @@ class SettingsScreen extends StatelessWidget {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.brightness_medium_outlined),
-              title: Text(AppLocalizations.of(context)!.themeMode),
+              title: Text(context.appLocalizations.themeMode),
               subtitle: Text(
-                AppLocalizations.of(context)!
+                context.appLocalizations
                     .themeModeName(value.themeMode.name)
                     .toTitleCase(),
               ),
@@ -59,12 +59,11 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.palette_outlined),
-              title: Text(AppLocalizations.of(context)!.colorPallete),
+              title: Text(context.appLocalizations.colorPallete),
               subtitle: Row(
                 children: [
                   CircleAvatar(
                     backgroundColor: ColorSchemePalette.primaryColor(
-                      context,
                       value.colorSchemePalette,
                       MediaQuery.platformBrightnessOf(context),
                     ),
@@ -74,7 +73,7 @@ class SettingsScreen extends StatelessWidget {
                     width: 5.0,
                   ),
                   Text(
-                    AppLocalizations.of(context)!
+                    context.appLocalizations
                         .colorPaletteName(value.colorSchemePalette.storageName),
                   ),
                 ],
@@ -88,9 +87,9 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.translate_outlined),
-              title: Text(AppLocalizations.of(context)!.language),
+              title: Text(context.appLocalizations.language),
               subtitle: Text(
-                AppLocalizations.of(context)!.languageName(value.language),
+                context.appLocalizations.languageName(value.language),
               ),
               onTap: () => showDialog<void>(
                 context: context,
@@ -101,14 +100,14 @@ class SettingsScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.info_outline),
-              title: Text(AppLocalizations.of(context)!.info),
+              title: Text(context.appLocalizations.info),
               onTap: () => showAboutDialog(
                 context: context,
                 applicationName: 'My Quotes',
                 applicationVersion: '0.1.0',
                 applicationIcon: const Icon(Icons.format_quote),
                 children: [
-                  Text(AppLocalizations.of(context)!.infoDescription),
+                  Text(context.appLocalizations.infoDescription),
                   Wrap(
                     spacing: 5.0,
                     children: <IconButton>[

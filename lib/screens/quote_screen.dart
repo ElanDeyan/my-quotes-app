@@ -1,9 +1,8 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/nullable_extension.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/actions/quotes/show_update_quote_dialog.dart';
@@ -25,7 +24,7 @@ final class QuoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.quoteInfo),
+        title: Text(context.appLocalizations.quoteInfo),
         leading: BackButton(
           onPressed: () => context.canPop()
               ? context.pop()
@@ -43,7 +42,7 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
     builder: (context) => AlertDialog(
       icon: const Icon(Icons.info),
       scrollable: true,
-      title: Text(AppLocalizations.of(context)!.quoteInfo),
+      title: Text(context.appLocalizations.quoteInfo),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
         child: QuoteScreenDialogBody(quoteId: quote.id!),
@@ -54,11 +53,11 @@ Future<void> showQuoteInfoDialog(BuildContext context, Quote quote) {
             Navigator.pop(context);
             showUpdateQuoteDialog(context, quote);
           },
-          child: Text(AppLocalizations.of(context)!.edit),
+          child: Text(context.appLocalizations.edit),
         ),
         OutlinedButton(
           onPressed: () => context.pop(),
-          child: Text(AppLocalizations.of(context)!.ok),
+          child: Text(context.appLocalizations.ok),
         ),
       ],
     ),
@@ -75,83 +74,86 @@ class ViewQuotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(top: 8.0),
       child: Center(
-        child: _quoteInfoWithCard(),
-      ),
-    );
-  }
+        child: Consumer<DatabaseProvider>(
+          builder: (context, database, child) => FutureBuilder(
+            future: database.getQuoteById(quoteId),
+            builder: (context, snapshot) {
+              final connectionState = snapshot.connectionState;
 
-  Consumer<DatabaseProvider> _quoteInfoWithCard() {
-    return Consumer<DatabaseProvider>(
-      builder: (context, database, child) => FutureBuilder(
-        future: database.getQuoteById(quoteId),
-        builder: (context, snapshot) {
-          final connectionState = snapshot.connectionState;
-
-          switch (connectionState) {
-            case ConnectionState.none:
-              return Text(
-                AppLocalizations.of(context)!.noDatabaseConnectionMessage,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              );
-            case ConnectionState.active || ConnectionState.waiting:
-              final isDarkTheme =
-                  MediaQuery.platformBrightnessOf(context) == Brightness.dark;
-
-              return ShimmerPro.sized(
-                scaffoldBackgroundColor: Theme.of(context).colorScheme.surface,
-                light: isDarkTheme ? ShimmerProLight.lighter : null,
-                height: 200,
-                width: 300,
-              );
-
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              } else {
-                final data = snapshot.data;
-                if (data.isNull) {
+              switch (connectionState) {
+                case ConnectionState.none:
                   return Text(
-                    AppLocalizations.of(context)!.quoteNotFoundWithId(quoteId),
+                    context.appLocalizations.noDatabaseConnectionMessage,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   );
-                } else {
-                  final quote = data!;
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.sizeOf(context).width * 0.9,
-                        ),
-                        child: QuoteCard(
-                          quote: quote,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        quote.createdAtLocaleMessageOf(context).capitalize(),
-                      ),
-                      if (quote.isFavorite ?? false)
-                        IconWithLabel(
-                          icon: const Icon(Icons.star),
-                          horizontalGap: 10,
-                          label: Text(
-                            AppLocalizations.of(context)!
-                                .isFavorite(quote.isFavorite.toString()),
+                case ConnectionState.active || ConnectionState.waiting:
+                  final isDarkTheme =
+                      MediaQuery.platformBrightnessOf(context) ==
+                          Brightness.dark;
+
+                  return ShimmerPro.sized(
+                    scaffoldBackgroundColor:
+                        Theme.of(context).colorScheme.surface,
+                    light: isDarkTheme ? ShimmerProLight.lighter : null,
+                    height: 200,
+                    width: 300,
+                  );
+
+                case ConnectionState.done:
+                  if (snapshot.hasError) {
+                    return Text(snapshot.error.toString());
+                  } else {
+                    final data = snapshot.data;
+                    if (data == null) {
+                      return Text(
+                        context.appLocalizations.quoteNotFoundWithId(quoteId),
+                      );
+                    } else {
+                      final quote = data;
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.sizeOf(context).width * 0.9,
+                            ),
+                            child: QuoteCard(
+                              quote: quote,
+                            ),
                           ),
-                        ),
-                    ],
-                  );
-                }
+                          const SizedBox(height: 16),
+                          Text(
+                            quote
+                                .createdAtLocaleMessageOf(
+                                  Locale(appLocalizations.localeName),
+                                )
+                                .capitalize(),
+                          ),
+                          if (quote.isFavorite)
+                            IconWithLabel(
+                              icon: const Icon(Icons.star),
+                              horizontalGap: 10,
+                              label: Text(
+                                context.appLocalizations
+                                    .isFavorite(quote.isFavorite.toString()),
+                              ),
+                            ),
+                        ],
+                      );
+                    }
+                  }
               }
-          }
-        },
+            },
+          ),
+        ),
       ),
     );
   }
@@ -179,7 +181,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
               switch (connectionState) {
                 case ConnectionState.none:
                   return Text(
-                    AppLocalizations.of(context)!.noDatabaseConnectionMessage,
+                    context.appLocalizations.noDatabaseConnectionMessage,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
@@ -208,43 +210,42 @@ class QuoteScreenDialogBody extends StatelessWidget {
                   );
                 case ConnectionState.done:
                   final data = snapshot.data;
-                  if (data.isNull) {
+                  if (data == null) {
                     return Text(
-                      AppLocalizations.of(context)!
-                          .quoteNotFoundWithId(quoteId),
+                      context.appLocalizations.quoteNotFoundWithId(quoteId),
                     );
                   } else {
-                    final quote = data!;
+                    final quote = data;
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
+                        Text('Id: ${quote.id}'),
                         Text(
-                          AppLocalizations.of(context)!.quoteInfo,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        Text('Id: ${quote.id!}'),
-                        Text(
-                          '${AppLocalizations.of(context)!.quoteFormFieldContent}: ${quote.content}',
+                          '${context.appLocalizations.quoteFormFieldContent}: ${quote.content}',
                         ),
                         Text(
-                          '${AppLocalizations.of(context)!.quoteFormFieldAuthor}: ${quote.author}',
+                          '${context.appLocalizations.quoteFormFieldAuthor}: ${quote.author}',
                         ),
                         if (quote.source.isNotNullOrBlank)
                           Text(
-                            '${AppLocalizations.of(context)!.quoteFormFieldSource}: ${quote.source!}',
+                            '${context.appLocalizations.quoteFormFieldSource}: ${quote.source!}',
                           ),
                         if (quote.sourceUri.isNotNullOrBlank)
                           Text(
-                            '${AppLocalizations.of(context)!.quoteFormFieldSourceUri}: ${quote.sourceUri}',
+                            '${context.appLocalizations.quoteFormFieldSourceUri}: ${quote.sourceUri}',
                           ),
                         Text(
-                          quote.createdAtLocaleMessageOf(context).capitalize(),
+                          quote
+                              .createdAtLocaleMessageOf(
+                                Locale(context.appLocalizations.localeName),
+                              )
+                              .capitalize(),
                         ),
                         if (quote.tagsId.isEmpty)
                           Text(
-                            AppLocalizations.of(context)!.quoteWithoutTags,
+                            context.appLocalizations.quoteWithoutTags,
                           )
                         else
                           FutureBuilder(
@@ -256,18 +257,18 @@ class QuoteScreenDialogBody extends StatelessWidget {
                                   final tags = snapshot.data!;
                                   if (tags.isEmpty) {
                                     return Text(
-                                      AppLocalizations.of(context)!.noTagsFound,
+                                      context.appLocalizations.noTagsFound,
                                     );
                                   } else {
                                     final tagsNames =
                                         tags.map((tag) => tag.name).join(', ');
                                     return Text(
-                                      '${AppLocalizations.of(context)!.tags}: $tagsNames',
+                                      '${context.appLocalizations.tags}: $tagsNames',
                                     );
                                   }
                                 }
                                 return Text(
-                                  AppLocalizations.of(context)!.noTagsFound,
+                                  context.appLocalizations.noTagsFound,
                                 );
                               } else {
                                 return ShimmerPro.text(
@@ -277,12 +278,12 @@ class QuoteScreenDialogBody extends StatelessWidget {
                               }
                             },
                           ),
-                        if (quote.isFavorite ?? false)
+                        if (quote.isFavorite)
                           IconWithLabel(
                             icon: const Icon(Icons.star),
                             horizontalGap: 10,
                             label: Text(
-                              AppLocalizations.of(context)!
+                              context.appLocalizations
                                   .isFavorite(quote.isFavorite.toString()),
                             ),
                           ),

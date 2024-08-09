@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -15,6 +15,8 @@ class QuoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 500, maxHeight: 250),
       child: Stack(
@@ -108,7 +110,7 @@ class QuoteCard extends StatelessWidget {
               onPressed: () {},
               iconSize: 16,
               icon: Icon(
-                quote.isFavorite ?? false ? Icons.star : Icons.star_outline,
+                quote.isFavorite ? Icons.star : Icons.star_outline,
                 size: 16,
               ),
             ),
@@ -116,22 +118,25 @@ class QuoteCard extends StatelessWidget {
           if (showActions)
             Positioned(
               right: 0,
-              child: PopupMenuButton(
-                tooltip: AppLocalizations.of(context)!
-                    .quoteActionsPopupButtonTooltip,
-                icon: const Icon(Icons.more_horiz_outlined),
-                position: PopupMenuPosition.under,
-                itemBuilder: (context) => QuoteActions.popupMenuItems(
-                  context,
-                  quote,
-                  actions: QuoteActions.values.where(
-                    (action) => switch (action) {
-                      QuoteActions.create ||
-                      QuoteActions.share ||
-                      QuoteActions.delete =>
-                        false,
-                      _ => true
-                    },
+              child: Consumer<DatabaseProvider>(
+                builder: (context, database, child) => PopupMenuButton(
+                  tooltip: appLocalizations.quoteActionsPopupButtonTooltip,
+                  icon: const Icon(Icons.more_horiz_outlined),
+                  position: PopupMenuPosition.under,
+                  itemBuilder: (context) => QuoteActions.popupMenuItems(
+                    appLocalizations,
+                    database,
+                    context,
+                    quote,
+                    actions: QuoteActions.values.where(
+                      (action) => switch (action) {
+                        QuoteActions.create ||
+                        QuoteActions.share ||
+                        QuoteActions.delete =>
+                          false,
+                        _ => true
+                      },
+                    ),
                   ),
                 ),
               ),

@@ -9,11 +9,11 @@ abstract interface class QuotesRepository {
 
   Future<List<Quote>> getQuotesWithTagId(int tagId);
 
-  Future<int> addQuote(Quote quote);
+  Future<int> createQuote(Quote quote);
 
   Future<bool> updateQuote(Quote quote);
 
-  Future<int> removeQuote(int id);
+  Future<int> deleteQuote(int id);
 
   Future<void> clearAllQuotes();
 

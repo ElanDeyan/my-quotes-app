@@ -1,6 +1,7 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 
 final class MyQuotesFeedbackFormArea extends StatefulWidget {
   const MyQuotesFeedbackFormArea(
@@ -12,7 +13,7 @@ final class MyQuotesFeedbackFormArea extends StatefulWidget {
 
   final BuildContext context;
   final ScrollController? scrollController;
-  final Future<void> Function(String, {Map<String, dynamic>? extras}) fn;
+  final Future<void> Function(String, {Map<String, Object?>? extras}) fn;
 
   @override
   State<MyQuotesFeedbackFormArea> createState() =>
@@ -47,11 +48,11 @@ class _MyQuotesFeedbackFormAreaState extends State<MyQuotesFeedbackFormArea> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context)!.provideFeedback,
+              context.appLocalizations.provideFeedback,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
-              AppLocalizations.of(context)!.feedbackInstructions,
+              context.appLocalizations.feedbackInstructions,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             Form(
@@ -64,12 +65,11 @@ class _MyQuotesFeedbackFormAreaState extends State<MyQuotesFeedbackFormArea> {
                     smartDashesType: SmartDashesType.enabled,
                     smartQuotesType: SmartQuotesType.enabled,
                     decoration: InputDecoration(
-                      labelText:
-                          AppLocalizations.of(context)!.feedbackTextLabel,
+                      labelText: context.appLocalizations.feedbackTextLabel,
                       border: const OutlineInputBorder(),
                     ),
                     validator: (value) => value.isNullOrBlank
-                        ? AppLocalizations.of(context)!.requiredFieldAlert
+                        ? context.appLocalizations.requiredFieldAlert
                         : null,
                   ),
                   const SizedBox(

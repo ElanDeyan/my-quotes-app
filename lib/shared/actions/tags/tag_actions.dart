@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/tags/delete_tag.dart';
 import 'package:my_quotes/shared/actions/tags/update_tag.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
@@ -53,7 +53,7 @@ enum TagActions {
                 icon: action.icon,
                 horizontalGap: 10,
                 label: Text(
-                  AppLocalizations.of(context)!.tagActions(action.debugLabel),
+                  context.appLocalizations.tagActions(action.debugLabel),
                 ),
               ),
             ),
