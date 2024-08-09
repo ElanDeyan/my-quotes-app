@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:basics/basics.dart';
 import 'package:feedback_sentry/feedback_sentry.dart';
@@ -20,23 +21,22 @@ import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
 
 void main() async {
-  runZonedGuarded(
-    () async {
-      final sentryDsn = switch ((
-        const String.fromEnvironment(sentryDsnKey),
-        Env.sentryDsn,
-      )) {
-        (final a, _) when a != '' => a,
-        (_, final b) when b.isNotNullOrBlank => b,
-        _ => throw UnsupportedError('No sentry dsn defined')
-      };
+  runZonedGuarded(() async {
+    final sentryDsn = switch ((
+      const String.fromEnvironment(sentryDsnKey),
+      Env.sentryDsn,
+    )) {
+      (final a, _) when a != '' => a,
+      (_, final b) when b.isNotNullOrBlank => b,
+      _ => throw UnsupportedError('No sentry dsn defined')
+    };
 
-      await Sentry.init((options) => options.dsn = sentryDsn);
-      await initApp();
-    },
-    (exception, stackTrace) async =>
-        await Sentry.captureException(exception, stackTrace: stackTrace),
-  );
+    await Sentry.init((options) => options.dsn = sentryDsn);
+    await initApp();
+  }, (exception, stackTrace) {
+    log('There is an exception!', name: 'exception', error: exception, stackTrace: stackTrace);
+    unawaited(Sentry.captureException(exception, stackTrace: stackTrace));
+  });
 }
 
 Future<void> initApp() async {
