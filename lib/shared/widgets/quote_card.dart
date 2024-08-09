@@ -8,7 +8,11 @@ import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
 class QuoteCard extends StatelessWidget {
-  const QuoteCard({super.key, required this.quote, this.showActions = true});
+  const QuoteCard({
+    super.key,
+    required this.quote,
+    this.showActions = true,
+  });
 
   final Quote quote;
   final bool showActions;
@@ -130,10 +134,7 @@ class QuoteCard extends StatelessWidget {
                     quote,
                     actions: QuoteActions.values.where(
                       (action) => switch (action) {
-                        QuoteActions.create ||
-                        QuoteActions.share ||
-                        QuoteActions.delete =>
-                          false,
+                        QuoteActions.create || QuoteActions.delete => false,
                         _ => true
                       },
                     ),

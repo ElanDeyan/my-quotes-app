@@ -44,7 +44,6 @@ mixin QuoteFormMixin {
               maxLines: null,
               smartQuotesType: SmartQuotesType.enabled,
               keyboardType: TextInputType.multiline,
-              enableSuggestions: true,
               smartDashesType: SmartDashesType.enabled,
               validator: FormBuilderValidators.required(
                 errorText: context.appLocalizations.nonEmptyField(
@@ -68,7 +67,6 @@ mixin QuoteFormMixin {
                 hintText: context.appLocalizations.quoteFormFieldSourceHintText,
               ),
               keyboardType: TextInputType.text,
-              enableSuggestions: true,
               smartQuotesType: SmartQuotesType.enabled,
               smartDashesType: SmartDashesType.enabled,
               valueTransformer: (value) => value?.trim(),
@@ -85,7 +83,6 @@ mixin QuoteFormMixin {
                     context.appLocalizations.quoteFormFieldSourceUriHintText,
               ),
               validator: FormBuilderValidators.url(),
-              enableSuggestions: true,
               smartDashesType: SmartDashesType.enabled,
               smartQuotesType: SmartQuotesType.enabled,
               keyboardType: TextInputType.url,
@@ -135,7 +132,6 @@ mixin QuoteFormMixin {
             ),
             smartQuotesType: SmartQuotesType.enabled,
             keyboardType: TextInputType.name,
-            enableSuggestions: true,
             smartDashesType: SmartDashesType.enabled,
             validator: FormBuilderValidators.required(
               errorText: context.appLocalizations.nonEmptyField(
@@ -152,7 +148,6 @@ mixin QuoteFormMixin {
             ),
             initialValue: context.appLocalizations.quoteFormFieldAnonymAuthor,
             smartQuotesType: SmartQuotesType.enabled,
-            enableSuggestions: true,
             smartDashesType: SmartDashesType.enabled,
             keyboardType: TextInputType.name,
             validator: FormBuilderValidators.required(

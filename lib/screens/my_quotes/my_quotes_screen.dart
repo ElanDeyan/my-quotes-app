@@ -24,8 +24,7 @@ final class MyQuotesScreen extends StatelessWidget {
 
           return switch ((connectionState, hasError, hasData)) {
             (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
-            (ConnectionState.active || ConnectionState.waiting, _, _) =>
-              const WaitingForQuotesSkeleton(),
+            (ConnectionState.waiting, _, _) => const WaitingForQuotesSkeleton(),
             (ConnectionState.done, _, true) when snapshot.data!.isEmpty =>
               const NoQuotesAddedYet(),
             (ConnectionState.done, _, true) when snapshot.data!.isNotEmpty =>

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
+import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
+import 'package:my_quotes/shared/widgets/no_database_connection_message.dart';
+import 'package:my_quotes/shared/widgets/no_quotes_added_yet_message.dart';
 import 'package:my_quotes/shared/widgets/quote_card.dart';
+import 'package:my_quotes/shared/widgets/quote_card_skeleton.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer_pro/shimmer_pro.dart';
 
 final class RandomQuoteContainer extends StatefulWidget {
   const RandomQuoteContainer({super.key});
@@ -23,69 +26,51 @@ final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
       future: databaseProvider.randomQuote,
       builder: (context, snapshot) {
         final connectionState = snapshot.connectionState;
-        switch (connectionState) {
-          case ConnectionState.none:
-            return Text(
-              context.appLocalizations.noDatabaseConnectionMessage,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-            );
-          case ConnectionState.active || ConnectionState.waiting:
-            final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-            return Center(
-              child: ShimmerPro.sized(
-                light: isDarkTheme ? ShimmerProLight.lighter : null,
-                scaffoldBackgroundColor:
-                    Theme.of(context).colorScheme.primaryContainer,
-                height: 100,
-                width: 200,
-              ),
-            );
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return Text(context.appLocalizations.errorOccurred);
-            }
-            final quote = snapshot.data;
+        final hasError = snapshot.hasError;
+        final hasData = snapshot.hasData;
 
-            if (quote == null) {
-              return Text(context.appLocalizations.noQuotesAddedYet);
-            } else {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: QuoteCard(
-                      quote: quote,
+        final data = snapshot.data;
+
+        return switch ((connectionState, hasError, hasData)) {
+          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+          (ConnectionState.waiting, _, _) => const QuoteCardSkeleton(),
+          (ConnectionState.done, _, true) when data == null =>
+            const NoQuotesAddedYetMessage(),
+          (ConnectionState.done, _, true) when data != null => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: QuoteCard(
+                    quote: data,
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () => setState(() {}),
+                      child: const Icon(Icons.shuffle_outlined),
                     ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () => setState(() {}),
-                        child: const Icon(Icons.shuffle_outlined),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    OutlinedButton(
+                      onPressed: QuoteActions.actionCallback(
+                        context.appLocalizations,
+                        databaseProvider,
+                        context,
+                        QuoteActions.share,
+                        data,
                       ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      OutlinedButton(
-                        onPressed: QuoteActions.actionCallback(
-                          context.appLocalizations,
-                          databaseProvider,
-                          context,
-                          QuoteActions.share,
-                          quote,
-                        ),
-                        child: const Icon(Icons.share_outlined),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            }
-        }
+                      child: const Icon(Icons.share_outlined),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          _ => const AnErrorOccurredMessage(),
+        };
       },
     );
   }
