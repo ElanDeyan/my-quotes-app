@@ -13,6 +13,12 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/nullable_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
+import 'package:my_quotes/shared/widgets/form/quote_form_author_field.dart';
+import 'package:my_quotes/shared/widgets/form/quote_form_content_field.dart';
+import 'package:my_quotes/shared/widgets/form/quote_form_is_favorite_field.dart';
+import 'package:my_quotes/shared/widgets/form/quote_form_search_tags_field.dart';
+import 'package:my_quotes/shared/widgets/form/quote_form_source_field.dart';
+import 'package:my_quotes/shared/widgets/form/quote_form_source_uri_field.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
@@ -35,23 +41,7 @@ mixin QuoteFormMixin {
             BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.8),
         child: Column(
           children: [
-            FormBuilderTextField(
-              name: 'content',
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: context.appLocalizations.quoteFormFieldContent,
-              ),
-              maxLines: null,
-              smartQuotesType: SmartQuotesType.enabled,
-              keyboardType: TextInputType.multiline,
-              smartDashesType: SmartDashesType.enabled,
-              validator: FormBuilderValidators.required(
-                errorText: context.appLocalizations.nonEmptyField(
-                  context.appLocalizations.quoteFormFieldContent,
-                ),
-              ),
-              valueTransformer: (value) => value?.trim(),
-            ),
+            const QuoteFormContentField(),
             const SizedBox(
               height: 10,
             ),
@@ -59,50 +49,15 @@ mixin QuoteFormMixin {
             const SizedBox(
               height: 10,
             ),
-            FormBuilderTextField(
-              name: 'source',
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: context.appLocalizations.quoteFormFieldSource,
-                hintText: context.appLocalizations.quoteFormFieldSourceHintText,
-              ),
-              keyboardType: TextInputType.text,
-              smartQuotesType: SmartQuotesType.enabled,
-              smartDashesType: SmartDashesType.enabled,
-              valueTransformer: (value) => value?.trim(),
-            ),
+            const QuoteFormSourceField(),
             const SizedBox(
               height: 10,
             ),
-            FormBuilderTextField(
-              name: 'sourceUri',
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: context.appLocalizations.quoteFormFieldSourceUri,
-                hintText:
-                    context.appLocalizations.quoteFormFieldSourceUriHintText,
-              ),
-              validator: FormBuilderValidators.url(),
-              smartDashesType: SmartDashesType.enabled,
-              smartQuotesType: SmartQuotesType.enabled,
-              keyboardType: TextInputType.url,
-              valueTransformer: (value) => value?.trim(),
-            ),
+            const QuoteFormSourceUriField(),
             const SizedBox(
               height: 10,
             ),
-            FormBuilderCheckbox(
-              name: 'isFavorite',
-              title: Text(context.appLocalizations.quoteFormFieldIsFavorite),
-              shape: StarBorder(
-                squash: .5,
-                innerRadiusRatio: .5,
-                side:
-                    BorderSide(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              checkColor: Colors.transparent,
-              valueTransformer: (value) => value ?? false,
-            ),
+            const QuoteFormIsFavoriteField(),
             const SizedBox(
               height: 10,
             ),
@@ -121,25 +76,10 @@ mixin QuoteFormMixin {
     );
   }
 
-  FormBuilderTextField _authorTextField(BuildContext context) {
+  Widget _authorTextField(BuildContext context) {
     final fieldName = context.appLocalizations.quoteFormFieldAuthor;
     return formType != FormTypes.add
-        ? FormBuilderTextField(
-            name: 'author',
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              labelText: fieldName,
-            ),
-            smartQuotesType: SmartQuotesType.enabled,
-            keyboardType: TextInputType.name,
-            smartDashesType: SmartDashesType.enabled,
-            validator: FormBuilderValidators.required(
-              errorText: context.appLocalizations.nonEmptyField(
-                fieldName,
-              ),
-            ),
-            valueTransformer: (value) => value?.trim(),
-          )
+        ? const QuoteFormAuthorField()
         : FormBuilderTextField(
             name: 'author',
             decoration: InputDecoration(
@@ -179,16 +119,13 @@ mixin QuoteFormMixin {
             if (!snapshot.hasError) {
               final allTags = snapshot.data!.first!;
               return MultipleSearchSelection(
-                searchField: TextField(
+                searchField: QuoteFormSearchTagsField(
                   decoration: InputDecoration(
                     labelText: context.appLocalizations.quoteFormFieldTags,
                     hintText:
                         context.appLocalizations.quoteFormFieldTagsHintText,
                     border: const OutlineInputBorder(),
                   ),
-                  smartDashesType: SmartDashesType.enabled,
-                  smartQuotesType: SmartQuotesType.enabled,
-                  keyboardType: TextInputType.name,
                 ),
                 controller: controller,
                 items: allTags,

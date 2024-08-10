@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
+import 'package:my_quotes/screens/add_quote/add_quote_form.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
 
@@ -32,14 +33,15 @@ final class AddQuoteScreen extends StatelessWidget {
   }
 }
 
-final class AddQuoteForm extends StatefulWidget {
-  const AddQuoteForm({super.key});
+final class AddQuoteFormBody extends StatefulWidget {
+  const AddQuoteFormBody({super.key});
 
   @override
-  State<AddQuoteForm> createState() => _AddQuoteFormState();
+  State<AddQuoteFormBody> createState() => _AddQuoteFormBodyState();
 }
 
-class _AddQuoteFormState extends State<AddQuoteForm> with QuoteFormMixin {
+class _AddQuoteFormBodyState extends State<AddQuoteFormBody>
+    with QuoteFormMixin {
   @override
   void dispose() {
     multipleTagSearchController
