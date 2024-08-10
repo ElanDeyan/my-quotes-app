@@ -97,6 +97,9 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   Future<List<Tag>> get allTags => tagsDao.allTags;
 
   @override
+  Stream<List<Tag>> get allTagsStream => tagsDao.allTagsStream;
+
+  @override
   Future<int> createTag(String tagName) async {
     return into(tagTable).insert(
       TagTableCompanion.insert(name: tagName),

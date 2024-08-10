@@ -10,6 +10,8 @@ class TagsDao extends DatabaseAccessor<AppDatabase> with _$TagsDaoMixin {
 
   Future<List<Tag>> get allTags async => select(tagTable).get();
 
+  Stream<List<Tag>> get allTagsStream => select(tagTable).watch();
+
   Future<Tag?> getTagById(int id) {
     return (select(tagTable)..where((row) => row.id.equals(id)))
         .getSingleOrNull();
