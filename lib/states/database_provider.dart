@@ -107,4 +107,7 @@ final class DatabaseProvider extends ChangeNotifier implements AppRepository {
     _appRepository.restoreData(tags, quotes);
     notifyListeners();
   }
+
+  @override
+  Stream<List<Tag>> get allTagsStream => _appRepository.allTagsStream;
 }
