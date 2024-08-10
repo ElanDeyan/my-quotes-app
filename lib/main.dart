@@ -11,14 +11,19 @@ import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/constants/keys.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/env/env.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
 import 'package:my_quotes/screens/feedback/my_quotes_feedback.dart';
+import 'package:my_quotes/services/database_locator.dart';
 import 'package:my_quotes/services/setup.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:my_quotes/states/database_provider.dart';
+import 'package:my_quotes/states/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
+
+late final DatabaseLocator databaseLocator;
 
 void main() async {
   runZonedGuarded(() async {
@@ -34,7 +39,12 @@ void main() async {
     await Sentry.init((options) => options.dsn = sentryDsn);
     await initApp();
   }, (exception, stackTrace) {
-    log('There is an exception!', name: 'exception', error: exception, stackTrace: stackTrace);
+    log(
+      'There is an exception!',
+      name: 'exception',
+      error: exception,
+      stackTrace: stackTrace,
+    );
     unawaited(Sentry.captureException(exception, stackTrace: stackTrace));
   });
 }
@@ -50,10 +60,18 @@ Future<void> initApp() async {
 
   await appPreferences.loadLocalPreferences();
 
+  final appDatabase = AppDatabase();
+
+  serviceLocator.registerSingleton<AppRepository>(
+    appDatabase,
+  );
+
+  databaseLocator = DatabaseLocator(serviceLocator<AppRepository>());
+
   runApp(
     MyAppProvider(
       appPreferencesProvider: appPreferences,
-      databaseNotifier: DatabaseProvider(appRepository: AppDatabase()),
+      databaseNotifier: DatabaseProvider(appRepository: appDatabase),
     ),
   );
 }
