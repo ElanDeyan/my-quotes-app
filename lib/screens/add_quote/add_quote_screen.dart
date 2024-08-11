@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/add_quote/add_quote_form.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
-import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
 
 final class AddQuoteScreen extends StatelessWidget {
   const AddQuoteScreen({super.key});
@@ -29,41 +27,6 @@ final class AddQuoteScreen extends StatelessWidget {
         ],
       ),
       body: const AddQuoteForm(),
-    );
-  }
-}
-
-final class AddQuoteFormBody extends StatefulWidget {
-  const AddQuoteFormBody({super.key});
-
-  @override
-  State<AddQuoteFormBody> createState() => _AddQuoteFormBodyState();
-}
-
-class _AddQuoteFormBodyState extends State<AddQuoteFormBody>
-    with QuoteFormMixin {
-  @override
-  void dispose() {
-    multipleTagSearchController
-      ..clearAllPickedItems()
-      ..clearSearchField();
-    formKey.currentState?.reset();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: FormBuilder(
-          key: formKey,
-          onChanged: formKey.currentState?.validate,
-          autovalidateMode: AutovalidateMode.always,
-          child: quoteFormBody(context),
-        ),
-      ),
     );
   }
 }
