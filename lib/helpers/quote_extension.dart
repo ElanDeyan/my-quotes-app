@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
-import 'package:my_quotes/states/database_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 extension QuoteExtension on Quote {
@@ -62,10 +62,10 @@ extension QuoteExtension on Quote {
       timeago.format(createdAt!, locale: locale.languageCode);
 
   Future<String> toShareableJsonString(
-    DatabaseProvider databaseProvider,
+    AppRepository appRepository,
   ) async {
     final tagsName =
-        (await databaseProvider.getTagsByIds(tagsId)).map((tag) => tag.name);
+        (await appRepository.getTagsByIds(tagsId)).map((tag) => tag.name);
 
     return jsonEncode(<String, Object?>{
       'content': content,

@@ -29,6 +29,9 @@ final class DatabaseProvider extends ChangeNotifier implements AppRepository {
   Future<Quote?> get randomQuote => _appRepository.randomQuote;
 
   @override
+  Stream<List<Quote>> get allQuotesStream => _appRepository.allQuotesStream;
+
+  @override
   Future<int> deleteQuote(int id) {
     final oldId = _appRepository.deleteQuote(id);
     notifyListeners();

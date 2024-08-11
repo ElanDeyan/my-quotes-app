@@ -3,11 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/services/save_quote_image.dart';
 import 'package:my_quotes/services/share_quote_file.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
-import 'package:my_quotes/states/database_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 enum ShareActions {
@@ -35,7 +35,7 @@ enum ShareActions {
 
   static VoidCallback actionCallback(
     BuildContext context,
-    DatabaseProvider databaseProvider,
+    AppRepository appRepository,
     AppLocalizations appLocalizations,
     ShareActions action,
     Quote quote,
@@ -53,7 +53,7 @@ enum ShareActions {
           },
         ShareActions.file => () async {
             final successfulOperation =
-                await shareQuoteFile(databaseProvider, quote);
+                await shareQuoteFile(appRepository, quote);
 
             if (context.mounted) {
               onSuccessfulOperation(successfulOperation, context);

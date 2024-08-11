@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_quotes/screens/home/random_quote_container.dart';
+import 'package:my_quotes/screens/home/random_quote_section.dart';
 
 final class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -10,7 +10,7 @@ final class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SizedBox.expand(
       child: Center(
-        child: RandomQuoteContainer(),
+        child: RandomQuoteSection(),
       ),
     );
   }

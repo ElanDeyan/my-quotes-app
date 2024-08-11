@@ -65,6 +65,9 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   Future<Quote?> get randomQuote => quotesDao.randomQuote;
 
   @override
+  Stream<List<Quote>> get allQuotesStream => quotesDao.allQuotesStream;
+
+  @override
   Future<bool> updateQuote(Quote quote) {
     return update(quoteTable).replace(
       quote.toCompanion(true),
