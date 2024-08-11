@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:basics/basics.dart';
 import 'package:feedback_sentry/feedback_sentry.dart';
@@ -39,12 +38,6 @@ void main() async {
     await Sentry.init((options) => options.dsn = sentryDsn);
     await initApp();
   }, (exception, stackTrace) {
-    log(
-      'There is an exception!',
-      name: 'exception',
-      error: exception,
-      stackTrace: stackTrace,
-    );
     unawaited(Sentry.captureException(exception, stackTrace: stackTrace));
   });
 }
@@ -62,8 +55,8 @@ Future<void> initApp() async {
 
   final appDatabase = AppDatabase();
 
-  serviceLocator.registerSingleton<AppRepository>(
-    appDatabase,
+  serviceLocator.registerLazySingleton<AppRepository>(
+    () => appDatabase,
   );
 
   databaseLocator = DatabaseLocator(serviceLocator<AppRepository>());
