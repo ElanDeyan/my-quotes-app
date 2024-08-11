@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:multiple_search_selection/multiple_search_selection.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/enums/form_types.dart';
+import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/helpers/map_extension.dart';
+import 'package:my_quotes/main.dart';
+import 'package:my_quotes/routes/routes_names.dart';
+import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_action_button.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_author_field.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_content_field.dart';
@@ -11,6 +17,7 @@ import 'package:my_quotes/shared/widgets/form/quote_form_select_tags_field.dart'
 import 'package:my_quotes/shared/widgets/form/quote_form_source_field.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_source_uri_field.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
+import 'package:my_quotes/shared/widgets/pill_chip.dart';
 
 class AddQuoteForm extends StatefulWidget {
   const AddQuoteForm({super.key});
@@ -23,24 +30,62 @@ class AddQuoteForm extends StatefulWidget {
 
 class _AddQuoteFormState extends State<AddQuoteForm> {
   final _formKey = GlobalKey<FormBuilderState>();
-  late final MultipleSearchController<Tag> _multipleTagSelectionController;
   final _pickedItems = <Tag>{};
 
   @override
-  void initState() {
-    super.initState();
-    _multipleTagSelectionController = MultipleSearchController<Tag>(
-      allowDuplicateSelection: false,
-    );
-  }
-
-  @override
   void dispose() {
-    _multipleTagSelectionController
-      ..clearAllPickedItems()
-      ..clearSearchField();
     _formKey.currentState?.reset();
     super.dispose();
+  }
+
+  void _onSubmit(BuildContext context) {
+    final isValid = _formKey.currentState?.saveAndValidate() ?? false;
+    if (isValid) {
+      final formData = _formKey.currentState!.value.copy
+        ..putIfAbsent(
+          'tags',
+          () {
+            if (_pickedItems.isEmpty) return null;
+
+            return _pickedItems
+                .map((tag) => tag.id)
+                .nonNulls
+                .join(idSeparatorChar);
+          },
+        );
+
+      final quoteFromForm = Quote.fromJson(formData);
+
+      databaseLocator.createQuote(quoteFromForm).then(
+        (createdId) {
+          if (context.mounted) {
+            showToast(
+              context,
+              child: PillChip(
+                label: Text(context.appLocalizations.quoteFormSuccessfulAdd),
+              ),
+            );
+
+            context.canPop()
+                ? context.pop()
+                : context.goNamed(homeNavigationKey);
+          }
+        },
+        onError: (error) => context.mounted
+            ? showToast(
+                context,
+                child: PillChip(
+                  label: Text(context.appLocalizations.quoteFormError),
+                ),
+              )
+            : null,
+      );
+    } else {
+      showToast(
+        context,
+        child: PillChip(label: Text(context.appLocalizations.quoteFormError)),
+      );
+    }
   }
 
   @override
@@ -72,11 +117,12 @@ class _AddQuoteFormState extends State<AddQuoteForm> {
                   const QuoteFormIsFavoriteField(),
                   const Gap.vertical(spacing: 10),
                   QuoteFormSelectTagsField(
-                    initialSelectedTags: _pickedItems,
-                    multipleSearchController: _multipleTagSelectionController,
+                    pickedItems: _pickedItems,
                   ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormActionButton(),
+                  QuoteFormActionButton(
+                    onPressed: () => _onSubmit(context),
+                  ),
                 ],
               ),
             ),
