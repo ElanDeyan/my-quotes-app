@@ -8,15 +8,18 @@ class QuoteFormAuthorField extends StatelessWidget {
   const QuoteFormAuthorField({
     super.key,
     this.formType = FormTypes.add,
+    this.initialValue,
   });
 
   final FormTypes formType;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     final labelText = context.appLocalizations.quoteFormFieldAuthor;
     return FormBuilderTextField(
       name: 'author',
+      initialValue: initialValue,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         labelText: labelText,

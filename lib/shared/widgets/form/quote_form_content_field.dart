@@ -6,12 +6,16 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 class QuoteFormContentField extends StatelessWidget {
   const QuoteFormContentField({
     super.key,
+    this.initialValue,
   });
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return FormBuilderTextField(
       name: 'content',
+      initialValue: initialValue,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         labelText: context.appLocalizations.quoteFormFieldContent,

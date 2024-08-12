@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/screens/add_quote_from_file/add_quote_from_file_form_builder.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
+import 'package:my_quotes/shared/widgets/form/quote_form_skeleton.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +61,7 @@ class AddQuoteFromFileProvider extends StatelessWidget {
         final data = snapshot.data;
 
         return switch ((connectionState, hasError, hasData)) {
-          (ConnectionState.waiting, _, _) => const CircularProgressIndicator(),
+          (ConnectionState.waiting, _, _) => const QuoteFormSkeleton(),
           (ConnectionState.done, _, true) => AddQuoteFromFileFormBuilder(
               tagsIds: data!,
               quoteAsJson: quoteAsJson,

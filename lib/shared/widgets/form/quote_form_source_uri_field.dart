@@ -6,12 +6,16 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 class QuoteFormSourceUriField extends StatelessWidget {
   const QuoteFormSourceUriField({
     super.key,
+    this.initialValue,
   });
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return FormBuilderTextField(
       name: 'sourceUri',
+      initialValue: initialValue,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         labelText: context.appLocalizations.quoteFormFieldSourceUri,

@@ -5,12 +5,16 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 class QuoteFormIsFavoriteField extends StatelessWidget {
   const QuoteFormIsFavoriteField({
     super.key,
+    this.initialValue = false,
   });
+
+  final bool initialValue;
 
   @override
   Widget build(BuildContext context) {
     return FormBuilderCheckbox(
       name: 'isFavorite',
+      initialValue: initialValue,
       title: Text(context.appLocalizations.quoteFormFieldIsFavorite),
       shape: StarBorder(
         squash: .5,
