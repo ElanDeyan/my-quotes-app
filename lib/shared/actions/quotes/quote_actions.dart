@@ -141,7 +141,7 @@ enum QuoteActions {
 
   static List<PopupMenuItem<Quote>> popupMenuItems(
     AppLocalizations appLocalizations,
-    DatabaseProvider databaseProvider,
+    AppRepository appRepository,
     BuildContext context,
     Quote quote, {
     Iterable<QuoteActions> actions = QuoteActions.values,
@@ -152,7 +152,7 @@ enum QuoteActions {
               value: quote,
               onTap: QuoteActions.actionCallback(
                 appLocalizations,
-                databaseProvider,
+                appRepository,
                 context,
                 action,
                 quote,
