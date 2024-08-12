@@ -141,8 +141,10 @@ class _QuoteFromFileForm extends StatelessWidget {
                 label: Text(context.appLocalizations.quoteFormSuccessfulAdd),
               ),
             );
-          
-            context.canPop() ? context.pop() : context.goNamed(homeNavigationKey);
+
+            context.canPop()
+                ? context.pop()
+                : context.goNamed(homeNavigationKey);
           }
         },
         onError: (error) => context.mounted
