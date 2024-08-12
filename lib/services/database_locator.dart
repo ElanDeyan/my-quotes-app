@@ -12,7 +12,7 @@ class DatabaseLocator implements AppRepository {
 
   @override
   Stream<List<Quote>> get allQuotesStream => _appRepository.allQuotesStream;
-  
+
   @override
   Future<List<Tag>> get allTags => _appRepository.allTags;
 
@@ -23,10 +23,10 @@ class DatabaseLocator implements AppRepository {
   Future<void> clearAllTags() => _appRepository.clearAllTags();
 
   @override
-  Future<int> createQuote(Quote quote) => _appRepository.createQuote(quote);
+  Future<Quote> createQuote(Quote quote) => _appRepository.createQuote(quote);
 
   @override
-  Future<int> createTag(String tagName) => _appRepository.createTag(tagName);
+  Future<Tag> createTag(String tagName) => _appRepository.createTag(tagName);
 
   @override
   Future<int> deleteQuote(int id) => _appRepository.deleteQuote(id);
@@ -53,7 +53,6 @@ class DatabaseLocator implements AppRepository {
 
   @override
   Future<Quote?> get randomQuote => _appRepository.randomQuote;
-
 
   @override
   Future<void> restoreData(List<Tag> tags, List<Quote> quotes) =>

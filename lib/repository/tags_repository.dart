@@ -9,7 +9,7 @@ abstract interface class TagsRepository {
 
   Future<List<Tag>> getTagsByIds(Iterable<int> ids);
 
-  Future<int> createTag(String tagName);
+  Future<Tag> createTag(String tagName);
 
   Future<bool> updateTag(Tag tag);
 

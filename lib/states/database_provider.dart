@@ -13,10 +13,10 @@ final class DatabaseProvider extends ChangeNotifier implements AppRepository {
   Future<List<Quote>> get allQuotes => _appRepository.allQuotes;
 
   @override
-  Future<int> createQuote(Quote quote) {
-    final newId = _appRepository.createQuote(quote);
+  Future<Quote> createQuote(Quote quote) {
+    final addedQuote = _appRepository.createQuote(quote);
     notifyListeners();
-    return newId;
+    return addedQuote;
   }
 
   @override
@@ -49,10 +49,10 @@ final class DatabaseProvider extends ChangeNotifier implements AppRepository {
   Future<List<Tag>> get allTags => _appRepository.allTags;
 
   @override
-  Future<int> createTag(String tagName) {
-    final newId = _appRepository.createTag(tagName);
+  Future<Tag> createTag(String tagName) {
+    final addedTag = _appRepository.createTag(tagName);
     notifyListeners();
-    return newId;
+    return addedTag;
   }
 
   @override

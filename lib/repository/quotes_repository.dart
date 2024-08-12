@@ -11,7 +11,7 @@ abstract interface class QuotesRepository {
 
   Future<List<Quote>> getQuotesWithTagId(int tagId);
 
-  Future<int> createQuote(Quote quote);
+  Future<Quote> createQuote(Quote quote);
 
   Future<bool> updateQuote(Quote quote);
 
