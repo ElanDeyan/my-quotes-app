@@ -57,7 +57,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> {
       final quoteFromForm = Quote.fromJson(formData);
 
       databaseLocator.createQuote(quoteFromForm).then(
-        (createdId) {
+        (createdQuote) {
           if (context.mounted) {
             showToast(
               context,
