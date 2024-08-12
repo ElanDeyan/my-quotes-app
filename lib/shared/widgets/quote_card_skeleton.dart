@@ -7,9 +7,8 @@ class QuoteCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Skeletonizer(
-      justifyMultiLineText: true,
-      containersColor: Theme.of(context).colorScheme.primaryContainer,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500, maxHeight: 250),
         child: Stack(
@@ -64,8 +63,8 @@ class QuoteCardSkeleton extends StatelessWidget {
               ),
             ),
             const Positioned(
-              bottom: 7.5,
-              right: 7.5,
+              bottom: 10,
+              right: 10,
               child: Skeleton.shade(
                 child: Icon(
                   Icons.favorite,
@@ -74,7 +73,8 @@ class QuoteCardSkeleton extends StatelessWidget {
               ),
             ),
             const Positioned(
-              right: 0,
+              right: 7.5,
+              top: 2.5,
               child: Skeleton.shade(child: Icon(Icons.more_horiz)),
             ),
             const Positioned(
