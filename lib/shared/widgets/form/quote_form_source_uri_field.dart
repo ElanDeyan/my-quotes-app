@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -25,7 +26,7 @@ class QuoteFormSourceUriField extends StatelessWidget {
       smartDashesType: SmartDashesType.enabled,
       smartQuotesType: SmartQuotesType.enabled,
       keyboardType: TextInputType.url,
-      valueTransformer: (value) => value?.trim(),
+      valueTransformer: (value) => value.isNullOrBlank ? null : value!.trim(),
     );
   }
 }

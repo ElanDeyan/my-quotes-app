@@ -23,7 +23,6 @@ class QuoteFormSourceField extends StatelessWidget {
       keyboardType: TextInputType.text,
       smartQuotesType: SmartQuotesType.enabled,
       smartDashesType: SmartDashesType.enabled,
-      valueTransformer: (value) => value?.trim(),
     );
   }
 }

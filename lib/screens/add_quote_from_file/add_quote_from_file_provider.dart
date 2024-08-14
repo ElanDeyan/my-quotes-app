@@ -1,74 +1,98 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/screens/add_quote_from_file/add_quote_from_file_form_builder.dart';
+import 'package:my_quotes/main.dart';
+import 'package:my_quotes/screens/add_quote_from_file/add_quote_from_file_form.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_skeleton.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
 
-class AddQuoteFromFileProvider extends StatelessWidget {
+class AddQuoteFromFileProvider extends StatefulWidget {
   const AddQuoteFromFileProvider({
     super.key,
-    required this.quote,
-    required this.tags,
+    required this.tagsNamesFromFile,
+    required this.quoteFromFile,
   });
 
-  final Quote quote;
-  final List<String> tags;
+  final Set<String> tagsNamesFromFile;
+  final Quote quoteFromFile;
 
-  Future<List<String>> _updateTagsIds(
-    BuildContext context,
-    List<String> tags,
-  ) async {
-    if (tags.isEmpty) return <String>[];
+  FormTypes get formType => FormTypes.addFromFile;
 
-    final tagsIds = <String>[];
+  @override
+  State<AddQuoteFromFileProvider> createState() =>
+      _AddQuoteFromFileProviderState();
+}
 
-    final database = Provider.of<DatabaseProvider>(context, listen: false);
-    final allTags = await database.allTags;
+class _AddQuoteFromFileProviderState extends State<AddQuoteFromFileProvider> {
+  final _formKey = GlobalKey<FormBuilderState>();
+  var _pickedItems = Future.value(<Tag>{});
 
-    tagsIds.addAll(
-      allTags
-          .where((tag) => tags.contains(tag.name))
-          .map((tag) => tag.id.toString()),
-    );
-
-    final allTagsNames = allTags.map((tag) => tag.name);
-    final missingTags =
-        tags.where((tagName) => !allTagsNames.contains(tagName));
-
-    for (final missingTag in missingTags) {
-      final newId = await database.createTag(missingTag);
-      tagsIds.add(newId.toString());
-    }
-
-    return tagsIds;
+  @override
+  void initState() {
+    super.initState();
+    _pickedItems = _getTagsFromNames(widget.tagsNamesFromFile);
   }
 
-  Map<String, Object?> get quoteAsJson => quote.toJson();
+  Future<Set<Tag>> _getTagsFromNames(Set<String> tagsNames) async {
+    if (tagsNames.isEmpty) return const <Tag>{};
+
+    final allTags = await databaseLocator.allTags;
+
+    final tagsToHaveAlreadySelected = <Tag>{
+      ...allTags.where((tag) => tagsNames.contains(tag.name)),
+    };
+
+    final missingTagsNames = widget.tagsNamesFromFile
+        .where((tagName) => !allTags.map((tag) => tag.name).contains(tagName));
+
+    for (final tagNameToCreate in missingTagsNames) {
+      tagsToHaveAlreadySelected
+          .add(await databaseLocator.createTag(tagNameToCreate));
+    }
+
+    return tagsToHaveAlreadySelected;
+  }
+
+  @override
+  void dispose() {
+    _formKey.currentState?.reset();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _updateTagsIds(context, tags),
-      builder: (context, snapshot) {
-        final connectionState = snapshot.connectionState;
-        final hasError = snapshot.hasError;
-        final hasData = snapshot.hasData;
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: FutureBuilder(
+            future: _pickedItems,
+            initialData: const <Tag>{},
+            builder: (context, snapshot) {
+              final connectionState = snapshot.connectionState;
+              final hasError = snapshot.hasError;
+              final hasData = snapshot.hasData;
 
-        final data = snapshot.data;
+              final data = snapshot.data;
 
-        return switch ((connectionState, hasError, hasData)) {
-          (ConnectionState.waiting, _, _) => const QuoteFormSkeleton(),
-          (ConnectionState.done, _, true) => AddQuoteFromFileFormBuilder(
-              tagsIds: data!,
-              quoteAsJson: quoteAsJson,
-            ),
-          _ => const AnErrorOccurredMessage(),
-        };
-      },
+              return switch ((connectionState, hasError, hasData)) {
+                (ConnectionState.done, _, true) when data != null =>
+                  AddQuoteFromFileForm(
+                    formKey: _formKey,
+                    quote: widget.quoteFromFile,
+                    tags: data,
+                    formType: widget.formType,
+                  ),
+                (ConnectionState.waiting, _, _) => const QuoteFormSkeleton(),
+                _ => const AnErrorOccurredMessage(),
+              };
+            },
+          ),
+        ),
+      ),
     );
   }
 }

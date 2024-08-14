@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
@@ -7,9 +8,12 @@ import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/map_extension.dart';
+import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/main.dart';
 import 'package:my_quotes/routes/routes_names.dart';
+import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
+import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_action_button.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_author_field.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_content_field.dart';
@@ -20,17 +24,23 @@ import 'package:my_quotes/shared/widgets/form/quote_form_source_uri_field.dart';
 import 'package:my_quotes/shared/widgets/form/update_form_data_mixin.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-class AddQuoteForm extends StatefulWidget {
-  const AddQuoteForm({super.key});
+class UpdateQuoteForm extends StatefulWidget {
+  const UpdateQuoteForm({
+    super.key,
+    required this.quote,
+  });
 
-  FormTypes get formType => FormTypes.add;
+  final Quote quote;
+  FormTypes get formType => FormTypes.update;
 
   @override
-  State<AddQuoteForm> createState() => _AddQuoteFormState();
+  State<UpdateQuoteForm> createState() => _UpdateQuoteFormState();
 }
 
-class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
+class _UpdateQuoteFormState extends State<UpdateQuoteForm>
+    with UpdateFormDataMixin {
   final _formKey = GlobalKey<FormBuilderState>();
   final _pickedTags = <Tag>{};
 
@@ -41,20 +51,26 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
   }
 
   void _onSubmit(BuildContext context) {
-    final isValid = _formKey.currentState?.saveAndValidate() ?? false;
-    if (isValid) {
+    final isValid = _formKey.currentState?.saveAndValidate();
+
+    if (isValid ?? false) {
       final formData =
           updateFormData(_formKey.currentState!.value.copy, _pickedTags);
 
-      final quoteFromForm = Quote.fromJson(formData);
+      final quoteFromForm = Quote.fromJson(formData).copyWith(
+        id: Value(widget.quote.id),
+        createdAt: Value(widget.quote.createdAt),
+      );
 
-      databaseLocator.createQuote(quoteFromForm).then(
-        (createdQuote) {
+      log(quoteFromForm.toString(), name: 'UpdateFormSubmit');
+
+      databaseLocator.updateQuote(quoteFromForm).then(
+        (value) {
           if (context.mounted) {
             showToast(
               context,
               child: PillChip(
-                label: Text(context.appLocalizations.quoteFormSuccessfulAdd),
+                label: Text(context.appLocalizations.quoteFormSuccessfulEdit),
               ),
             );
 
@@ -71,14 +87,9 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
                 label: Text(context.appLocalizations.quoteFormError),
               ),
             );
-            log('Error', name: 'AddQuoteFormError', error: error);
+            log('Error', name: 'UpdateQuoteFormError', error: error);
           }
         },
-      );
-    } else {
-      showToast(
-        context,
-        child: PillChip(label: Text(context.appLocalizations.quoteFormError)),
       );
     }
   }
@@ -101,22 +112,35 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
               ),
               child: Column(
                 children: [
-                  const QuoteFormContentField(),
+                  QuoteFormContentField(
+                    initialValue: widget.quote.content,
+                  ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormAuthorField(),
+                  QuoteFormAuthorField(
+                    formType: widget.formType,
+                    initialValue: widget.quote.author,
+                  ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormSourceField(),
+                  QuoteFormSourceField(
+                    initialValue: widget.quote.source,
+                  ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormSourceUriField(),
+                  QuoteFormSourceUriField(
+                    initialValue: widget.quote.sourceUri,
+                  ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormIsFavoriteField(),
+                  QuoteFormIsFavoriteField(
+                    initialValue: widget.quote.isFavorite,
+                  ),
                   const Gap.vertical(spacing: 10),
-                  QuoteFormSelectTagsField(
-                    pickedItems: _pickedTags,
+                  _FutureSelectedTagsField(
+                    quote: widget.quote,
+                    tagSetToUpdate: _pickedTags,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormActionButton(
                     onPressed: () => _onSubmit(context),
+                    formType: widget.formType,
                   ),
                 ],
               ),
@@ -124,6 +148,44 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _FutureSelectedTagsField extends StatelessWidget {
+  const _FutureSelectedTagsField({
+    super.key,
+    required this.quote,
+    required this.tagSetToUpdate,
+  });
+
+  final Quote quote;
+  final Set<Tag> tagSetToUpdate;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: databaseLocator.getTagsByIds(quote.tagsId),
+      builder: (context, snapshot) {
+        final connectionState = snapshot.connectionState;
+        final hasError = snapshot.hasError;
+        final hasData = snapshot.hasData;
+
+        final data = snapshot.data;
+
+        if (connectionState == ConnectionState.done && data != null) {
+          tagSetToUpdate.addAll(data);
+        }
+
+        return switch ((connectionState, hasError, hasData)) {
+          (ConnectionState.done, _, true) when data != null =>
+            QuoteFormSelectTagsField(pickedItems: tagSetToUpdate),
+          (ConnectionState.waiting, _, _) =>
+            const Skeletonizer(child: TextField()),
+          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+          _ => const AnErrorOccurredMessage(),
+        };
+      },
     );
   }
 }
