@@ -8,6 +8,6 @@ class AnErrorOccurredMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(context.appLocalizations.errorOccurred);
+    return Center(child: Text(context.appLocalizations.errorOccurred));
   }
 }
