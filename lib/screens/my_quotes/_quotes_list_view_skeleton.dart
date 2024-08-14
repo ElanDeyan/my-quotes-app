@@ -16,7 +16,7 @@ class QuotesListViewSkeleton extends StatelessWidget {
           10,
           (index) => const ListTile(
             leading: Bone.icon(),
-            trailing: Skeleton.shade(child: Icon(Icons.more_horiz_outlined)),
+            trailing: Skeleton.shade(child: Icon(Icons.more_vert_outlined)),
             title: Bone.multiText(),
             subtitle: Bone.text(
               words: 5,
