@@ -1,10 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class WaitingForQuotesSkeleton extends StatelessWidget {
-  const WaitingForQuotesSkeleton({
+class QuotesListViewSkeleton extends StatelessWidget {
+  const QuotesListViewSkeleton({
     super.key,
   });
 
@@ -18,7 +16,7 @@ class WaitingForQuotesSkeleton extends StatelessWidget {
           10,
           (index) => const ListTile(
             leading: Bone.icon(),
-            trailing: Bone.icon(),
+            trailing: Skeleton.shade(child: Icon(Icons.more_horiz_outlined)),
             title: Bone.multiText(),
             subtitle: Bone.text(
               words: 5,
