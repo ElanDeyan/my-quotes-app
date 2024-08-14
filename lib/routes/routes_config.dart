@@ -9,7 +9,7 @@ import 'package:my_quotes/screens/quote_single/quote_screen.dart';
 import 'package:my_quotes/screens/quotes_with_tag.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
 import 'package:my_quotes/screens/settings/settings_screen.dart';
-import 'package:my_quotes/screens/tags_screen.dart';
+import 'package:my_quotes/screens/tags/tags_screen.dart';
 import 'package:my_quotes/screens/update_quote/update_quote_screen.dart';
 
 final routesConfig = GoRouter(
