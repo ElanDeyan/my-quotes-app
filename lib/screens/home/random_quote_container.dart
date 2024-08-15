@@ -39,35 +39,38 @@ class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: QuoteCard(quote: _quote),
-        ),
-        const Gap.vertical(spacing: 10),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            OutlinedButton(
-              onPressed: _updateRandomQuote,
-              child: const Icon(Icons.shuffle),
-            ),
-            const Gap.horizontal(spacing: 10),
-            OutlinedButton(
-              onPressed: QuoteActions.actionCallback(
-                context.appLocalizations,
-                databaseLocator,
-                context,
-                QuoteActions.share,
-                _quote,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: QuoteCard(quote: _quote),
+          ),
+          const Gap.vertical(spacing: 10),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              OutlinedButton(
+                onPressed: _updateRandomQuote,
+                child: const Icon(Icons.shuffle),
               ),
-              child: const Icon(Icons.share_outlined),
-            ),
-          ],
-        ),
-      ],
+              const Gap.horizontal(spacing: 10),
+              OutlinedButton(
+                onPressed: QuoteActions.actionCallback(
+                  context.appLocalizations,
+                  databaseLocator,
+                  context,
+                  QuoteActions.share,
+                  _quote,
+                ),
+                child: const Icon(Icons.share_outlined),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
