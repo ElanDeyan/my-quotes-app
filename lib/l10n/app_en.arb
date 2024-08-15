@@ -187,5 +187,11 @@
   "feedbackInstructions": "Navigate through the app and type below what do you want.",
   "feedbackTextLabel": "Your feedback",
   "feedbackSend": "Send feedback",
-  "successfulOperation": "Successful operation!"
+  "successfulOperation": "Successful operation!",
+  "quotesListViewSortingButton": "Sort",
+  "quotesListViewSortingButtonTooltip": "Show menu",
+  "quotesListViewSortingCreatedAtAsc": "Older first",
+  "quotesListViewSortingCreatedAtDesc": "Newer first",
+  "quotesListViewFilteringFavorites": "Favorites"
+
 }

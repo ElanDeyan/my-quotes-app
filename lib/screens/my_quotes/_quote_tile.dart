@@ -39,7 +39,11 @@ class QuoteTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         softWrap: true,
       ),
-      subtitle: Text(_subtitle),
+      subtitle: Text(
+        _subtitle,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: PopupMenuButton(
         tooltip: context.appLocalizations.quoteActionsPopupButtonTooltip,
         position: PopupMenuPosition.under,

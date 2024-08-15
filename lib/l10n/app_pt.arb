@@ -185,5 +185,10 @@
   "feedbackInstructions": "Navegue até a tela desejada e escreva abaixo o que quer que melhore",
   "feedbackTextLabel": "Seu feedback",
   "feedbackSend": "Enviar feedback",
-  "successfulOperation": "Operação realizada com sucesso!"
+  "successfulOperation": "Operação realizada com sucesso!",
+  "quotesListViewSortingButton": "Ordenar",
+  "quotesListViewSortingButtonTooltip": "Ver opções",
+  "quotesListViewSortingCreatedAtAsc": "Mais antigos",
+  "quotesListViewSortingCreatedAtDesc": "Mais recentes",
+  "quotesListViewFilteringFavorites": "Favoritos"
 }

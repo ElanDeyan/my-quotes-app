@@ -3,8 +3,8 @@ import 'package:my_quotes/main.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/screens/my_quotes/_no_quotes_added_yet.dart';
 import 'package:my_quotes/screens/my_quotes/_quotes_list_error.dart';
-import 'package:my_quotes/screens/my_quotes/_quotes_list_view.dart';
 import 'package:my_quotes/screens/my_quotes/_quotes_list_view_skeleton.dart';
+import 'package:my_quotes/screens/my_quotes/quotes_list_view_container.dart';
 
 final class MyQuotesScreen extends StatelessWidget {
   const MyQuotesScreen({
@@ -30,7 +30,7 @@ final class MyQuotesScreen extends StatelessWidget {
             const NoQuotesAddedYet(),
           (ConnectionState.active || ConnectionState.done, _, true)
               when data != null && data.isNotEmpty =>
-            QuotesListView(data: data.reversed.toList()),
+            QuotesListViewContainer(quotes: data),
           _ => const QuotesListError()
         };
       },
