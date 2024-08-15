@@ -108,10 +108,7 @@ final class _MainAppScreenState extends State<MainAppScreen> {
         actions: _appBarActions(context, isCompactWindowSize),
       ),
       body: isCompactWindowSize
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: bodyContent,
-            )
+          ? bodyContent
           : _notCompactWindowSizeBody(context),
       floatingActionButton: isCompactWindowSize
           ? FloatingActionButton(
@@ -180,7 +177,6 @@ final class _MainAppScreenState extends State<MainAppScreen> {
             },
           ),
         ],
-        // TODO: Adds handling for web (just downloads the file)
         icon: const Icon(Icons.import_export_outlined),
         tooltip: context.appLocalizations.backupOptionsTooltip,
       ),
