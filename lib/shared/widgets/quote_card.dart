@@ -3,12 +3,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/main.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
 
 class QuoteCard extends StatelessWidget {
-  const QuoteCard({super.key, required this.quote, this.showActions = true});
+  const QuoteCard({
+    super.key,
+    required this.quote,
+    this.showActions = true,
+  });
 
   final Quote quote;
   final bool showActions;
@@ -71,33 +74,31 @@ class QuoteCard extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Consumer<DatabaseProvider>(
-                    builder: (context, database, child) => FutureBuilder(
-                      future: database.getTagsByIds(quote.tagsId),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          if (!snapshot.hasError) {
-                            return Wrap(
-                              runSpacing: 5.0,
-                              spacing: 5.0,
-                              children: [
-                                for (final tag in snapshot.data!)
-                                  Text(
-                                    '#${tag.name}',
-                                    style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontSize,
-                                    ),
+                  FutureBuilder(
+                    future: databaseLocator.getTagsByIds(quote.tagsId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (!snapshot.hasError) {
+                          return Wrap(
+                            runSpacing: 5.0,
+                            spacing: 5.0,
+                            children: [
+                              for (final tag in snapshot.data!)
+                                Text(
+                                  '#${tag.name}',
+                                  style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .fontSize,
                                   ),
-                              ],
-                            );
-                          }
+                                ),
+                            ],
+                          );
                         }
-                        return const SizedBox.shrink();
-                      },
-                    ),
+                      }
+                      return const SizedBox.shrink();
+                    },
                   ),
                 ],
               ),
@@ -118,25 +119,20 @@ class QuoteCard extends StatelessWidget {
           if (showActions)
             Positioned(
               right: 0,
-              child: Consumer<DatabaseProvider>(
-                builder: (context, database, child) => PopupMenuButton(
-                  tooltip: appLocalizations.quoteActionsPopupButtonTooltip,
-                  icon: const Icon(Icons.more_horiz_outlined),
-                  position: PopupMenuPosition.under,
-                  itemBuilder: (context) => QuoteActions.popupMenuItems(
-                    appLocalizations,
-                    database,
-                    context,
-                    quote,
-                    actions: QuoteActions.values.where(
-                      (action) => switch (action) {
-                        QuoteActions.create ||
-                        QuoteActions.share ||
-                        QuoteActions.delete =>
-                          false,
-                        _ => true
-                      },
-                    ),
+              child: PopupMenuButton(
+                tooltip: appLocalizations.quoteActionsPopupButtonTooltip,
+                icon: const Icon(Icons.more_horiz_outlined),
+                position: PopupMenuPosition.under,
+                itemBuilder: (context) => QuoteActions.popupMenuItems(
+                  appLocalizations,
+                  databaseLocator,
+                  context,
+                  quote,
+                  actions: QuoteActions.values.where(
+                    (action) => switch (action) {
+                      QuoteActions.create || QuoteActions.delete => false,
+                      _ => true
+                    },
                   ),
                 ),
               ),

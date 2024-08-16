@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
@@ -15,8 +16,9 @@ class QuoteTile extends StatelessWidget {
 
   final Quote quote;
 
-  String get _subtitle =>
-      quote.source != null ? '${quote.author}, ${quote.source}' : quote.author;
+  String get _subtitle => quote.source.isNotNullOrBlank
+      ? '${quote.author}, ${quote.source}'
+      : quote.author;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,11 @@ class QuoteTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         softWrap: true,
       ),
-      subtitle: Text(_subtitle),
+      subtitle: Text(
+        _subtitle,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: PopupMenuButton(
         tooltip: context.appLocalizations.quoteActionsPopupButtonTooltip,
         position: PopupMenuPosition.under,

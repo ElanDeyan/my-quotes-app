@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/screens/add_quote_from_file.dart';
+import 'package:my_quotes/screens/add_quote_from_file/add_quote_from_file_screen.dart';
 
 Future<void> showAddQuoteFromFileDialog(
   BuildContext context,

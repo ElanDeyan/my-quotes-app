@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/constants/enums/form_types.dart';
-import 'package:my_quotes/constants/id_separator.dart';
-import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/main.dart';
 import 'package:my_quotes/routes/routes_names.dart';
+import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
+import 'package:my_quotes/screens/update_quote/update_quote_form.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
-import 'package:my_quotes/shared/widgets/quote_form_mixin.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
+import 'package:my_quotes/shared/widgets/form/quote_form_skeleton.dart';
+import 'package:my_quotes/shared/widgets/form/quote_not_found_with_id_message.dart';
 
 final class UpdateQuoteScreen extends StatelessWidget {
   const UpdateQuoteScreen({
@@ -37,90 +36,25 @@ final class UpdateQuoteScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: _UpdateQuoteScreenBody(quoteId: quoteId),
-    );
-  }
-}
+      body: FutureBuilder(
+        future: databaseLocator.getQuoteById(quoteId),
+        builder: (context, snapshot) {
+          final connectionState = snapshot.connectionState;
+          final hasError = snapshot.hasError;
+          final hasData = snapshot.hasData;
 
-class _UpdateQuoteScreenBody extends StatelessWidget {
-  const _UpdateQuoteScreenBody({
-    required this.quoteId,
-  });
+          final data = snapshot.data;
 
-  final int quoteId;
-
-  @override
-  Widget build(BuildContext context) {
-    final database = Provider.of<DatabaseProvider>(context, listen: false);
-
-    return FutureBuilder(
-      future: database.getQuoteById(quoteId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
-          final maybeQuote = snapshot.data;
-          if (maybeQuote == null) {
-            return Text(
-              context.appLocalizations.quoteNotFoundWithId(quoteId),
-            );
-          } else {
-            return UpdateQuoteForm(quote: maybeQuote);
-          }
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
-}
-
-class UpdateQuoteForm extends StatefulWidget {
-  const UpdateQuoteForm({
-    super.key,
-    required this.quote,
-  });
-
-  final Quote quote;
-
-  @override
-  State<UpdateQuoteForm> createState() => _UpdateQuoteFormState();
-}
-
-class _UpdateQuoteFormState extends State<UpdateQuoteForm> with QuoteFormMixin {
-  @override
-  void dispose() {
-    multipleTagSearchController
-      ..clearAllPickedItems()
-      ..clearSearchField();
-    formKey.currentState?.reset();
-    super.dispose();
-  }
-
-  Map<String, Object?> get quoteAsJson => widget.quote.toJson()
-    ..update(
-      'tags',
-      (value) => switch (value) {
-        final String tags => tags.split(idSeparatorChar),
-        _ => <String>[],
-      },
-      ifAbsent: () => <String>[],
-    );
-
-  @override
-  FormTypes get formType => FormTypes.update;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: FormBuilder(
-        key: formKey,
-        onChanged: formKey.currentState?.validate,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        initialValue: quoteAsJson,
-        child: quoteFormBody(context, quoteForUpdate: widget.quote),
+          return switch ((connectionState, hasError, hasData)) {
+            (ConnectionState.done, _, true) when data == null =>
+              QuoteNotFoundWithIdMessage(quoteId: quoteId),
+            (ConnectionState.done, _, true) when data != null =>
+              UpdateQuoteForm(quote: data),
+            (ConnectionState.waiting, _, _) => const QuoteFormSkeleton(),
+            (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+            _ => const AnErrorOccurredMessage(),
+          };
+        },
       ),
     );
   }

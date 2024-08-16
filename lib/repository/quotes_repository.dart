@@ -5,11 +5,13 @@ abstract interface class QuotesRepository {
 
   Future<Quote?> get randomQuote;
 
+  Stream<List<Quote>> get allQuotesStream;
+
   Future<Quote?> getQuoteById(int id);
 
   Future<List<Quote>> getQuotesWithTagId(int tagId);
 
-  Future<int> createQuote(Quote quote);
+  Future<Quote> createQuote(Quote quote);
 
   Future<bool> updateQuote(Quote quote);
 

@@ -4,10 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
-import 'package:my_quotes/screens/quote_screen.dart';
 import 'package:my_quotes/shared/actions/copy_to_clipboard.dart';
 import 'package:my_quotes/shared/actions/quotes/delete_quote.dart';
+import 'package:my_quotes/shared/actions/quotes/show_quote_info_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_share_actions.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/states/database_provider.dart';
@@ -94,7 +95,7 @@ enum QuoteActions {
 
   static void Function() actionCallback(
     AppLocalizations appLocalizations,
-    DatabaseProvider databaseProvider,
+    AppRepository appRepository,
     BuildContext context,
     QuoteActions action,
     Quote quote,
@@ -113,7 +114,7 @@ enum QuoteActions {
             copyToClipBoard(context, quote.sourceUri ?? ''),
         QuoteActions.share => () => showQuoteShareActions(
               appLocalizations,
-              databaseProvider,
+              appRepository,
               context,
               quote,
             ),
@@ -140,7 +141,7 @@ enum QuoteActions {
 
   static List<PopupMenuItem<Quote>> popupMenuItems(
     AppLocalizations appLocalizations,
-    DatabaseProvider databaseProvider,
+    AppRepository appRepository,
     BuildContext context,
     Quote quote, {
     Iterable<QuoteActions> actions = QuoteActions.values,
@@ -151,7 +152,7 @@ enum QuoteActions {
               value: quote,
               onTap: QuoteActions.actionCallback(
                 appLocalizations,
-                databaseProvider,
+                appRepository,
                 context,
                 action,
                 quote,

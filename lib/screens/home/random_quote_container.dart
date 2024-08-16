@@ -1,92 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/main.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
+import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/quote_card.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:shimmer_pro/shimmer_pro.dart';
 
-final class RandomQuoteContainer extends StatefulWidget {
-  const RandomQuoteContainer({super.key});
+class RandomQuoteContainer extends StatefulWidget {
+  const RandomQuoteContainer({super.key, required this.quotes});
+
+  final List<Quote> quotes;
 
   @override
   State<RandomQuoteContainer> createState() => _RandomQuoteContainerState();
 }
 
-final class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
+class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
+  late Quote _quote;
+
+  late final int _lastIndex;
+  int _index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _lastIndex = widget.quotes.length - 1;
+    _quote = widget.quotes[_index];
+  }
+
+  void _updateRandomQuote() => setState(() {
+        if (_index == _lastIndex) {
+          _index = 0;
+        } else {
+          _index++;
+        }
+        _quote = widget.quotes[_index];
+      });
+
   @override
   Widget build(BuildContext context) {
-    final databaseProvider =
-        Provider.of<DatabaseProvider>(context, listen: false);
-
-    return FutureBuilder(
-      future: databaseProvider.randomQuote,
-      builder: (context, snapshot) {
-        final connectionState = snapshot.connectionState;
-        switch (connectionState) {
-          case ConnectionState.none:
-            return Text(
-              context.appLocalizations.noDatabaseConnectionMessage,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: QuoteCard(quote: _quote),
+          ),
+          const Gap.vertical(spacing: 10),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              OutlinedButton(
+                onPressed: _updateRandomQuote,
+                child: const Icon(Icons.shuffle),
               ),
-            );
-          case ConnectionState.active || ConnectionState.waiting:
-            final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-            return Center(
-              child: ShimmerPro.sized(
-                light: isDarkTheme ? ShimmerProLight.lighter : null,
-                scaffoldBackgroundColor:
-                    Theme.of(context).colorScheme.primaryContainer,
-                height: 100,
-                width: 200,
+              const Gap.horizontal(spacing: 10),
+              OutlinedButton(
+                onPressed: QuoteActions.actionCallback(
+                  context.appLocalizations,
+                  databaseLocator,
+                  context,
+                  QuoteActions.share,
+                  _quote,
+                ),
+                child: const Icon(Icons.share_outlined),
               ),
-            );
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return Text(context.appLocalizations.errorOccurred);
-            }
-            final quote = snapshot.data;
-
-            if (quote == null) {
-              return Text(context.appLocalizations.noQuotesAddedYet);
-            } else {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: QuoteCard(
-                      quote: quote,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () => setState(() {}),
-                        child: const Icon(Icons.shuffle_outlined),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      OutlinedButton(
-                        onPressed: QuoteActions.actionCallback(
-                          context.appLocalizations,
-                          databaseProvider,
-                          context,
-                          QuoteActions.share,
-                          quote,
-                        ),
-                        child: const Icon(Icons.share_outlined),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            }
-        }
-      },
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -8,9 +8,10 @@ class NoDatabaseConnectionMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      context.appLocalizations.noDatabaseConnectionMessage,
-      style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+    return Center(
+      child: Text(
+        context.appLocalizations.noDatabaseConnectionMessage,
+      ),
     );
   }
 }

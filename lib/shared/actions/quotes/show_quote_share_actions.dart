@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/shared/actions/quotes/share_actions.dart';
-import 'package:my_quotes/states/database_provider.dart';
 
 Future<void> showQuoteShareActions(
   AppLocalizations appLocalizations,
-  DatabaseProvider databaseProvider,
+  AppRepository appRepository,
   BuildContext context,
   Quote quote,
 ) {
@@ -25,7 +26,7 @@ Future<void> showQuoteShareActions(
                 (action) => TextButton.icon(
                   onPressed: ShareActions.actionCallback(
                     context,
-                    databaseProvider,
+                    databaseLocator,
                     appLocalizations,
                     action,
                     quote,

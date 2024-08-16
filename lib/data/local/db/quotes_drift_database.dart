@@ -47,8 +47,8 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
       (select(quoteTable)..where((row) => row.isFavorite.equals(true))).watch();
 
   @override
-  Future<int> createQuote(Quote quote) async {
-    return into(quoteTable).insert(
+  Future<Quote> createQuote(Quote quote) async {
+    return into(quoteTable).insertReturning(
       quote.toCompanion(true),
       mode: InsertMode.insertOrReplace,
     );
@@ -63,6 +63,9 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
 
   @override
   Future<Quote?> get randomQuote => quotesDao.randomQuote;
+
+  @override
+  Stream<List<Quote>> get allQuotesStream => quotesDao.allQuotesStream;
 
   @override
   Future<bool> updateQuote(Quote quote) {
@@ -97,8 +100,11 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   Future<List<Tag>> get allTags => tagsDao.allTags;
 
   @override
-  Future<int> createTag(String tagName) async {
-    return into(tagTable).insert(
+  Stream<List<Tag>> get allTagsStream => tagsDao.allTagsStream;
+
+  @override
+  Future<Tag> createTag(String tagName) async {
+    return into(tagTable).insertReturning(
       TagTableCompanion.insert(name: tagName),
       mode: InsertMode.insertOrReplace,
     );

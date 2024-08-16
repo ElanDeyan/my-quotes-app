@@ -12,6 +12,8 @@ class QuotesDao extends DatabaseAccessor<AppDatabase> with _$QuotesDaoMixin {
 
   Future<List<Quote>> get allQuotes => select(quoteTable).get();
 
+  Stream<List<Quote>> get allQuotesStream => select(quoteTable).watch();
+
   Future<Quote?> getQuoteById(int id) {
     return (select(quoteTable)..where((row) => row.id.equals(id)))
         .getSingleOrNull();

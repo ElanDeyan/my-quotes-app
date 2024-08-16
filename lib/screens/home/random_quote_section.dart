@@ -1,0 +1,37 @@
+import 'package:flutter/material.dart';
+import 'package:my_quotes/main.dart';
+import 'package:my_quotes/screens/home/random_quote_container.dart';
+import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
+import 'package:my_quotes/shared/widgets/no_database_connection_message.dart';
+import 'package:my_quotes/shared/widgets/no_quotes_added_yet_message.dart';
+import 'package:my_quotes/shared/widgets/quote_card_skeleton.dart';
+
+class RandomQuoteSection extends StatelessWidget {
+  const RandomQuoteSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: databaseLocator.allQuotesStream,
+      builder: (context, snapshot) {
+        final connectionState = snapshot.connectionState;
+        final hasError = snapshot.hasError;
+        final hasData = snapshot.hasData;
+
+        final data = snapshot.data;
+
+        return switch ((connectionState, hasError, hasData)) {
+          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+          (ConnectionState.waiting, _, _) => const QuoteCardSkeleton(),
+          (ConnectionState.active || ConnectionState.done, _, true)
+              when data == null =>
+            const NoQuotesAddedYetMessage(),
+          (ConnectionState.active || ConnectionState.done, _, true)
+              when data != null =>
+            RandomQuoteContainer(quotes: data..shuffle()),
+          _ => const AnErrorOccurredMessage(),
+        };
+      },
+    );
+  }
+}
