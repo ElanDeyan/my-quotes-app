@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -62,8 +60,6 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
         createdAt: Value(widget.quote.createdAt),
       );
 
-      log(quoteFromForm.toString(), name: 'UpdateFormSubmit');
-
       databaseLocator.updateQuote(quoteFromForm).then(
         (value) {
           if (context.mounted) {
@@ -87,7 +83,6 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
                 label: Text(context.appLocalizations.quoteFormError),
               ),
             );
-            log('Error', name: 'UpdateQuoteFormError', error: error);
           }
         },
       );
