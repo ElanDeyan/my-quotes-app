@@ -190,8 +190,8 @@
   "successfulOperation": "Successful operation!",
   "quotesListViewSortingButton": "Sort",
   "quotesListViewSortingButtonTooltip": "Show menu",
-  "quotesListViewSortingCreatedAtAsc": "Older first",
-  "quotesListViewSortingCreatedAtDesc": "Newer first",
+  "quotesListViewSortingCreatedAtAsc": "Oldest first",
+  "quotesListViewSortingCreatedAtDesc": "Newest first",
   "quotesListViewFilteringFavorites": "Favorites"
 
 }
