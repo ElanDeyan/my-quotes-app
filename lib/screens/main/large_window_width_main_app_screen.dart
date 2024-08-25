@@ -99,9 +99,10 @@ class _LargeWindowWidthMainAppScreenState
                 onPressed: () => context.pushNamed(addQuoteNavigationKey),
                 child: const Icon(Icons.add_outlined),
               ),
-              trailing: IconButton.outlined(
+              trailing: IconButton(
                 onPressed: () => context.pushNamed(settingsNavigationKey),
                 icon: settingsDestination.outlinedIcon,
+                tooltip: settingsDestination.label,
               ),
             ),
             const VerticalDivider(),
