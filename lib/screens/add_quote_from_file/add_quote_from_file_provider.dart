@@ -81,12 +81,14 @@ class _AddQuoteFromFileProviderState extends State<AddQuoteFromFileProvider> {
               return switch ((connectionState, hasError, hasData)) {
                 (ConnectionState.done, _, true) when data != null =>
                   AddQuoteFromFileForm(
+                    key: const Key('add_quote_from_file_form'),
                     formKey: _formKey,
                     quote: widget.quoteFromFile,
                     tags: data,
                     formType: widget.formType,
                   ),
-                (ConnectionState.waiting, _, _) => const QuoteFormSkeleton(),
+                (ConnectionState.waiting, _, _) =>
+                  const QuoteFormSkeleton(key: Key('quote_form_skeleton')),
                 _ => const AnErrorOccurredMessage(),
               };
             },

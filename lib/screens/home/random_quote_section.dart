@@ -22,13 +22,17 @@ class RandomQuoteSection extends StatelessWidget {
 
         return switch ((connectionState, hasError, hasData)) {
           (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
-          (ConnectionState.waiting, _, _) => const QuoteCardSkeleton(),
+          (ConnectionState.waiting, _, _) =>
+            const QuoteCardSkeleton(key: Key('quote_card_skeleton')),
           (ConnectionState.active || ConnectionState.done, _, true)
               when data == null =>
             const NoQuotesAddedYetMessage(),
           (ConnectionState.active || ConnectionState.done, _, true)
               when data != null =>
-            RandomQuoteContainer(quotes: data..shuffle()),
+            RandomQuoteContainer(
+              key: const Key('random_quote_container'),
+              quotes: data..shuffle(),
+            ),
           _ => const AnErrorOccurredMessage(),
         };
       },

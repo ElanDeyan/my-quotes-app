@@ -24,13 +24,18 @@ final class MyQuotesScreen extends StatelessWidget {
 
         return switch ((connectionState, hasError, hasData)) {
           (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
-          (ConnectionState.waiting, _, _) => const QuotesListViewSkeleton(),
+          (ConnectionState.waiting, _, _) => const QuotesListViewSkeleton(
+              key: Key('quotes_list_view_container_skeleton'),
+            ),
           (ConnectionState.active || ConnectionState.done, _, true)
               when data != null && data.isEmpty =>
             const NoQuotesAddedYet(),
           (ConnectionState.active || ConnectionState.done, _, true)
               when data != null && data.isNotEmpty =>
-            QuotesListViewContainer(quotes: data),
+            QuotesListViewContainer(
+              key: const Key('quotes_list_view_container'),
+              quotes: data,
+            ),
           _ => const QuotesListError()
         };
       },

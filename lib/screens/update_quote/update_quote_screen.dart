@@ -50,8 +50,11 @@ final class UpdateQuoteScreen extends StatelessWidget {
               QuoteNotFoundWithIdMessage(quoteId: quoteId),
             (ConnectionState.done, _, true) when data != null =>
               UpdateQuoteForm(quote: data),
-            (ConnectionState.waiting, _, _) => const QuoteFormSkeleton(),
-            (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+            (ConnectionState.waiting, _, _) =>
+              const QuoteFormSkeleton(key: Key('quote_form_skeleton')),
+            (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(
+                key: Key('no_database_connection_message'),
+              ),
             _ => const AnErrorOccurredMessage(),
           };
         },

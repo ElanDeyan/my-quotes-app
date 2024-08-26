@@ -32,7 +32,8 @@ class QuoteScreenDialogBody extends StatelessWidget {
 
               return switch ((connectionState, hasError, hasData)) {
                 (ConnectionState.none, _, _) =>
-                  const NoDatabaseConnectionMessage(),
+                  const NoDatabaseConnectionMessage(
+                      key: Key('no_database_connection_message')),
                 (ConnectionState.waiting, _, _) => Skeletonizer(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

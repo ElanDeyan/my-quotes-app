@@ -46,8 +46,12 @@ class _CompactWindowWidthMainAppScreenState
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    _homeScreen = const HomeScreen();
-    _myQuotesScreen = const MyQuotesScreen();
+    _homeScreen = const HomeScreen(
+      key: Key('home_screen'),
+    );
+    _myQuotesScreen = const MyQuotesScreen(
+      key: Key('my_quotes_screen'),
+    );
   }
 
   Widget get body => switch (_selectedIndex) {

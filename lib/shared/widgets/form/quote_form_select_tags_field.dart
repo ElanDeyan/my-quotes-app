@@ -26,7 +26,8 @@ class QuoteFormSelectTagsField extends StatelessWidget {
           snapshot.hasError,
           snapshot.hasData
         )) {
-          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(
+              key: Key('no_database_connection_message')),
           (ConnectionState.waiting, _, _) =>
             const Skeletonizer(child: TextField()),
           (ConnectionState.active || ConnectionState.done, _, true) =>

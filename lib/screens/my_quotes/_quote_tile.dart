@@ -8,7 +8,7 @@ import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/states/database_provider.dart';
 import 'package:provider/provider.dart';
 
-class QuoteTile extends StatelessWidget {
+class QuoteTile extends StatefulWidget {
   const QuoteTile({
     super.key,
     required this.quote,
@@ -16,25 +16,35 @@ class QuoteTile extends StatelessWidget {
 
   final Quote quote;
 
-  String get _subtitle => quote.source.isNotNullOrBlank
-      ? '${quote.author}, ${quote.source}'
-      : quote.author;
+  @override
+  State<QuoteTile> createState() => _QuoteTileState();
+}
+
+class _QuoteTileState extends State<QuoteTile>
+    with AutomaticKeepAliveClientMixin {
+  String get _subtitle => widget.quote.source.isNotNullOrBlank
+      ? '${widget.quote.author}, ${widget.quote.source}'
+      : widget.quote.author;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final databaseProvider =
         Provider.of<DatabaseProvider>(context, listen: false);
 
     return ListTile(
       onTap: () => context.pushNamed(
         quoteByIdNavigationKey,
-        pathParameters: {'id': quote.id!.toString()},
+        pathParameters: {'id': widget.quote.id!.toString()},
       ),
-      leading: quote.isFavorite
+      leading: widget.quote.isFavorite
           ? const Icon(Icons.favorite_outline)
           : const Icon(Icons.format_quote_outlined),
       title: Text(
-        quote.content,
+        widget.quote.content,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         softWrap: true,
@@ -51,7 +61,7 @@ class QuoteTile extends StatelessWidget {
           context.appLocalizations,
           databaseProvider,
           context,
-          quote,
+          widget.quote,
           actions: QuoteActions.values.where(
             (action) => switch (action) {
               QuoteActions.create => false,

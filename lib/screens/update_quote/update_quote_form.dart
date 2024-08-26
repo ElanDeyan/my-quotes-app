@@ -108,23 +108,28 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
               child: Column(
                 children: [
                   QuoteFormContentField(
+                    key: const Key('quote_form_content_field'),
                     initialValue: widget.quote.content,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormAuthorField(
+                    key: const Key('quote_form_author_field'),
                     formType: widget.formType,
                     initialValue: widget.quote.author,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormSourceField(
+                    key: const Key('quote_form_source_field'),
                     initialValue: widget.quote.source,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormSourceUriField(
+                    key: const Key('quote_form_source_uri_field'),
                     initialValue: widget.quote.sourceUri,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormIsFavoriteField(
+                    key: const Key('quote_form_is_favorite_field'),
                     initialValue: widget.quote.isFavorite,
                   ),
                   const Gap.vertical(spacing: 10),
@@ -134,6 +139,9 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormActionButton(
+                    key: const Key(
+                      'quote_form_update_quote_action_button_field',
+                    ),
                     onPressed: () => _onSubmit(context),
                     formType: widget.formType,
                   ),
@@ -174,10 +182,15 @@ class _FutureSelectedTagsField extends StatelessWidget {
 
         return switch ((connectionState, hasError, hasData)) {
           (ConnectionState.done, _, true) when data != null =>
-            QuoteFormSelectTagsField(pickedItems: tagSetToUpdate),
+            QuoteFormSelectTagsField(
+              key: const Key('quote_form_select_tags_field'),
+              pickedItems: tagSetToUpdate,
+            ),
           (ConnectionState.waiting, _, _) =>
             const Skeletonizer(child: TextField()),
-          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(
+              key: Key('no_database_connection_message'),
+            ),
           _ => const AnErrorOccurredMessage(),
         };
       },

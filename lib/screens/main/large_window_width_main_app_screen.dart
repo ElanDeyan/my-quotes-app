@@ -39,18 +39,22 @@ class _LargeWindowWidthMainAppScreenState
     extends State<LargeWindowWidthMainAppScreen> {
   late int _selectedIndex;
   late final HomeScreen _homeScreen;
-  late final MyQuotesScreen _quotesScreen;
+  late final MyQuotesScreen _myQuotesScreen;
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    _homeScreen = const HomeScreen();
-    _quotesScreen = const MyQuotesScreen();
+    _homeScreen = const HomeScreen(
+      key: Key('home_screen'),
+    );
+    _myQuotesScreen = const MyQuotesScreen(
+      key: Key('my_quotes_screen'),
+    );
   }
 
   Widget get body => switch (_selectedIndex) {
         0 => _homeScreen,
-        1 => _quotesScreen,
+        1 => _myQuotesScreen,
         _ => throw UnimplementedError(),
       };
 

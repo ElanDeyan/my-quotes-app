@@ -57,7 +57,8 @@ class QuoteScreenBody extends StatelessWidget {
             return switch ((connectionState, hasError, hasData)) {
               (ConnectionState.none, _, _) =>
                 const NoDatabaseConnectionMessage(),
-              (ConnectionState.waiting, _, _) => const QuoteCardSkeleton(),
+              (ConnectionState.waiting, _, _) =>
+                const QuoteCardSkeleton(key: Key('quote_card_skeleton')),
               (ConnectionState.done, _, true) when data == null => Text(
                   context.appLocalizations.quoteNotFoundWithId(quoteId),
                 ),

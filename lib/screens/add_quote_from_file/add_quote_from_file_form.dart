@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +63,6 @@ class AddQuoteFromFileForm extends StatelessWidget with UpdateFormDataMixin {
                 label: Text(context.appLocalizations.quoteFormError),
               ),
             );
-            log('Error', name: 'AddQuoteFormFromFileError', error: error);
           }
         },
       );
@@ -85,31 +82,40 @@ class AddQuoteFromFileForm extends StatelessWidget with UpdateFormDataMixin {
         child: Column(
           children: [
             QuoteFormContentField(
+              key: const Key('quote_form_content_field'),
               initialValue: quote.content,
             ),
             const Gap.vertical(spacing: 10),
             QuoteFormAuthorField(
+              key: const Key('quote_form_author_field'),
               formType: formType,
               initialValue: quote.author,
             ),
             const Gap.vertical(spacing: 10),
             QuoteFormSourceField(
+              key: const Key('quote_form_source_field'),
               initialValue: quote.source,
             ),
             const Gap.vertical(spacing: 10),
             QuoteFormSourceUriField(
+              key: const Key('quote_form_source_uri_field'),
               initialValue: quote.sourceUri,
             ),
             const Gap.vertical(spacing: 10),
             QuoteFormIsFavoriteField(
+              key: const Key('quote_form_is_favorite_field'),
               initialValue: quote.isFavorite,
             ),
             const Gap.vertical(spacing: 10),
             QuoteFormSelectTagsField(
+              key: const Key('quote_form_select_tags_field'),
               pickedItems: tags,
             ),
             const Gap.vertical(spacing: 10),
             QuoteFormActionButton(
+              key: const Key(
+                'quote_form_add_quote_from_file_action_button_field',
+              ),
               onPressed: () => _onSubmit(context),
               formType: formType,
             ),

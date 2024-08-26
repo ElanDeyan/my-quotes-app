@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
@@ -71,7 +69,6 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
                 label: Text(context.appLocalizations.quoteFormError),
               ),
             );
-            log('Error', name: 'AddQuoteFormError', error: error);
           }
         },
       );
@@ -101,21 +98,33 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
               ),
               child: Column(
                 children: [
-                  const QuoteFormContentField(),
+                  const QuoteFormContentField(
+                    key: Key('quote_form_content_field'),
+                  ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormAuthorField(),
+                  const QuoteFormAuthorField(
+                    key: Key('quote_form_author_field'),
+                  ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormSourceField(),
+                  const QuoteFormSourceField(
+                    key: Key('quote_form_source_field'),
+                  ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormSourceUriField(),
+                  const QuoteFormSourceUriField(
+                    key: Key('quote_form_source_uri_field'),
+                  ),
                   const Gap.vertical(spacing: 10),
-                  const QuoteFormIsFavoriteField(),
+                  const QuoteFormIsFavoriteField(
+                    key: Key('quote_form_is_favorite_field'),
+                  ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormSelectTagsField(
+                    key: const Key('quote_form_select_tags_field'),
                     pickedItems: _pickedTags,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormActionButton(
+                    key: const Key('quote_form_add_quote_action_button_field'),
                     onPressed: () => _onSubmit(context),
                   ),
                 ],
