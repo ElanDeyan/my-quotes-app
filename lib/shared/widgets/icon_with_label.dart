@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final class IconWithLabel extends StatelessWidget {
-  final Icon icon;
+  final Widget icon;
   final Widget label;
   final double horizontalGap;
 
