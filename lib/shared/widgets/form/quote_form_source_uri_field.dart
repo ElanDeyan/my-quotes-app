@@ -14,19 +14,21 @@ class QuoteFormSourceUriField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilderTextField(
-      name: 'sourceUri',
-      initialValue: initialValue,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: context.appLocalizations.quoteFormFieldSourceUri,
-        hintText: context.appLocalizations.quoteFormFieldSourceUriHintText,
+    return RepaintBoundary(
+      child: FormBuilderTextField(
+        name: 'sourceUri',
+        initialValue: initialValue,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: context.appLocalizations.quoteFormFieldSourceUri,
+          hintText: context.appLocalizations.quoteFormFieldSourceUriHintText,
+        ),
+        validator: FormBuilderValidators.url(),
+        smartDashesType: SmartDashesType.enabled,
+        smartQuotesType: SmartQuotesType.enabled,
+        keyboardType: TextInputType.url,
+        valueTransformer: (value) => value.isNullOrBlank ? null : value!.trim(),
       ),
-      validator: FormBuilderValidators.url(),
-      smartDashesType: SmartDashesType.enabled,
-      smartQuotesType: SmartQuotesType.enabled,
-      keyboardType: TextInputType.url,
-      valueTransformer: (value) => value.isNullOrBlank ? null : value!.trim(),
     );
   }
 }

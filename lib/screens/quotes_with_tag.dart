@@ -22,60 +22,62 @@ class QuotesWithTag extends StatelessWidget {
         ),
       ),
       body: Consumer<DatabaseProvider>(
-        builder: (context, database, child) => FutureBuilder(
-          future: database.getQuotesWithTagId(tagId),
-          builder: (context, snapshot) {
-            final connectionState = snapshot.connectionState;
+        builder: (context, database, child) => RepaintBoundary(
+          child: FutureBuilder(
+            future: database.getQuotesWithTagId(tagId),
+            builder: (context, snapshot) {
+              final connectionState = snapshot.connectionState;
 
-            switch (connectionState) {
-              case ConnectionState.none:
-                return Center(
-                  child: Text(
-                    context.appLocalizations.noDatabaseConnectionMessage,
-                  ),
-                );
+              switch (connectionState) {
+                case ConnectionState.none:
+                  return Center(
+                    child: Text(
+                      context.appLocalizations.noDatabaseConnectionMessage,
+                    ),
+                  );
 
-              case ConnectionState.active || ConnectionState.waiting:
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                case ConnectionState.active || ConnectionState.waiting:
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
 
-              case ConnectionState.done:
-                if (!snapshot.hasError) {
-                  if (snapshot.data!.isEmpty) {
-                    return Center(
-                      child: Text(context.appLocalizations.noQuotesWithTag),
-                    );
+                case ConnectionState.done:
+                  if (!snapshot.hasError) {
+                    if (snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text(context.appLocalizations.noQuotesWithTag),
+                      );
+                    } else {
+                      final data = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) => ListTile(
+                          leading: const Icon(Icons.format_quote),
+                          title: Text(
+                            data[index].content,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            data[index].author,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          onTap: () => context.goNamed(
+                            quoteByIdNavigationKey,
+                            pathParameters: {'id': '${data[index].id}'},
+                          ),
+                        ),
+                      );
+                    }
                   } else {
-                    final data = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) => ListTile(
-                        leading: const Icon(Icons.format_quote),
-                        title: Text(
-                          data[index].content,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          data[index].author,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        onTap: () => context.goNamed(
-                          quoteByIdNavigationKey,
-                          pathParameters: {'id': '${data[index].id}'},
-                        ),
-                      ),
+                    return Center(
+                      child: Text(context.appLocalizations.errorOccurred),
                     );
                   }
-                } else {
-                  return Center(
-                    child: Text(context.appLocalizations.errorOccurred),
-                  );
-                }
-            }
-          },
+              }
+            },
+          ),
         ),
       ),
     );

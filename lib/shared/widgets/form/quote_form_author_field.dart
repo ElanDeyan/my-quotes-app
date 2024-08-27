@@ -17,22 +17,24 @@ class QuoteFormAuthorField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final labelText = context.appLocalizations.quoteFormFieldAuthor;
-    return FormBuilderTextField(
-      name: 'author',
-      initialValue: initialValue,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: labelText,
-      ),
-      smartQuotesType: SmartQuotesType.enabled,
-      keyboardType: TextInputType.name,
-      smartDashesType: SmartDashesType.enabled,
-      validator: FormBuilderValidators.required(
-        errorText: context.appLocalizations.nonEmptyField(
-          labelText,
+    return RepaintBoundary(
+      child: FormBuilderTextField(
+        name: 'author',
+        initialValue: initialValue,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: labelText,
         ),
+        smartQuotesType: SmartQuotesType.enabled,
+        keyboardType: TextInputType.name,
+        smartDashesType: SmartDashesType.enabled,
+        validator: FormBuilderValidators.required(
+          errorText: context.appLocalizations.nonEmptyField(
+            labelText,
+          ),
+        ),
+        valueTransformer: (value) => value?.trim(),
       ),
-      valueTransformer: (value) => value?.trim(),
     );
   }
 }

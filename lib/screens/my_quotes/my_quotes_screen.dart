@@ -13,32 +13,34 @@ final class MyQuotesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: databaseLocator.allQuotesStream,
-      builder: (context, snapshot) {
-        final connectionState = snapshot.connectionState;
-        final hasError = snapshot.hasError;
-        final hasData = snapshot.hasData;
+    return RepaintBoundary(
+      child: StreamBuilder(
+        stream: databaseLocator.allQuotesStream,
+        builder: (context, snapshot) {
+          final connectionState = snapshot.connectionState;
+          final hasError = snapshot.hasError;
+          final hasData = snapshot.hasData;
 
-        final data = snapshot.data;
+          final data = snapshot.data;
 
-        return switch ((connectionState, hasError, hasData)) {
-          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
-          (ConnectionState.waiting, _, _) => const QuotesListViewSkeleton(
-              key: Key('quotes_list_view_container_skeleton'),
-            ),
-          (ConnectionState.active || ConnectionState.done, _, true)
-              when data != null && data.isEmpty =>
-            const NoQuotesAddedYet(),
-          (ConnectionState.active || ConnectionState.done, _, true)
-              when data != null && data.isNotEmpty =>
-            QuotesListViewContainer(
-              key: const Key('quotes_list_view_container'),
-              quotes: data,
-            ),
-          _ => const QuotesListError()
-        };
-      },
+          return switch ((connectionState, hasError, hasData)) {
+            (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+            (ConnectionState.waiting, _, _) => const QuotesListViewSkeleton(
+                key: Key('quotes_list_view_container_skeleton'),
+              ),
+            (ConnectionState.active || ConnectionState.done, _, true)
+                when data != null && data.isEmpty =>
+              const NoQuotesAddedYet(),
+            (ConnectionState.active || ConnectionState.done, _, true)
+                when data != null && data.isNotEmpty =>
+              QuotesListViewContainer(
+                key: const Key('quotes_list_view_container'),
+                quotes: data,
+              ),
+            _ => const QuotesListError()
+          };
+        },
+      ),
     );
   }
 }

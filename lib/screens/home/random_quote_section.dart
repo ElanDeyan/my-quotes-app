@@ -22,8 +22,9 @@ class RandomQuoteSection extends StatelessWidget {
 
         return switch ((connectionState, hasError, hasData)) {
           (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
-          (ConnectionState.waiting, _, _) =>
-            const QuoteCardSkeleton(key: Key('quote_card_skeleton')),
+          (ConnectionState.waiting, _, _) => const RepaintBoundary(
+              child: QuoteCardSkeleton(key: Key('quote_card_skeleton')),
+            ),
           (ConnectionState.active || ConnectionState.done, _, true)
               when data == null =>
             const NoQuotesAddedYetMessage(),
