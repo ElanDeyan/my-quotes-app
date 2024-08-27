@@ -61,7 +61,8 @@ class TagsScreen extends StatelessWidget {
 
             return switch ((connectionState, hasError, hasData)) {
               (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(
-                  key: Key('no_database_connection_message')),
+                  key: Key('no_database_connection_message'),
+                ),
               (ConnectionState.waiting, _, _) => const TagsListViewSkeleton(),
               (ConnectionState.active || ConnectionState.done, _, true)
                   when data!.isNotEmpty =>
