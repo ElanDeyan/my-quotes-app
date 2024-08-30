@@ -151,6 +151,17 @@ void main() {
         expect(quoteById, equals(addedQuote));
       });
 
+      test('Getting quote by id stream', () async {
+        await database.createQuote(sampleQuote);
+        final addedQuote = (await database.allQuotes).single;
+        final addedQuoteId = addedQuote.id!;
+
+        await expectLater(
+          database.getQuoteByIdStream(addedQuoteId),
+          emits(addedQuote),
+        );
+      });
+
       test(
         'Getting null for not found id',
         () async {
