@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
-import 'package:my_quotes/states/database_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class QuoteDataListView extends StatelessWidget {
   const QuoteDataListView({
     super.key,
     required this.quote,
-    required this.databaseProvider,
+    required this.appRepository,
   });
 
   final Quote quote;
-  final DatabaseProvider databaseProvider;
+  final AppRepository appRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class QuoteDataListView extends StatelessWidget {
               )
             else
               FutureBuilder(
-                future: databaseProvider.getTagsByIds(quote.tagsId),
+                future: appRepository.getTagsByIds(quote.tagsId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {

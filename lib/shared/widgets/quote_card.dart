@@ -3,8 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 class QuoteCard extends StatelessWidget {
   const QuoteCard({
@@ -75,7 +76,8 @@ class QuoteCard extends StatelessWidget {
                     height: 10,
                   ),
                   FutureBuilder(
-                    future: databaseLocator.getTagsByIds(quote.tagsId),
+                    future: serviceLocator<AppRepository>()
+                        .getTagsByIds(quote.tagsId),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (!snapshot.hasError) {
@@ -125,7 +127,7 @@ class QuoteCard extends StatelessWidget {
                 position: PopupMenuPosition.under,
                 itemBuilder: (context) => QuoteActions.popupMenuItems(
                   appLocalizations,
-                  databaseLocator,
+                  serviceLocator<AppRepository>(),
                   context,
                   quote,
                   actions: QuoteActions.values.where(

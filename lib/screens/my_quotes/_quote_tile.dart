@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 class QuoteTile extends StatefulWidget {
   const QuoteTile({
@@ -32,8 +32,6 @@ class _QuoteTileState extends State<QuoteTile>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final databaseProvider =
-        Provider.of<DatabaseProvider>(context, listen: false);
 
     return ListTile(
       onTap: () => context.pushNamed(
@@ -59,7 +57,7 @@ class _QuoteTileState extends State<QuoteTile>
         position: PopupMenuPosition.under,
         itemBuilder: (context) => QuoteActions.popupMenuItems(
           context.appLocalizations,
-          databaseProvider,
+          serviceLocator<AppRepository>(),
           context,
           widget.quote,
           actions: QuoteActions.values.where(

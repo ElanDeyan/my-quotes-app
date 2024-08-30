@@ -5,10 +5,10 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/fuzzy_search_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 final class SearchQuoteDelegate extends SearchDelegate<Quote> {
   SearchQuoteDelegate({
@@ -23,7 +23,7 @@ final class SearchQuoteDelegate extends SearchDelegate<Quote> {
   final BuildContext context;
 
   Future<List<Quote>> get allQuotes async =>
-      await context.read<DatabaseProvider>().allQuotes;
+      await serviceLocator<AppRepository>().allQuotes;
 
   @override
   List<Widget>? buildActions(BuildContext context) {

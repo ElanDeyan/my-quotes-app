@@ -5,7 +5,7 @@ import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/map_extension.dart';
-import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_action_button.dart';
@@ -18,6 +18,7 @@ import 'package:my_quotes/shared/widgets/form/quote_form_source_uri_field.dart';
 import 'package:my_quotes/shared/widgets/form/update_form_data_mixin.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 class AddQuoteForm extends StatefulWidget {
   const AddQuoteForm({super.key});
@@ -46,7 +47,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
 
       final quoteFromForm = Quote.fromJson(formData);
 
-      databaseLocator.createQuote(quoteFromForm).then(
+      serviceLocator<AppRepository>().createQuote(quoteFromForm).then(
         (createdQuote) {
           if (context.mounted) {
             showToast(

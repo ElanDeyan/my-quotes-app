@@ -7,7 +7,7 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/map_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
@@ -22,6 +22,7 @@ import 'package:my_quotes/shared/widgets/form/quote_form_source_uri_field.dart';
 import 'package:my_quotes/shared/widgets/form/update_form_data_mixin.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
+import 'package:my_quotes/states/service_locator.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class UpdateQuoteForm extends StatefulWidget {
@@ -60,7 +61,7 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
         createdAt: Value(widget.quote.createdAt),
       );
 
-      databaseLocator.updateQuote(quoteFromForm).then(
+      serviceLocator<AppRepository>().updateQuote(quoteFromForm).then(
         (value) {
           if (context.mounted) {
             showToast(
@@ -168,7 +169,7 @@ class _FutureSelectedTagsField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: databaseLocator.getTagsByIds(quote.tagsId),
+      future: serviceLocator<AppRepository>().getTagsByIds(quote.tagsId),
       builder: (context, snapshot) {
         final connectionState = snapshot.connectionState;
         final hasError = snapshot.hasError;

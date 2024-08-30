@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/fuzzy_search_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_tag_results.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 final class SearchTagDelegate extends SearchDelegate<Tag> {
   SearchTagDelegate({
@@ -22,7 +22,7 @@ final class SearchTagDelegate extends SearchDelegate<Tag> {
   final BuildContext context;
 
   Future<List<Tag>> get allTags async =>
-      await context.read<DatabaseProvider>().allTags;
+      await serviceLocator<AppRepository>().allTags;
 
   @override
   List<Widget>? buildActions(BuildContext context) {

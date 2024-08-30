@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/repository/user_preferences_interfaces.dart';
 import 'package:my_quotes/states/app_preferences.dart';
-import 'package:my_quotes/states/database_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 Future<XFile> generateBackupFile(
-  DatabaseProvider database,
+  AppRepository appRepository,
   AppPreferences appPreferences,
 ) async {
-  final userData = await retrieveUserData(appPreferences, database);
+  final userData = await retrieveUserData(appPreferences, appRepository);
 
   final encodedData = utf8.encode(jsonEncode(userData));
 
@@ -19,11 +19,11 @@ Future<XFile> generateBackupFile(
 
 Future<Map<String, Object?>> retrieveUserData(
   AppPreferences appPreferences,
-  DatabaseProvider database,
+  AppRepository appRepository,
 ) async {
-  final tags = await database.allTags;
+  final tags = await appRepository.allTags;
 
-  final quotes = await database.allQuotes;
+  final quotes = await appRepository.allQuotes;
 
   final colorPalette = appPreferences.colorSchemePalette;
 

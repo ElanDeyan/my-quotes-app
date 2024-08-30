@@ -11,7 +11,6 @@ import 'package:my_quotes/shared/actions/quotes/delete_quote.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_info_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_share_actions.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
-import 'package:my_quotes/states/database_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum QuoteActions {
@@ -127,7 +126,7 @@ enum QuoteActions {
 
   static PopupMenuButton<Quote> popupMenuButton(
     AppLocalizations appLocalizations,
-    DatabaseProvider databaseProvider,
+    AppRepository appRepository,
     BuildContext context,
     Quote quote,
   ) =>
@@ -135,7 +134,7 @@ enum QuoteActions {
         tooltip: context.appLocalizations.quoteActionsPopupButtonTooltip,
         position: PopupMenuPosition.under,
         itemBuilder: (context) =>
-            popupMenuItems(appLocalizations, databaseProvider, context, quote)
+            popupMenuItems(appLocalizations, appRepository, context, quote)
                 .toList(),
       );
 

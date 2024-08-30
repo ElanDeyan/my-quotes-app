@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/screens/search/search_tag_delegate.dart';
@@ -11,6 +11,7 @@ import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/actions/tags/show_tag_search.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/no_tags_added_yet_message.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 class TagsScreen extends StatelessWidget {
   const TagsScreen({super.key});
@@ -51,7 +52,7 @@ class TagsScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: StreamBuilder(
-          stream: databaseLocator.allTagsStream,
+          stream: serviceLocator<AppRepository>().allTagsStream,
           builder: (context, snapshot) {
             final connectionState = snapshot.connectionState;
             final hasError = snapshot.hasError;

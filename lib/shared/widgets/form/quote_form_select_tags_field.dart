@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_search_tag_selection_field.dart';
+import 'package:my_quotes/states/service_locator.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class QuoteFormSelectTagsField extends StatelessWidget {
@@ -20,7 +21,7 @@ class QuoteFormSelectTagsField extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: StreamBuilder(
-        stream: databaseLocator.allTagsStream,
+        stream: serviceLocator<AppRepository>().allTagsStream,
         builder: (context, snapshot) {
           return switch ((
             snapshot.connectionState,
