@@ -58,11 +58,9 @@ void main() {
       );
     }
 
-    final quotesWithTag = appDatabase.getQuotesWithTagIdStream(addedTag.id!);
-
     await expectLater(
-      quotesWithTag.single,
-      completion(containsAll(await appDatabase.allQuotes)),
+      appDatabase.getQuotesWithTagIdStream(addedTag.id!),
+      emits(await appDatabase.allQuotes),
     );
   });
 
