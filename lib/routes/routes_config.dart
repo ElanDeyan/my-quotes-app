@@ -5,7 +5,7 @@ import 'package:my_quotes/screens/add_quote/add_quote_screen.dart';
 import 'package:my_quotes/screens/error_screen.dart';
 import 'package:my_quotes/screens/main/main_app_screen.dart';
 import 'package:my_quotes/screens/quote_single/quote_screen.dart';
-import 'package:my_quotes/screens/quotes_with_tag.dart';
+import 'package:my_quotes/screens/quotes_with_tag/quotes_with_tag.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
 import 'package:my_quotes/screens/settings/settings_screen.dart';
 import 'package:my_quotes/screens/tags/tags_screen.dart';
