@@ -73,4 +73,12 @@ class DatabaseLocator implements AppRepository {
 
   @override
   Stream<List<Tag>> get allTagsStream => _appRepository.allTagsStream;
+
+  @override
+  Stream<Quote?> getQuoteByIdStream(int id) =>
+      _appRepository.getQuoteByIdStream(id);
+
+  @override
+  Stream<List<Quote>> getQuotesWithTagIdStream(int id) =>
+      _appRepository.getQuotesWithTagIdStream(id);
 }

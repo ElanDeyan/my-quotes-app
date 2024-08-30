@@ -9,7 +9,11 @@ abstract interface class QuotesRepository {
 
   Future<Quote?> getQuoteById(int id);
 
+  Stream<Quote?> getQuoteByIdStream(int id);
+
   Future<List<Quote>> getQuotesWithTagId(int tagId);
+
+  Stream<List<Quote>> getQuotesWithTagIdStream(int id);
 
   Future<Quote> createQuote(Quote quote);
 
