@@ -111,7 +111,7 @@ class _LargeWindowWidthMainAppScreenState
             ),
             const VerticalDivider(),
             Expanded(
-              child: body,
+              child: RepaintBoundary(child: body),
             ),
           ],
         ),
