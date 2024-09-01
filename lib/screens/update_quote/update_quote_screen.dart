@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/screens/update_quote/update_quote_form.dart';
@@ -9,6 +9,7 @@ import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_skeleton.dart';
 import 'package:my_quotes/shared/widgets/form/quote_not_found_with_id_message.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 final class UpdateQuoteScreen extends StatelessWidget {
   const UpdateQuoteScreen({
@@ -37,7 +38,7 @@ final class UpdateQuoteScreen extends StatelessWidget {
         ],
       ),
       body: FutureBuilder(
-        future: databaseLocator.getQuoteById(quoteId),
+        future: serviceLocator<AppRepository>().getQuoteById(quoteId),
         builder: (context, snapshot) {
           final connectionState = snapshot.connectionState;
           final hasError = snapshot.hasError;
@@ -50,8 +51,11 @@ final class UpdateQuoteScreen extends StatelessWidget {
               QuoteNotFoundWithIdMessage(quoteId: quoteId),
             (ConnectionState.done, _, true) when data != null =>
               UpdateQuoteForm(quote: data),
-            (ConnectionState.waiting, _, _) => const QuoteFormSkeleton(),
-            (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+            (ConnectionState.waiting, _, _) =>
+              const QuoteFormSkeleton(key: Key('quote_form_skeleton')),
+            (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(
+                key: Key('no_database_connection_message'),
+              ),
             _ => const AnErrorOccurredMessage(),
           };
         },

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:my_quotes/constants/enums/form_types.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/screens/add_quote_from_file/add_quote_from_file_form.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_skeleton.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 class AddQuoteFromFileProvider extends StatefulWidget {
   const AddQuoteFromFileProvider({
@@ -37,7 +38,9 @@ class _AddQuoteFromFileProviderState extends State<AddQuoteFromFileProvider> {
   Future<Set<Tag>> _getTagsFromNames(Set<String> tagsNames) async {
     if (tagsNames.isEmpty) return const <Tag>{};
 
-    final allTags = await databaseLocator.allTags;
+    final appRepository = serviceLocator<AppRepository>();
+
+    final allTags = await appRepository.allTags;
 
     final tagsToHaveAlreadySelected = <Tag>{
       ...allTags.where((tag) => tagsNames.contains(tag.name)),
@@ -47,8 +50,9 @@ class _AddQuoteFromFileProviderState extends State<AddQuoteFromFileProvider> {
         .where((tagName) => !allTags.map((tag) => tag.name).contains(tagName));
 
     for (final tagNameToCreate in missingTagsNames) {
-      tagsToHaveAlreadySelected
-          .add(await databaseLocator.createTag(tagNameToCreate));
+      tagsToHaveAlreadySelected.add(
+        await appRepository.createTag(tagNameToCreate),
+      );
     }
 
     return tagsToHaveAlreadySelected;
@@ -81,12 +85,14 @@ class _AddQuoteFromFileProviderState extends State<AddQuoteFromFileProvider> {
               return switch ((connectionState, hasError, hasData)) {
                 (ConnectionState.done, _, true) when data != null =>
                   AddQuoteFromFileForm(
+                    key: const Key('add_quote_from_file_form'),
                     formKey: _formKey,
                     quote: widget.quoteFromFile,
                     tags: data,
                     formType: widget.formType,
                   ),
-                (ConnectionState.waiting, _, _) => const QuoteFormSkeleton(),
+                (ConnectionState.waiting, _, _) =>
+                  const QuoteFormSkeleton(key: Key('quote_form_skeleton')),
                 _ => const AnErrorOccurredMessage(),
               };
             },

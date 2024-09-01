@@ -27,8 +27,9 @@ abstract interface class LanguageRepository {
       .where((element) => element == const Locale('en'))
       .single;
 
-  static final values =
-      AppLocalizations.supportedLocales.map((locale) => locale.languageCode);
+  static final values = AppLocalizations.supportedLocales
+      .map((locale) => locale.languageCode)
+      .toList();
 
   Future<String> get language;
 

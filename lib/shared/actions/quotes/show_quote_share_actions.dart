@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/main.dart';
 import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/shared/actions/quotes/share_actions.dart';
 
@@ -26,7 +25,7 @@ Future<void> showQuoteShareActions(
                 (action) => TextButton.icon(
                   onPressed: ShareActions.actionCallback(
                     context,
-                    databaseLocator,
+                    appRepository,
                     appLocalizations,
                     action,
                     quote,

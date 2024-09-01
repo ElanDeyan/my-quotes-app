@@ -12,17 +12,14 @@ class QuoteFormIsFavoriteField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilderCheckbox(
-      name: 'isFavorite',
-      initialValue: initialValue,
-      title: Text(context.appLocalizations.quoteFormFieldIsFavorite),
-      shape: StarBorder(
-        squash: .5,
-        innerRadiusRatio: .5,
-        side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+    return RepaintBoundary(
+      child: FormBuilderCheckbox(
+        name: 'isFavorite',
+        initialValue: initialValue,
+        title: Text(context.appLocalizations.quoteFormFieldIsFavorite),
+        checkColor: Colors.transparent,
+        valueTransformer: (value) => value ?? false,
       ),
-      checkColor: Colors.transparent,
-      valueTransformer: (value) => value ?? false,
     );
   }
 }

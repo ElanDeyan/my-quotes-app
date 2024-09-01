@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 class SearchQuoteResults extends StatelessWidget {
   const SearchQuoteResults({super.key, required this.searchResults});
@@ -14,9 +14,6 @@ class SearchQuoteResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final databaseProvider =
-        Provider.of<DatabaseProvider>(context, listen: false);
-
     return Scaffold(
       body: ListView.builder(
         itemCount: searchResults.length,
@@ -36,7 +33,7 @@ class SearchQuoteResults extends StatelessWidget {
             position: PopupMenuPosition.under,
             itemBuilder: (context) => QuoteActions.popupMenuItems(
               context.appLocalizations,
-              databaseProvider,
+              serviceLocator<AppRepository>(),
               context,
               searchResults[index],
               actions: QuoteActions.values.where(

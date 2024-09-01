@@ -26,7 +26,9 @@ final class AddQuoteScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const AddQuoteForm(),
+      body: const AddQuoteForm(
+        key: Key('add_quote_form'),
+      ),
     );
   }
 }

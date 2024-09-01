@@ -2,25 +2,29 @@ import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/actions/tags/show_update_tag_dialog.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
 void updateTag(BuildContext context, Tag tag) {
-  final database = Provider.of<DatabaseProvider>(context, listen: false);
   final result = showUpdateTagDialog(context, tag);
   result.then(
     (value) {
       if (value.isNotNullOrBlank) {
-        database.updateTag(tag.copyWith(name: value));
-        if (context.mounted) {
-          showToast(
-            context,
-            child: PillChip(label: Text(context.appLocalizations.updated)),
-          );
-        }
+        serviceLocator<AppRepository>()
+            .updateTag(tag.copyWith(name: value))
+            .then(
+              (_) => context.mounted
+                  ? showToast(
+                      context,
+                      child: PillChip(
+                        label: Text(context.appLocalizations.updated),
+                      ),
+                    )
+                  : null,
+            );
       }
     },
   );

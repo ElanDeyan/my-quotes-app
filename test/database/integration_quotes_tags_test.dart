@@ -42,6 +42,28 @@ void main() {
     expect(quotesWithTag, hasLength(numberOfQuotes));
   });
 
+  test('Quotes with tag stream', () async {
+    final sampleTagName = faker.lorem.word().toLowerCase();
+    await appDatabase.createTag(sampleTagName);
+    final addedTag = (await appDatabase.allTags).single;
+
+    const numberOfQuotes = 5;
+
+    for (var i = 0; i < numberOfQuotes; i++) {
+      final quoteToAdd =
+          generateRandomQuote().copyWith(tags: Value(addedTag.id.toString()));
+
+      await appDatabase.createQuote(
+        quoteToAdd,
+      );
+    }
+
+    await expectLater(
+      appDatabase.getQuotesWithTagIdStream(addedTag.id!),
+      emits(await appDatabase.allQuotes),
+    );
+  });
+
   test('When deleting tag, quotes with this tag will loose it', () async {
     const tagName1 = 'tag1';
     const tagName2 = 'tag2';

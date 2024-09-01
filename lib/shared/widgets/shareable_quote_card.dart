@@ -74,7 +74,7 @@ class ShareableQuoteCard extends StatelessWidget {
                   onPressed: () {},
                   iconSize: 16,
                   icon: Icon(
-                    quote.isFavorite ? Icons.star : Icons.star_outline,
+                    quote.isFavorite ? Icons.favorite : Icons.favorite_border,
                     size: 16,
                   ),
                 ),

@@ -7,7 +7,7 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/map_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/main.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
@@ -22,6 +22,7 @@ import 'package:my_quotes/shared/widgets/form/quote_form_source_uri_field.dart';
 import 'package:my_quotes/shared/widgets/form/update_form_data_mixin.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
+import 'package:my_quotes/states/service_locator.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class UpdateQuoteForm extends StatefulWidget {
@@ -60,7 +61,7 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
         createdAt: Value(widget.quote.createdAt),
       );
 
-      databaseLocator.updateQuote(quoteFromForm).then(
+      serviceLocator<AppRepository>().updateQuote(quoteFromForm).then(
         (value) {
           if (context.mounted) {
             showToast(
@@ -108,23 +109,28 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
               child: Column(
                 children: [
                   QuoteFormContentField(
+                    key: const Key('quote_form_content_field'),
                     initialValue: widget.quote.content,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormAuthorField(
+                    key: const Key('quote_form_author_field'),
                     formType: widget.formType,
                     initialValue: widget.quote.author,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormSourceField(
+                    key: const Key('quote_form_source_field'),
                     initialValue: widget.quote.source,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormSourceUriField(
+                    key: const Key('quote_form_source_uri_field'),
                     initialValue: widget.quote.sourceUri,
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormIsFavoriteField(
+                    key: const Key('quote_form_is_favorite_field'),
                     initialValue: widget.quote.isFavorite,
                   ),
                   const Gap.vertical(spacing: 10),
@@ -134,6 +140,9 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
                   ),
                   const Gap.vertical(spacing: 10),
                   QuoteFormActionButton(
+                    key: const Key(
+                      'quote_form_update_quote_action_button_field',
+                    ),
                     onPressed: () => _onSubmit(context),
                     formType: widget.formType,
                   ),
@@ -160,7 +169,7 @@ class _FutureSelectedTagsField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: databaseLocator.getTagsByIds(quote.tagsId),
+      future: serviceLocator<AppRepository>().getTagsByIds(quote.tagsId),
       builder: (context, snapshot) {
         final connectionState = snapshot.connectionState;
         final hasError = snapshot.hasError;
@@ -174,10 +183,15 @@ class _FutureSelectedTagsField extends StatelessWidget {
 
         return switch ((connectionState, hasError, hasData)) {
           (ConnectionState.done, _, true) when data != null =>
-            QuoteFormSelectTagsField(pickedItems: tagSetToUpdate),
+            QuoteFormSelectTagsField(
+              key: const Key('quote_form_select_tags_field'),
+              pickedItems: tagSetToUpdate,
+            ),
           (ConnectionState.waiting, _, _) =>
             const Skeletonizer(child: TextField()),
-          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(),
+          (ConnectionState.none, _, _) => const NoDatabaseConnectionMessage(
+              key: Key('no_database_connection_message'),
+            ),
           _ => const AnErrorOccurredMessage(),
         };
       },

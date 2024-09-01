@@ -6,9 +6,9 @@ import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/string_extension.dart';
 import 'package:my_quotes/routes/routes_names.dart';
-import 'package:my_quotes/screens/settings/color_pallete_radio_list.dart';
-import 'package:my_quotes/screens/settings/language_radio_list.dart';
-import 'package:my_quotes/screens/settings/theme_mode_radio_list.dart';
+import 'package:my_quotes/screens/settings/choose_app_language_dialog.dart';
+import 'package:my_quotes/screens/settings/choose_color_scheme_palette_dialog.dart';
+import 'package:my_quotes/screens/settings/choose_theme_mode_dialog.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
       body: Consumer<AppPreferences>(
-        builder: (context, value, child) => ListView(
+        builder: (context, appPreferences, child) => ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             ListTile(
@@ -47,13 +47,13 @@ class SettingsScreen extends StatelessWidget {
               title: Text(context.appLocalizations.themeMode),
               subtitle: Text(
                 context.appLocalizations
-                    .themeModeName(value.themeMode.name)
+                    .themeModeName(appPreferences.themeMode.name)
                     .toTitleCase(),
               ),
               onTap: () => showDialog<void>(
                 context: context,
-                builder: (_) => const Dialog(
-                  child: ThemeModeRadioList(),
+                builder: (_) => const ChooseThemeModeDialog(
+                  key: Key('choose_theme_mode_dialog'),
                 ),
               ),
             ),
@@ -64,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: ColorSchemePalette.primaryColor(
-                      value.colorSchemePalette,
+                      appPreferences.colorSchemePalette,
                       MediaQuery.platformBrightnessOf(context),
                     ),
                     minRadius: 5.0,
@@ -73,15 +73,16 @@ class SettingsScreen extends StatelessWidget {
                     width: 5.0,
                   ),
                   Text(
-                    context.appLocalizations
-                        .colorPaletteName(value.colorSchemePalette.storageName),
+                    context.appLocalizations.colorPaletteName(
+                      appPreferences.colorSchemePalette.storageName,
+                    ),
                   ),
                 ],
               ),
               onTap: () => showDialog<void>(
                 context: context,
-                builder: (_) => const Dialog(
-                  child: ColorSchemePaletteRadioList(),
+                builder: (_) => const ChooseColorSchemePaletteDialog(
+                  key: Key('choose_color_scheme_palette_dialog'),
                 ),
               ),
             ),
@@ -89,12 +90,12 @@ class SettingsScreen extends StatelessWidget {
               leading: const Icon(Icons.translate_outlined),
               title: Text(context.appLocalizations.language),
               subtitle: Text(
-                context.appLocalizations.languageName(value.language),
+                context.appLocalizations.languageName(appPreferences.language),
               ),
               onTap: () => showDialog<void>(
                 context: context,
-                builder: (_) => const Dialog(
-                  child: LanguageRadioList(),
+                builder: (_) => const ChooseAppLanguageDialog(
+                  key: Key('choose_app_language_dialog'),
                 ),
               ),
             ),

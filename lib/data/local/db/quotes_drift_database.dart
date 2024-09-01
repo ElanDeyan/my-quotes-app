@@ -171,4 +171,11 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
     await restoreTags(tags);
     await restoreQuotes(quotes);
   }
+
+  @override
+  Stream<Quote?> getQuoteByIdStream(int id) => quotesDao.getQuoteByIdStream(id);
+
+  @override
+  Stream<List<Quote>> getQuotesWithTagIdStream(int id) =>
+      quotesDao.getQuotesWithTagIdStream(id);
 }

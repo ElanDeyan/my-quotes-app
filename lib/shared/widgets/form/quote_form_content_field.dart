@@ -13,23 +13,25 @@ class QuoteFormContentField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilderTextField(
-      name: 'content',
-      initialValue: initialValue,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: context.appLocalizations.quoteFormFieldContent,
-      ),
-      maxLines: null,
-      smartQuotesType: SmartQuotesType.enabled,
-      keyboardType: TextInputType.multiline,
-      smartDashesType: SmartDashesType.enabled,
-      validator: FormBuilderValidators.required(
-        errorText: context.appLocalizations.nonEmptyField(
-          context.appLocalizations.quoteFormFieldContent,
+    return RepaintBoundary(
+      child: FormBuilderTextField(
+        name: 'content',
+        initialValue: initialValue,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: context.appLocalizations.quoteFormFieldContent,
         ),
+        maxLines: null,
+        smartQuotesType: SmartQuotesType.enabled,
+        keyboardType: TextInputType.multiline,
+        smartDashesType: SmartDashesType.enabled,
+        validator: FormBuilderValidators.required(
+          errorText: context.appLocalizations.nonEmptyField(
+            context.appLocalizations.quoteFormFieldContent,
+          ),
+        ),
+        valueTransformer: (value) => value?.trim(),
       ),
-      valueTransformer: (value) => value?.trim(),
     );
   }
 }

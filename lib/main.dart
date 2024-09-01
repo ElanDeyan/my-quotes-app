@@ -14,15 +14,11 @@ import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
 import 'package:my_quotes/screens/feedback/my_quotes_feedback.dart';
-import 'package:my_quotes/services/database_locator.dart';
 import 'package:my_quotes/services/setup.dart';
 import 'package:my_quotes/states/app_preferences.dart';
-import 'package:my_quotes/states/database_provider.dart';
 import 'package:my_quotes/states/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
-
-late final DatabaseLocator databaseLocator;
 
 void main() async {
   runZonedGuarded(() async {
@@ -53,18 +49,13 @@ Future<void> initApp() async {
 
   await appPreferences.loadLocalPreferences();
 
-  final appDatabase = AppDatabase();
-
   serviceLocator.registerLazySingleton<AppRepository>(
-    () => appDatabase,
+    () => AppDatabase(),
   );
-
-  databaseLocator = DatabaseLocator(serviceLocator<AppRepository>());
 
   runApp(
     MyAppProvider(
       appPreferencesProvider: appPreferences,
-      databaseNotifier: DatabaseProvider(appRepository: appDatabase),
     ),
   );
 }
@@ -73,24 +64,15 @@ final class MyAppProvider extends StatelessWidget {
   const MyAppProvider({
     super.key,
     required AppPreferences appPreferencesProvider,
-    required DatabaseProvider databaseNotifier,
-  })  : _appPreferences = appPreferencesProvider,
-        _databaseNotifier = databaseNotifier;
+  }) : _appPreferences = appPreferencesProvider;
 
   final AppPreferences _appPreferences;
 
-  final DatabaseProvider _databaseNotifier;
-
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => _appPreferences),
-        ChangeNotifierProvider(create: (_) => _databaseNotifier),
-      ],
-      child: const MyQuotesFeedback(
-        child: MyApp(),
-      ),
+    return ChangeNotifierProvider(
+      create: (_) => _appPreferences,
+      child: const MyQuotesFeedback(child: MyApp()),
     );
   }
 }

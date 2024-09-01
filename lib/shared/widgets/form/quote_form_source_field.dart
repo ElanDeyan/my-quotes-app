@@ -12,17 +12,19 @@ class QuoteFormSourceField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilderTextField(
-      name: 'source',
-      initialValue: initialValue,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: context.appLocalizations.quoteFormFieldSource,
-        hintText: context.appLocalizations.quoteFormFieldSourceHintText,
+    return RepaintBoundary(
+      child: FormBuilderTextField(
+        name: 'source',
+        initialValue: initialValue,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: context.appLocalizations.quoteFormFieldSource,
+          hintText: context.appLocalizations.quoteFormFieldSourceHintText,
+        ),
+        keyboardType: TextInputType.text,
+        smartQuotesType: SmartQuotesType.enabled,
+        smartDashesType: SmartDashesType.enabled,
       ),
-      keyboardType: TextInputType.text,
-      smartQuotesType: SmartQuotesType.enabled,
-      smartDashesType: SmartDashesType.enabled,
     );
   }
 }

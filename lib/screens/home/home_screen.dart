@@ -10,7 +10,11 @@ final class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SizedBox.expand(
       child: Center(
-        child: RandomQuoteSection(),
+        child: RepaintBoundary(
+          child: RandomQuoteSection(
+            key: Key('random_quote_section'),
+          ),
+        ),
       ),
     );
   }

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
-import 'package:my_quotes/states/database_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_quotes/states/service_locator.dart';
 
-class QuoteTile extends StatelessWidget {
+class QuoteTile extends StatefulWidget {
   const QuoteTile({
     super.key,
     required this.quote,
@@ -16,25 +16,33 @@ class QuoteTile extends StatelessWidget {
 
   final Quote quote;
 
-  String get _subtitle => quote.source.isNotNullOrBlank
-      ? '${quote.author}, ${quote.source}'
-      : quote.author;
+  @override
+  State<QuoteTile> createState() => _QuoteTileState();
+}
+
+class _QuoteTileState extends State<QuoteTile>
+    with AutomaticKeepAliveClientMixin {
+  String get _subtitle => widget.quote.source.isNotNullOrBlank
+      ? '${widget.quote.author}, ${widget.quote.source}'
+      : widget.quote.author;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    final databaseProvider =
-        Provider.of<DatabaseProvider>(context, listen: false);
+    super.build(context);
 
     return ListTile(
       onTap: () => context.pushNamed(
         quoteByIdNavigationKey,
-        pathParameters: {'id': quote.id!.toString()},
+        pathParameters: {'id': widget.quote.id!.toString()},
       ),
-      leading: quote.isFavorite
+      leading: widget.quote.isFavorite
           ? const Icon(Icons.favorite_outline)
           : const Icon(Icons.format_quote_outlined),
       title: Text(
-        quote.content,
+        widget.quote.content,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         softWrap: true,
@@ -49,9 +57,9 @@ class QuoteTile extends StatelessWidget {
         position: PopupMenuPosition.under,
         itemBuilder: (context) => QuoteActions.popupMenuItems(
           context.appLocalizations,
-          databaseProvider,
+          serviceLocator<AppRepository>(),
           context,
-          quote,
+          widget.quote,
           actions: QuoteActions.values.where(
             (action) => switch (action) {
               QuoteActions.create => false,

@@ -19,10 +19,20 @@ class QuotesDao extends DatabaseAccessor<AppDatabase> with _$QuotesDaoMixin {
         .getSingleOrNull();
   }
 
+  Stream<Quote?> getQuoteByIdStream(int id) =>
+      (select(quoteTable)..where((row) => row.id.equals(id)))
+          .watchSingleOrNull();
+
   Future<List<Quote>> getQuotesWithTagId(int tagId) async {
     final quotes = await allQuotes;
 
     return quotes.where((quote) => quote.tagsId.contains(tagId)).toList();
+  }
+
+  Stream<List<Quote>> getQuotesWithTagIdStream(int tagId) async* {
+    await for (final quotes in allQuotesStream) {
+      yield [...quotes.where((quote) => quote.tagsId.contains(tagId))];
+    }
   }
 
   Future<Quote?> get randomQuote async => (await allQuotes).getRandom();

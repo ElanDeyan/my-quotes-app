@@ -113,4 +113,16 @@ final class DatabaseProvider extends ChangeNotifier implements AppRepository {
 
   @override
   Stream<List<Tag>> get allTagsStream => _appRepository.allTagsStream;
+
+  @override
+  Stream<Quote?> getQuoteByIdStream(int id) {
+    // TODO: implement getQuoteByIdStream
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<Quote>> getQuotesWithTagIdStream(int id) {
+    // TODO: implement getQuotesWithTagIdStream
+    throw UnimplementedError();
+  }
 }
