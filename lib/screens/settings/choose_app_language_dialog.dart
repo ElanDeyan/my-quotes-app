@@ -12,7 +12,7 @@ class ChooseAppLanguageDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appPreferences = Provider.of<AppPreferences>(context, listen: false);
-    
+
     return SimpleDialog(
       clipBehavior: Clip.none,
       title: Text(context.appLocalizations.chooseAppLanguage),
