@@ -83,6 +83,50 @@ void main() {
   });
 
   group('Get', () {
+    test('All tags (future)', () async {
+      await expectLater(appDatabase.allTags, completion(isEmpty));
+
+      final tagsNames = [generateRandomTag().name, generateRandomTag().name];
+
+      await appDatabase.createTag(tagsNames.first);
+      await appDatabase.createTag(tagsNames.last);
+
+      await expectLater(
+        appDatabase.allTags,
+        completion(
+          allOf([
+            hasLength(tagsNames.length),
+            predicate(
+              (List<Tag> allTags) =>
+                  allTags.map((tag) => tag.name).containsAll(tagsNames),
+            ),
+          ]),
+        ),
+      );
+    });
+
+    test('All tags (stream)', () async {
+      await expectLater(appDatabase.allTagsStream, emits(isEmpty));
+
+      final tagsNames = [generateRandomTag().name, generateRandomTag().name];
+
+      await appDatabase.createTag(tagsNames.first);
+      await appDatabase.createTag(tagsNames.last);
+
+      await expectLater(
+        appDatabase.allTagsStream,
+        emits(
+          allOf([
+            hasLength(tagsNames.length),
+            predicate(
+              (List<Tag> allTags) =>
+                  allTags.map((tag) => tag.name).containsAll(tagsNames),
+            ),
+          ]),
+        ),
+      );
+    });
+
     test('by id', () async {
       await appDatabase.createTag(sampleTag.name);
 
