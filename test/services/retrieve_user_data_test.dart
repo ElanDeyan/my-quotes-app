@@ -3,7 +3,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/list_extension.dart';
+import '../fixtures/list_extension.dart';
 import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/repository/user_preferences_interfaces.dart';

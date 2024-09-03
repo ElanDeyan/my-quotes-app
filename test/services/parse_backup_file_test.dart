@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:basics/basics.dart';
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_quotes/helpers/tag_extension.dart';
+import '../fixtures/tag_extension.dart';
 import 'package:my_quotes/services/parse_backup_file.dart';
 import 'package:share_plus/share_plus.dart';
 
