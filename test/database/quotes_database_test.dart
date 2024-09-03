@@ -11,20 +11,20 @@ import '../fixtures/generate_random_quote.dart';
 const _minRetryAttempts = 3;
 
 void main() {
-  late AppDatabase database;
+  late AppDatabase appDatabase;
 
   final faker = Faker();
 
   setUp(() {
     final inMemory = DatabaseConnection(NativeDatabase.memory());
-    database = AppDatabase.forTesting(inMemory);
+    appDatabase = AppDatabase.forTesting(inMemory);
   });
 
-  tearDown(() => database.close());
+  tearDown(() => appDatabase.close());
 
   test('Starts empty', () async {
-    expect(await database.allQuotes, isEmpty);
-    expect(await database.allTags, isEmpty);
+    await expectLater(appDatabase.allQuotes, completion(isEmpty));
+    await expectLater(appDatabase.allTags, completion(isEmpty));
   });
 
   group('Quotes:', () {
@@ -41,17 +41,17 @@ void main() {
           reason: 'Before add, the quote can have a null id.',
         );
 
-        await database.createQuote(sampleQuote);
+        await appDatabase.createQuote(sampleQuote);
 
-        expect(await database.allQuotes, hasLength(1));
+        await expectLater(appDatabase.allQuotes, completion(hasLength(1)));
       });
 
       test('Quote after add have non-null id', () async {
-        await database.createQuote(sampleQuote);
+        await appDatabase.createQuote(sampleQuote);
 
-        expect(await database.allQuotes, hasLength(1));
+        await expectLater(appDatabase.allQuotes, completion(hasLength(1)));
 
-        final addedQuote = (await database.allQuotes).single;
+        final addedQuote = (await appDatabase.allQuotes).single;
 
         expect(addedQuote.id, isNotNull);
       });
@@ -62,10 +62,10 @@ void main() {
           author: faker.person.name(),
         );
 
-        await database.createQuote(sampleQuote);
-        await database.createQuote(secondQuote);
+        await appDatabase.createQuote(sampleQuote);
+        await appDatabase.createQuote(secondQuote);
 
-        final [first, second] = await database.allQuotes;
+        final [first, second] = await appDatabase.allQuotes;
 
         expect(first.id, isNotNull);
         expect(second.id, isNotNull);
@@ -74,9 +74,9 @@ void main() {
       });
 
       test('Add quote with same id will replace', () async {
-        await database.createQuote(sampleQuote);
+        await appDatabase.createQuote(sampleQuote);
 
-        final addedQuote = (await database.allQuotes).single;
+        final addedQuote = (await appDatabase.allQuotes).single;
 
         final addedQuoteId = addedQuote.id;
 
@@ -89,23 +89,23 @@ void main() {
 
         expect(anotherQuote, isNot(addedQuote));
 
-        await database.createQuote(anotherQuote);
+        await appDatabase.createQuote(anotherQuote);
 
-        expect(await database.allQuotes, hasLength(1));
+        await expectLater(appDatabase.allQuotes, completion(hasLength(1)));
 
-        final newAddedQuote = (await database.allQuotes).single;
+        final newAddedQuote = (await appDatabase.allQuotes).single;
 
-        expect((await database.allQuotes).single, isNot(addedQuote));
+        expect((await appDatabase.allQuotes).single, isNot(addedQuote));
 
-        expect((await database.allQuotes).single, equals(newAddedQuote));
+        expect((await appDatabase.allQuotes).single, equals(newAddedQuote));
       });
 
       test('Auto increment id doesnt make conflict', () async {
         sampleQuote = sampleQuote.copyWith(id: const Value(3));
 
-        await database.createQuote(sampleQuote);
+        await appDatabase.createQuote(sampleQuote);
 
-        final addedQuoteWithId3 = (await database.allQuotes).single;
+        final addedQuoteWithId3 = (await appDatabase.allQuotes).single;
 
         expect(addedQuoteWithId3.id, equals(3));
 
@@ -114,20 +114,23 @@ void main() {
         ];
 
         for (final quote in quotesToAdd) {
-          await database.createQuote(quote);
+          await appDatabase.createQuote(quote);
         }
 
-        expect(
-          await database.allQuotes,
-          hasLength(quotesToAdd.length + 1),
+        await expectLater(
+          appDatabase.allQuotes,
+          completion(hasLength(quotesToAdd.length + 1)),
           reason:
               'Even the id 3 already existing, the auto increment will take the next available id',
         );
 
-        expect(await database.getQuoteById(3), addedQuoteWithId3);
+        await expectLater(
+          appDatabase.getQuoteById(3),
+          completion(addedQuoteWithId3),
+        );
 
         expect(
-          (await database.allQuotes).last.id,
+          (await appDatabase.allQuotes).last.id,
           equals(addedQuoteWithId3.id! + quotesToAdd.length),
           reason:
               'The database will take the next available id from the higher one. '
@@ -137,44 +140,78 @@ void main() {
     });
 
     group('Get Quote:', () {
-      test('Getting quote by id', () async {
-        await database.createQuote(sampleQuote);
+      group('All quotes', () {
+        late List<Quote> sampleQuotes;
+        setUp(() {
+          sampleQuotes = List.generate(5, (_) => generateRandomQuote());
+        });
+        test('(future)', () async {
+          await expectLater(appDatabase.allQuotes, completion(isEmpty));
 
-        final addedQuote = (await database.allQuotes).single;
-        final addedQuoteId = addedQuote.id!;
+          for (final quote in sampleQuotes) {
+            await appDatabase.createQuote(quote);
+          }
 
-        final quoteById = await database.getQuoteById(addedQuoteId);
+          await expectLater(
+            appDatabase.allQuotes,
+            completion(hasLength(sampleQuotes.length)),
+          );
+        });
 
-        expect(quoteById, isNotNull);
-        expect(quoteById, isA<Quote>());
+        test('(stream)', () async {
+          await expectLater(appDatabase.allQuotesStream, emits(isEmpty));
 
-        expect(quoteById, equals(addedQuote));
+          for (final quote in sampleQuotes) {
+            await appDatabase.createQuote(quote);
+          }
+
+          await expectLater(
+            appDatabase.allQuotesStream,
+            emits(hasLength(sampleQuotes.length)),
+          );
+        });
       });
 
-      test('Getting quote by id stream', () async {
-        await database.createQuote(sampleQuote);
-        final addedQuote = (await database.allQuotes).single;
-        final addedQuoteId = addedQuote.id!;
+      group('Getting by id', () {
+        test('(future)', () async {
+          await appDatabase.createQuote(sampleQuote);
 
-        await expectLater(
-          database.getQuoteByIdStream(addedQuoteId),
-          emits(addedQuote),
-        );
+          final addedQuote = (await appDatabase.allQuotes).single;
+          final addedQuoteId = addedQuote.id!;
+
+          final quoteById = await appDatabase.getQuoteById(addedQuoteId);
+
+          expect(quoteById, isNotNull);
+          expect(quoteById, isA<Quote>());
+
+          expect(quoteById, equals(addedQuote));
+        });
+
+        test('(stream)', () async {
+          await appDatabase.createQuote(sampleQuote);
+          final addedQuote = (await appDatabase.allQuotes).single;
+          final addedQuoteId = addedQuote.id!;
+
+          await expectLater(
+            appDatabase.getQuoteByIdStream(addedQuoteId),
+            emits(addedQuote),
+          );
+        });
       });
 
       test(
         'Getting null for not found id',
         () async {
-          await database.createQuote(sampleQuote);
+          await appDatabase.createQuote(sampleQuote);
 
-          final addedId = (await database.allQuotes).single.id!;
+          final addedId = (await appDatabase.allQuotes).single.id!;
 
           final randomId =
               Random.secure().nextInt(50) + 2; // to start from 2 to 50
 
           expect(addedId, isNot(randomId));
 
-          final maybeQuote = await database.getQuoteById(randomId);
+          final maybeQuote = await appDatabase.getQuoteById(randomId);
 
           expect(maybeQuote, isNull);
         },
@@ -182,11 +219,9 @@ void main() {
       );
 
       test('Random quote: null if empty', () async {
-        expect(await database.allQuotes, isEmpty);
+        await expectLater(appDatabase.allQuotes, completion(isEmpty));
 
-        final maybeQuote = await database.randomQuote;
-
-        expect(maybeQuote, isNull);
+        await expectLater(appDatabase.randomQuote, completion(isNull));
       });
     });
 
@@ -194,61 +229,64 @@ void main() {
       test(
         'Simple case',
         () async {
-          await database.createQuote(sampleQuote);
+          await appDatabase.createQuote(sampleQuote);
 
-          final oldQuote = (await database.allQuotes).single;
+          final oldQuote = (await appDatabase.allQuotes).single;
 
           final updatedQuote =
               oldQuote.copyWith(content: faker.lorem.sentence());
 
           expect(oldQuote.content, isNot(updatedQuote.content));
 
-          await database.updateQuote(updatedQuote);
+          await appDatabase.updateQuote(updatedQuote);
 
-          expect(await database.allQuotes, hasLength(1));
+          await expectLater(appDatabase.allQuotes, completion(hasLength(1)));
 
-          expect((await database.allQuotes).single, isNot(oldQuote));
+          expect((await appDatabase.allQuotes).single, isNot(oldQuote));
         },
         retry: _minRetryAttempts,
       );
 
       test('Updating in non-existent id doesnt add', () async {
-        await database.createQuote(sampleQuote);
-        await database.createQuote(generateRandomQuote());
+        await appDatabase.createQuote(sampleQuote);
+        await appDatabase.createQuote(generateRandomQuote());
 
-        final quotesQuantity = (await database.allQuotes).length;
+        final quotesQuantity = (await appDatabase.allQuotes).length;
 
         final nonExistentId = quotesQuantity + 1;
 
-        await database.updateQuote(
+        await appDatabase.updateQuote(
           generateRandomQuote().copyWith(id: Value(nonExistentId)),
         );
 
-        expect(await database.allQuotes, hasLength(quotesQuantity));
+        await expectLater(
+          appDatabase.allQuotes,
+          completion(hasLength(quotesQuantity)),
+        );
       });
     });
 
     group('Deleting', () {
       test('Basic deleting', () async {
-        await database.createQuote(sampleQuote);
-        expect(await database.allQuotes, hasLength(1));
+        await appDatabase.createQuote(sampleQuote);
+        await expectLater(appDatabase.allQuotes, completion(hasLength(1)));
 
-        final addedQuote = (await database.allQuotes).single;
+        final addedQuote = (await appDatabase.allQuotes).single;
 
-        await database.deleteQuote(addedQuote.id!);
+        await appDatabase.deleteQuote(addedQuote.id!);
 
-        expect(await database.allQuotes, isEmpty);
+        await expectLater(appDatabase.allQuotes, completion(isEmpty));
 
-        expect(
-          (await database.allQuotes).contains(addedQuote),
-          isFalse,
+        await expectLater(
+          appDatabase.allQuotes,
+          isNot(containsOnce(addedQuote)),
         );
       });
 
       test('Delete non-existent id does nothing', () async {
-        await database.createQuote(sampleQuote);
+        await appDatabase.createQuote(sampleQuote);
 
-        final addedQuote = (await database.allQuotes).single;
+        final addedQuote = (await appDatabase.allQuotes).single;
 
         final addedId = addedQuote.id!;
 
@@ -256,31 +294,37 @@ void main() {
 
         expect(addedId, isNot(nonExistentId));
 
-        await database.deleteQuote(nonExistentId);
+        await appDatabase.deleteQuote(nonExistentId);
 
-        expect(await database.allQuotes, hasLength(1));
+        await expectLater(appDatabase.allQuotes, completion(hasLength(1)));
 
-        expect(await database.allQuotes, containsOnce(addedQuote));
+        await expectLater(
+          appDatabase.allQuotes,
+          completion(containsOnce(addedQuote)),
+        );
       });
     });
 
     group('Clear all quotes', () {
       test('Basic case', () async {
-        expect(await database.allQuotes, isEmpty);
+        await expectLater(appDatabase.allQuotes, completion(isEmpty));
 
         final quotesToAdd = [
           for (var i = 0; i < 10; i++) generateRandomQuote(),
         ];
 
         for (final quote in quotesToAdd) {
-          await database.createQuote(quote);
+          await appDatabase.createQuote(quote);
         }
 
-        expect(await database.allQuotes, hasLength(quotesToAdd.length));
+        await expectLater(
+          appDatabase.allQuotes,
+          completion(hasLength(quotesToAdd.length)),
+        );
 
-        await database.clearAllQuotes();
+        await appDatabase.clearAllQuotes();
 
-        expect(await database.allQuotes, isEmpty);
+        await expectLater(appDatabase.allQuotes, completion(isEmpty));
       });
     });
   });
@@ -294,20 +338,38 @@ void main() {
       sampleTag = Tag(name: faker.lorem.word().toLowerCase());
     });
 
-    test('Quote with some tag', () async {
-      await database.createTag(sampleTag.name);
+    group('Quote with some tag', () {
+      test('(future)', () async {
+        await appDatabase.createTag(sampleTag.name);
 
-      final tagId = (await database.allTags).single.id;
+        final tagId = (await appDatabase.allTags).single.id;
 
-      await database.createQuote(sampleQuote.copyWith(tags: Value('$tagId')));
+        await appDatabase
+            .createQuote(sampleQuote.copyWith(tags: Value('$tagId')));
 
-      final addedQuote = (await database.allQuotes).single;
+        final addedQuote = (await appDatabase.allQuotes).single;
 
-      final quotesWithTagId = await database.getQuotesWithTagId(tagId!);
+        await expectLater(
+          appDatabase.getQuotesWithTagId(tagId!),
+          completion(containsOnce(addedQuote)),
+        );
+      });
 
-      expect(quotesWithTagId, isNotEmpty);
+      test('(stream)', () async {
+        await appDatabase.createTag(sampleTag.name);
 
-      expect(quotesWithTagId, containsOnce(addedQuote));
+        final tagId = (await appDatabase.allTags).single.id;
+
+        await appDatabase
+            .createQuote(sampleQuote.copyWith(tags: Value('$tagId')));
+
+        final addedQuote = (await appDatabase.allQuotes).single;
+
+        await expectLater(
+          appDatabase.getQuotesWithTagIdStream(tagId!),
+          emits(containsOnce(addedQuote)),
+        );
+      });
     });
   });
 }
