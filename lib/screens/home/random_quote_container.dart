@@ -49,15 +49,15 @@ class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
             child: QuoteCard(key: const Key('quote_card'), quote: _quote),
           ),
           const Gap.vertical(spacing: 10),
-          Row(
-            mainAxisSize: MainAxisSize.min,
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
             children: [
               OutlinedButton(
                 key: const Key('update_random_quote_button'),
                 onPressed: _updateRandomQuote,
                 child: const Icon(Icons.shuffle),
               ),
-              const Gap.horizontal(spacing: 10),
               OutlinedButton(
                 key: const Key('share_quote_button'),
                 onPressed: QuoteActions.actionCallback(
