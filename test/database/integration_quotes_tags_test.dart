@@ -5,11 +5,11 @@ import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import '../fixtures/list_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 
 import '../fixtures/generate_random_quote.dart';
 import '../fixtures/generate_random_tag.dart';
+import '../fixtures/list_extension.dart';
 
 void main() {
   late AppDatabase appDatabase;
