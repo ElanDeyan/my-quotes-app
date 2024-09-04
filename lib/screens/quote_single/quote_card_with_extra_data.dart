@@ -22,10 +22,8 @@ class QuoteCardWithExtraData extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.sizeOf(context).width * 0.9,
-          ),
+        FractionallySizedBox(
+          widthFactor: 0.9,
           child: QuoteCard(quote: quote),
         ),
         const SizedBox(height: 16),

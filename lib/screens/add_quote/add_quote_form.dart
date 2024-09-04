@@ -93,10 +93,8 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
             key: _formKey,
             onChanged: _formKey.currentState?.validate,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.sizeOf(context).width * 0.8,
-              ),
+            child: FractionallySizedBox(
+              widthFactor: 0.8,
               child: Column(
                 children: [
                   const QuoteFormContentField(
