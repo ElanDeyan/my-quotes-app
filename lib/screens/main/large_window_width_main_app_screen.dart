@@ -112,7 +112,12 @@ class _LargeWindowWidthMainAppScreenState
             ),
             const VerticalDivider(),
             Expanded(
-              child: RepaintBoundary(child: body),
+              child: RepaintBoundary(
+                child: AnimatedSwitcher(
+                  duration: Durations.short4,
+                  child: body,
+                ),
+              ),
             ),
           ],
         ),

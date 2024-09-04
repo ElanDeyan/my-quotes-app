@@ -83,7 +83,9 @@ class _CompactWindowWidthMainAppScreenState
       appBar: MainAppScreenAppBar(
         actions: _actions(settingsDestination, context),
       ),
-      body: RepaintBoundary(child: body),
+      body: RepaintBoundary(
+        child: AnimatedSwitcher(duration: Durations.short4, child: body),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.pushNamed(addQuoteNavigationKey),
         label: Text(context.appLocalizations.addQuoteTitle),
