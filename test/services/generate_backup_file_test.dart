@@ -13,7 +13,6 @@ import 'package:my_quotes/repository/user_preferences_interfaces.dart';
 import 'package:my_quotes/services/generate_backup_file.dart';
 import 'package:my_quotes/services/parse_backup_file.dart';
 import 'package:my_quotes/states/app_preferences.dart';
-import 'package:my_quotes/states/database_provider.dart';
 
 import '../fixtures/generate_random_quote.dart';
 import '../fixtures/generate_random_tag.dart';
@@ -23,7 +22,6 @@ void main() {
 
   late AppRepository appRepository;
   late AppPreferences appPreferences;
-  late DatabaseProvider databaseProvider;
 
   late List<Tag> tagsSample;
   late List<Quote> quotesSample;
@@ -34,8 +32,6 @@ void main() {
 
     appPreferences =
         AppPreferences(userPreferencesRepository: const UserPreferences());
-
-    databaseProvider = DatabaseProvider(appRepository: appRepository);
 
     tagsSample = [
       for (var i = 0; i < 10; i++)
@@ -58,8 +54,7 @@ void main() {
   });
 
   test('Is json', () async {
-    final backupFile =
-        await generateBackupFile(databaseProvider, appPreferences);
+    final backupFile = await generateBackupFile(appRepository, appPreferences);
     expect(
       jsonDecode(utf8.decode(await backupFile.readAsBytes())),
       isA<Map<String, Object?>>(),
@@ -80,7 +75,7 @@ void main() {
 
     test('Generated file is correctly parsed', () async {
       final backupFile =
-          await generateBackupFile(databaseProvider, appPreferences);
+          await generateBackupFile(appRepository, appPreferences);
 
       await expectLater(
         parseBackupFile(backupFile),
@@ -113,7 +108,7 @@ void main() {
       appPreferences.language = sampleLanguage;
 
       final backupFile =
-          await generateBackupFile(databaseProvider, appPreferences);
+          await generateBackupFile(appRepository, appPreferences);
       final parsedData = await parseBackupFile(backupFile);
 
       expect(parsedData, isNotNull);

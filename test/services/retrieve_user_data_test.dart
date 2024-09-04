@@ -3,16 +3,15 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/helpers/list_extension.dart';
 import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/repository/user_preferences_interfaces.dart';
 import 'package:my_quotes/services/generate_backup_file.dart';
 import 'package:my_quotes/states/app_preferences.dart';
-import 'package:my_quotes/states/database_provider.dart';
 
 import '../fixtures/generate_random_quote.dart';
 import '../fixtures/generate_random_tag.dart';
+import '../fixtures/list_extension.dart';
 
 const themeModeKey = ThemeModeRepository.themeModeKey;
 const defaultThemeMode = ThemeModeRepository.defaultThemeMode;
@@ -43,7 +42,6 @@ void main() {
 
   late AppRepository appRepository;
   late AppPreferences appPreferences;
-  late DatabaseProvider databaseProvider;
 
   late List<Tag> sampleTags;
   late List<Quote> sampleQuotesWithTags;
@@ -53,7 +51,6 @@ void main() {
 
     appPreferences =
         AppPreferences(userPreferencesRepository: const UserPreferences());
-    databaseProvider = DatabaseProvider(appRepository: appRepository);
 
     sampleTags = [
       for (var i = 0; i < numberOfTagsToAdd; i++)
@@ -77,10 +74,10 @@ void main() {
 
   group('Retrieving user data > ', () {
     test('Without changes', () async {
-      expect(await databaseProvider.allQuotes, isEmpty);
-      expect(await databaseProvider.allTags, isEmpty);
+      expect(await appRepository.allQuotes, isEmpty);
+      expect(await appRepository.allTags, isEmpty);
 
-      final userData = await retrieveUserData(appPreferences, databaseProvider);
+      final userData = await retrieveUserData(appPreferences, appRepository);
 
       _expectUserDataStructure(userData);
 
@@ -111,20 +108,20 @@ void main() {
         await appRepository.createQuote(quote);
       }
 
-      expect(await databaseProvider.allQuotes, hasLength(numberOfQuotesToAdd));
-      expect(await databaseProvider.allTags, hasLength(numberOfTagsToAdd));
+      expect(await appRepository.allQuotes, hasLength(numberOfQuotesToAdd));
+      expect(await appRepository.allTags, hasLength(numberOfTagsToAdd));
 
-      final userData = await retrieveUserData(appPreferences, databaseProvider);
+      final userData = await retrieveUserData(appPreferences, appRepository);
 
       _expectUserDataStructure(userData);
 
-      final tagsAsIdNameMap = (await databaseProvider.allTags)
-          .map((tag) => {'${tag.id}': tag.name});
+      final tagsAsIdNameMap =
+          (await appRepository.allTags).map((tag) => {'${tag.id}': tag.name});
 
       expect(userData['tags'], equals(tagsAsIdNameMap));
 
       final quotesAsJson =
-          (await databaseProvider.allQuotes).map((quote) => quote.toJson());
+          (await appRepository.allQuotes).map((quote) => quote.toJson());
 
       expect(userData['quotes'], quotesAsJson);
     });

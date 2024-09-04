@@ -29,11 +29,15 @@ void main() {
   group('Create', () {
     test('Basic', () async {
       await appDatabase.createTag(generateRandomTag().name);
-      expect(await appDatabase.allTags, isNotEmpty);
+
+      await expectLater(appDatabase.allTags, completion(isNotEmpty));
 
       final addedTag = (await appDatabase.allTags).single;
 
-      expect(await appDatabase.allTags, containsOnce(addedTag));
+      await expectLater(
+        appDatabase.allTags,
+        completion(containsOnce(addedTag)),
+      );
     });
 
     test('Non-null id after add', () async {
@@ -58,7 +62,10 @@ void main() {
           await appDatabase.createTag(tag.name);
         }
 
-        expect(await appDatabase.allTags, hasLength(tagsToAdd.length));
+        await expectLater(
+          appDatabase.allTags,
+          completion(hasLength(tagsToAdd.length)),
+        );
 
         final addedIds =
             (await appDatabase.allTags).map((tag) => tag.id).nonNulls;
@@ -76,27 +83,77 @@ void main() {
   });
 
   group('Get', () {
+    test('All tags (future)', () async {
+      await expectLater(appDatabase.allTags, completion(isEmpty));
+
+      final tagsNames = [generateRandomTag().name, generateRandomTag().name];
+
+      await appDatabase.createTag(tagsNames.first);
+      await appDatabase.createTag(tagsNames.last);
+
+      await expectLater(
+        appDatabase.allTags,
+        completion(
+          allOf([
+            hasLength(tagsNames.length),
+            predicate(
+              (List<Tag> allTags) =>
+                  allTags.map((tag) => tag.name).containsAll(tagsNames),
+            ),
+          ]),
+        ),
+      );
+    });
+
+    test('All tags (stream)', () async {
+      await expectLater(appDatabase.allTagsStream, emits(isEmpty));
+
+      final tagsNames = [generateRandomTag().name, generateRandomTag().name];
+
+      await appDatabase.createTag(tagsNames.first);
+      await appDatabase.createTag(tagsNames.last);
+
+      await expectLater(
+        appDatabase.allTagsStream,
+        emits(
+          allOf([
+            hasLength(tagsNames.length),
+            predicate(
+              (List<Tag> allTags) =>
+                  allTags.map((tag) => tag.name).containsAll(tagsNames),
+            ),
+          ]),
+        ),
+      );
+    });
+
     test('by id', () async {
       await appDatabase.createTag(sampleTag.name);
 
-      expect(await appDatabase.allTags, hasLength(1));
+      await expectLater(appDatabase.allTags, completion(hasLength(1)));
 
       final addedTag = (await appDatabase.allTags).single;
 
-      expect(await appDatabase.getTagById(addedTag.id!), equals(addedTag));
+      await expectLater(
+        appDatabase.getTagById(addedTag.id!),
+        completion(equals(addedTag)),
+      );
     });
 
     test('by id (null if doesnt have id)', () async {
       const hardCodedId = 3;
       await appDatabase.createTag(sampleTag.name);
 
-      expect(await appDatabase.allTags, hasLength(1));
+      await expectLater(appDatabase.allTags, completion(hasLength(1)));
 
       final addedTag = (await appDatabase.allTags).single;
 
       expect(addedTag.id, isNot(hardCodedId));
 
-      expect(await appDatabase.getTagById(hardCodedId), isNull);
+      await expectLater(
+        appDatabase.getTagById(hardCodedId),
+        completion(isNull),
+      );
     });
 
     test('Get tags by ids', () async {
@@ -115,7 +172,10 @@ void main() {
 
       expect(tagsWithSampleIds, isNotEmpty);
 
-      expect(await appDatabase.allTags, containsAll(tagsWithSampleIds));
+      await expectLater(
+        appDatabase.allTags,
+        completion(containsAll(tagsWithSampleIds)),
+      );
     });
 
     test('Tags by ids (when non existent ids => empty list)', () async {
@@ -130,9 +190,10 @@ void main() {
         for (var i = 0; i < 3; i++) Random().nextInt(50) + 6,
       ];
 
-      final maybeTags = await appDatabase.getTagsByIds(randomInvalidIds);
-
-      expect(maybeTags, isEmpty);
+      await expectLater(
+        appDatabase.getTagsByIds(randomInvalidIds),
+        completion(isEmpty),
+      );
     });
 
     test('Tags by ids (mixing valid and not valid ids)', () async {
@@ -145,9 +206,11 @@ void main() {
       }
 
       const oneToFiveInclusive = [1, 2, 3, 4, 5];
-      final tagsByMixedIds = await appDatabase.getTagsByIds(oneToFiveInclusive);
 
-      expect(tagsByMixedIds, hasLength(tagsToAdd.length));
+      await expectLater(
+        appDatabase.getTagsByIds(oneToFiveInclusive),
+        completion(hasLength(tagsToAdd.length)),
+      );
     });
   });
 
@@ -160,7 +223,7 @@ void main() {
       await appDatabase
           .updateTag(addedTag.copyWith(name: faker.lorem.word().toLowerCase()));
 
-      expect(await appDatabase.allTags, hasLength(1));
+      await expectLater(appDatabase.allTags, completion(hasLength(1)));
 
       final updatedTag = (await appDatabase.allTags).single;
 
@@ -182,7 +245,7 @@ void main() {
 
       await appDatabase.updateTag(supposedTagToUpdate);
 
-      expect(await appDatabase.allTags, hasLength(1));
+      await expectLater(appDatabase.allTags, completion(hasLength(1)));
 
       final uniqueTag = (await appDatabase.allTags).single;
 
@@ -198,8 +261,11 @@ void main() {
 
       await appDatabase.deleteTag(addedTag.id!);
 
-      expect(await appDatabase.allTags, isEmpty);
-      expect(await appDatabase.getTagById(addedTag.id!), isNull);
+      await expectLater(appDatabase.allTags, completion(isEmpty));
+      await expectLater(
+        appDatabase.getTagById(addedTag.id!),
+        completion(isNull),
+      );
     });
 
     test('Delete non-existent does nothing', () async {
@@ -213,8 +279,11 @@ void main() {
 
       await appDatabase.deleteTag(randomNonExistentId);
 
-      expect(await appDatabase.allTags, hasLength(1));
-      expect(await appDatabase.allTags, containsOnce(firstTag));
+      await expectLater(appDatabase.allTags, completion(hasLength(1)));
+      await expectLater(
+        appDatabase.allTags,
+        completion(containsOnce(firstTag)),
+      );
     });
 
     test('Clear all tags', () async {
@@ -223,13 +292,16 @@ void main() {
         await appDatabase.createTag(generateRandomTag(generateId: true).name);
       }
 
-      expect(await appDatabase.allTags, hasLength(numberOftagsToAdd));
+      await expectLater(
+        appDatabase.allTags,
+        completion(hasLength(numberOftagsToAdd)),
+      );
 
       final addedTags = await appDatabase.allTags;
 
       await appDatabase.clearAllTags();
 
-      expect(await appDatabase.allTags, isEmpty);
+      await expectLater(appDatabase.allTags, completion(isEmpty));
 
       expect((await appDatabase.allTags).containsAll(addedTags), isFalse);
     });
