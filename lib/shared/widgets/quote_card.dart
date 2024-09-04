@@ -22,11 +22,15 @@ class QuoteCard extends StatelessWidget {
     final appLocalizations = context.appLocalizations;
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 500, maxHeight: 250),
+      constraints: const BoxConstraints(
+        maxWidth: 500,
+        maxHeight: 250,
+      ),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Card.outlined(
+            clipBehavior: Clip.none,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadiusDirectional.circular(10),
               side: BorderSide(
@@ -47,14 +51,17 @@ class QuoteCard extends StatelessWidget {
                   Flexible(
                     child: SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      child: Text(
-                        quote.content,
-                        softWrap: true,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize:
-                              Theme.of(context).textTheme.bodyLarge!.fontSize,
+                      child: AnimatedSize(
+                        duration: Durations.short4,
+                        child: Text(
+                          quote.content,
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize:
+                                Theme.of(context).textTheme.bodyLarge!.fontSize,
+                          ),
                         ),
                       ),
                     ),
@@ -62,65 +69,76 @@ class QuoteCard extends StatelessWidget {
                   const SizedBox(
                     height: 10.0,
                   ),
-                  Text(
-                    '- ${quote.author}'
-                    '${quote.hasSource ? ', ${quote.source}.' : '.'}',
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
+                  AnimatedSize(
+                    duration: Durations.short4,
+                    child: Text(
+                      '- ${quote.author}'
+                      '${quote.hasSource ? ', ${quote.source}.' : '.'}',
+                      softWrap: true,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.bodySmall!.fontSize,
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  FutureBuilder(
-                    future: serviceLocator<AppRepository>()
-                        .getTagsByIds(quote.tagsId),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (!snapshot.hasError) {
-                          return Wrap(
-                            runSpacing: 5.0,
-                            spacing: 5.0,
-                            children: [
-                              for (final tag in snapshot.data!)
-                                Text(
-                                  '#${tag.name}',
-                                  style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall!
-                                        .fontSize,
+                  AnimatedSize(
+                    duration: Durations.short4,
+                    child: FutureBuilder(
+                      future: serviceLocator<AppRepository>()
+                          .getTagsByIds(quote.tagsId),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (!snapshot.hasError) {
+                            return Wrap(
+                              runSpacing: 5.0,
+                              spacing: 5.0,
+                              children: [
+                                for (final tag in snapshot.data!)
+                                  Text(
+                                    '#${tag.name}',
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall!
+                                          .fontSize,
+                                    ),
                                   ),
-                                ),
-                            ],
-                          );
+                              ],
+                            );
+                          }
                         }
-                      }
-                      return const SizedBox.shrink();
-                    },
+                        return const SizedBox.shrink();
+                      },
+                    ),
                   ),
                 ],
               ),
             ),
           ),
           Positioned(
-            bottom: 0,
-            right: 0,
-            child: IconButton(
-              onPressed: () {},
-              iconSize: 16,
-              icon: Icon(
-                quote.isFavorite ? Icons.favorite : Icons.favorite_border,
-                size: 16,
+            bottom: -2.25,
+            right: -2.25,
+            child: AnimatedSwitcher(
+              duration: Durations.short4,
+              child: IconButton(
+                onPressed: () {},
+                iconSize: 16,
+                icon: Icon(
+                  quote.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  size: 16,
+                ),
               ),
             ),
           ),
           if (showActions)
             Positioned(
-              right: 0,
+              top: -3.75,
+              right: -1,
               child: PopupMenuButton(
                 tooltip: appLocalizations.quoteActionsPopupButtonTooltip,
                 icon: const Icon(Icons.more_horiz_outlined),
@@ -140,12 +158,16 @@ class QuoteCard extends StatelessWidget {
               ),
             ),
           Positioned(
-            top: -15,
-            left: -10,
-            child: FaIcon(
-              FontAwesomeIcons.quoteLeft,
-              color: Theme.of(context).colorScheme.primary,
-              size: 48,
+            top: -16.25,
+            left: -16.25,
+            child: CircleAvatar(
+              radius: 21,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              child: FaIcon(
+                FontAwesomeIcons.quoteLeft,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                size: 36,
+              ),
             ),
           ),
         ],
