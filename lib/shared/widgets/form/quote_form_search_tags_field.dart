@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class QuoteFormSearchTagsField extends TextField {
   const QuoteFormSearchTagsField({
     super.key,
-    required super.decoration,
+    super.decoration,
   }) : super(
           autocorrect: true,
           enableSuggestions: true,
