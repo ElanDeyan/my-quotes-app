@@ -20,7 +20,8 @@ class QuoteFormAuthorField extends StatelessWidget {
     return RepaintBoundary(
       child: FormBuilderTextField(
         name: 'author',
-        initialValue: initialValue,
+        initialValue:
+            initialValue ?? context.appLocalizations.quoteFormFieldAnonymAuthor,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           labelText: labelText,
