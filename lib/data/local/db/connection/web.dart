@@ -19,5 +19,3 @@ DatabaseConnection connect() {
     }),
   );
 }
-
-Future<void> validateDatabaseSchema(GeneratedDatabase database) async {}

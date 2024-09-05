@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:drift_dev/api/migrations.dart';
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
@@ -30,10 +28,4 @@ DatabaseConnection connect() {
       return NativeDatabase.createBackgroundConnection(await databaseFile);
     }),
   );
-}
-
-Future<void> validateDatabaseSchema(GeneratedDatabase database) async {
-  if (kDebugMode) {
-    await VerifySelf(database).validateDatabaseSchema();
-  }
 }
