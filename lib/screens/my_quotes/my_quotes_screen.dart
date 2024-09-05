@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/screens/my_quotes/_no_quotes_added_yet.dart';
 import 'package:my_quotes/screens/my_quotes/_quotes_list_error.dart';
 import 'package:my_quotes/screens/my_quotes/_quotes_list_view_skeleton.dart';
 import 'package:my_quotes/screens/my_quotes/quotes_list_view_container.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/services/service_locator.dart';
 
 final class MyQuotesScreen extends StatelessWidget {
   const MyQuotesScreen({

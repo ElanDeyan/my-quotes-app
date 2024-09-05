@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/repository/user_preferences_interfaces.dart';
+import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 

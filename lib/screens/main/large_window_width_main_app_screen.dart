@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/enums/parse_quote_file_errors.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
@@ -20,7 +20,7 @@ import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
 import 'package:my_quotes/states/app_preferences.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:provider/provider.dart';
 
 class LargeWindowWidthMainAppScreen extends StatefulWidget {
@@ -112,7 +112,12 @@ class _LargeWindowWidthMainAppScreenState
             ),
             const VerticalDivider(),
             Expanded(
-              child: RepaintBoundary(child: body),
+              child: RepaintBoundary(
+                child: AnimatedSwitcher(
+                  duration: Durations.short4,
+                  child: body,
+                ),
+              ),
             ),
           ],
         ),

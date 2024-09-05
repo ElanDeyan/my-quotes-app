@@ -6,7 +6,7 @@ import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:my_quotes/constants/platforms.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/shared/widgets/shareable_quote_card.dart';
+import 'package:my_quotes/shared/widgets/quote_card/shareable_quote_card.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/screens/update_quote/update_quote_form.dart';
@@ -9,7 +9,7 @@ import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_skeleton.dart';
 import 'package:my_quotes/shared/widgets/form/quote_not_found_with_id_message.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/services/service_locator.dart';
 
 final class UpdateQuoteScreen extends StatelessWidget {
   const UpdateQuoteScreen({

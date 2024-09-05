@@ -1,8 +1,11 @@
-import 'package:my_quotes/repository/user_preferences_interfaces.dart';
+import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
+import 'package:my_quotes/repository/interfaces/language_repository.dart';
+import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
+import 'package:my_quotes/repository/interfaces/user_preferences_interfaces.dart';
 import 'package:my_quotes/services/shared_preferences.dart';
 
 final class UserPreferences
-    with SharedPreferencesMixin
+    with SharedPreferencesAsyncMixin
     implements UserPreferencesRepository {
   const UserPreferences();
 
@@ -12,47 +15,37 @@ final class UserPreferences
   String get _defaultLanguage => LanguageRepository.defaultLanguage.toString();
 
   @override
-  Future<String> get colorSchemePalette async {
-    return getStringPreference(
-      ColorSchemePaletteRepository.colorSchemePaletteKey,
-      orElse: _defaultColorPallete,
-    );
-  }
+  Future<String> get colorSchemePalette => getStringPreference(
+        ColorSchemePaletteRepository.colorSchemePaletteKey,
+        orElse: _defaultColorPallete,
+      );
 
   @override
-  Future<bool> setColorSchemePalette(String colorPallete) async {
-    return setStringPreference(
-      ColorSchemePaletteRepository.colorSchemePaletteKey,
-      colorPallete,
-    );
-  }
+  Future<void> setColorSchemePalette(String colorPallete) =>
+      setStringPreference(
+        ColorSchemePaletteRepository.colorSchemePaletteKey,
+        colorPallete,
+      );
 
   @override
-  Future<String> get language async {
-    return getStringPreference(
-      LanguageRepository.languageKey,
-      orElse: _defaultLanguage,
-    );
-  }
+  Future<String> get language => getStringPreference(
+        LanguageRepository.languageKey,
+        orElse: _defaultLanguage,
+      );
 
   @override
-  Future<bool> setLanguage(String language) async {
-    return setStringPreference(LanguageRepository.languageKey, language);
-  }
+  Future<void> setLanguage(String language) =>
+      setStringPreference(LanguageRepository.languageKey, language);
 
   @override
-  Future<String> get themeMode async {
-    return await getStringPreference(
-      ThemeModeRepository.themeModeKey,
-      orElse: _defaultThemeMode,
-    );
-  }
+  Future<String> get themeMode => getStringPreference(
+        ThemeModeRepository.themeModeKey,
+        orElse: _defaultThemeMode,
+      );
 
   @override
-  Future<bool> setThemeMode(String themeMode) async {
-    return await setStringPreference(
-      ThemeModeRepository.themeModeKey,
-      themeMode,
-    );
-  }
+  Future<void> setThemeMode(String themeMode) => setStringPreference(
+        ThemeModeRepository.themeModeKey,
+        themeMode,
+      );
 }

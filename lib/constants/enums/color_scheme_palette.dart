@@ -1,17 +1,14 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
 enum ColorSchemePalette {
-  blue(uiName: 'Blue', storageName: 'blue'),
-  caramel(uiName: 'Caramel', storageName: 'caramel'),
-  espresso(uiName: 'Espresso and Crema', storageName: 'espresso_and_crema'),
-  flutterDash(uiName: 'Flutter Dash', storageName: 'flutter_dash'),
-  green(uiName: 'Green', storageName: 'green'),
-  indigo(uiName: 'Indigo', storageName: 'indigo'),
-  pink(uiName: 'Pink', storageName: 'pink'),
-  vanilla(uiName: 'Vanilla', storageName: 'vanilla'),
-  vividSkyBlue(uiName: 'Vivid Sky Blue', storageName: 'vivid_sky_blue'),
-  ultraViolet(uiName: 'Ultra violet', storageName: 'ultra_violet');
+  coolBlush(uiName: 'Cool blush', storageName: 'cool_blush'),
+  fireEngineRed(uiName: 'Fire engine red', storageName: 'fire_engine_red'),
+  icyLilac(uiName: 'Icy lilac', storageName: 'icy_lilac'),
+  mistyMint(uiName: 'Misty mint', storageName: 'misty_mint'),
+  oxfordBlue(uiName: 'Oxford blue', storageName: 'oxford_blue'),
+  powderBlue(uiName: 'Powder blue', storageName: 'powder_blue'),
+  softApricot(uiName: 'Soft apricot', storageName: 'soft_apricot'),
+  vanilla(uiName: 'Vanilla', storageName: 'vanilla');
 
   const ColorSchemePalette({
     required this.uiName,
@@ -23,63 +20,56 @@ enum ColorSchemePalette {
 
   static ColorScheme lightColorScheme(ColorSchemePalette colorScheme) =>
       switch (colorScheme) {
-        ColorSchemePalette.blue => ColorScheme.fromSeed(seedColor: Colors.blue),
-        ColorSchemePalette.caramel => ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 192, 133, 82),
-          ),
-        ColorSchemePalette.espresso =>
-          FlexThemeData.light(scheme: FlexScheme.espresso).colorScheme,
-        ColorSchemePalette.flutterDash =>
-          FlexThemeData.light(scheme: FlexScheme.flutterDash).colorScheme,
-        ColorSchemePalette.green =>
-          ColorScheme.fromSeed(seedColor: Colors.green),
-        ColorSchemePalette.indigo =>
-          ColorScheme.fromSeed(seedColor: Colors.indigo),
-        ColorSchemePalette.pink => ColorScheme.fromSeed(seedColor: Colors.pink),
+        ColorSchemePalette.oxfordBlue =>
+          ColorScheme.fromSeed(seedColor: const Color(0xff061A40)),
+        ColorSchemePalette.fireEngineRed =>
+          ColorScheme.fromSeed(seedColor: const Color(0xffc42021)),
         ColorSchemePalette.vanilla =>
           ColorScheme.fromSeed(seedColor: const Color(0xfff1e8b8)),
-        ColorSchemePalette.vividSkyBlue =>
-          ColorScheme.fromSeed(seedColor: const Color(0xff54defd)),
-        ColorSchemePalette.ultraViolet =>
-          ColorScheme.fromSeed(seedColor: const Color(0xff52489c)),
+        ColorSchemePalette.mistyMint =>
+          ColorScheme.fromSeed(seedColor: const Color(0xffC5E3D5)),
+        ColorSchemePalette.softApricot =>
+          ColorScheme.fromSeed(seedColor: const Color(0xffF9C6A4)),
+        ColorSchemePalette.coolBlush =>
+          ColorScheme.fromSeed(seedColor: const Color(0xffEAC2C3)),
+        ColorSchemePalette.powderBlue =>
+          ColorScheme.fromSeed(seedColor: const Color(0xffA3C4E5)),
+        ColorSchemePalette.icyLilac =>
+          ColorScheme.fromSeed(seedColor: const Color(0xffD1C5E0)),
       };
 
   static ColorScheme darkColorScheme(ColorSchemePalette colorScheme) =>
       switch (colorScheme) {
-        ColorSchemePalette.espresso =>
-          FlexThemeData.dark(scheme: FlexScheme.espresso).colorScheme,
-        ColorSchemePalette.flutterDash =>
-          FlexThemeData.dark(scheme: FlexScheme.flutterDash).colorScheme,
-        ColorSchemePalette.blue => ColorScheme.fromSeed(
-            seedColor: Colors.blue,
+        ColorSchemePalette.oxfordBlue => ColorScheme.fromSeed(
+            seedColor: const Color(0xff061A40),
             brightness: Brightness.dark,
           ),
-        ColorSchemePalette.caramel => ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 192, 133, 82),
-            brightness: Brightness.dark,
-          ),
-        ColorSchemePalette.green => ColorScheme.fromSeed(
-            seedColor: Colors.green,
-            brightness: Brightness.dark,
-          ),
-        ColorSchemePalette.indigo => ColorScheme.fromSeed(
-            seedColor: Colors.indigo,
-            brightness: Brightness.dark,
-          ),
-        ColorSchemePalette.pink => ColorScheme.fromSeed(
-            seedColor: Colors.pink,
+        ColorSchemePalette.fireEngineRed => ColorScheme.fromSeed(
+            seedColor: const Color(0xffc42021),
             brightness: Brightness.dark,
           ),
         ColorSchemePalette.vanilla => ColorScheme.fromSeed(
             seedColor: const Color(0xfff1e8b8),
             brightness: Brightness.dark,
           ),
-        ColorSchemePalette.vividSkyBlue => ColorScheme.fromSeed(
-            seedColor: const Color(0xff54defd),
+        ColorSchemePalette.mistyMint => ColorScheme.fromSeed(
+            seedColor: const Color(0xffC5E3D5),
             brightness: Brightness.dark,
           ),
-        ColorSchemePalette.ultraViolet => ColorScheme.fromSeed(
-            seedColor: const Color(0xff52489c),
+        ColorSchemePalette.softApricot => ColorScheme.fromSeed(
+            seedColor: const Color(0xffF9C6A4),
+            brightness: Brightness.dark,
+          ),
+        ColorSchemePalette.coolBlush => ColorScheme.fromSeed(
+            seedColor: const Color(0xffEAC2C3),
+            brightness: Brightness.dark,
+          ),
+        ColorSchemePalette.powderBlue => ColorScheme.fromSeed(
+            seedColor: const Color(0xffA3C4E5),
+            brightness: Brightness.dark,
+          ),
+        ColorSchemePalette.icyLilac => ColorScheme.fromSeed(
+            seedColor: const Color(0xffD1C5E0),
             brightness: Brightness.dark,
           ),
       };

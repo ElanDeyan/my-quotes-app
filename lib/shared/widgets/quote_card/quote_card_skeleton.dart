@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_quotes/shared/widgets/quote_card/quote_icon_decoration.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class QuoteCardSkeleton extends StatelessWidget {
@@ -81,10 +81,7 @@ class QuoteCardSkeleton extends StatelessWidget {
               top: -15,
               left: -10,
               child: Skeleton.shade(
-                child: FaIcon(
-                  FontAwesomeIcons.quoteLeft,
-                  size: 48,
-                ),
+                child: QuoteIconDecoration(),
               ),
             ),
           ],

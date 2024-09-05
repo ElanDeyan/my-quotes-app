@@ -1,6 +1,5 @@
 {
   "@@locale": "pt",
-  "helloWorld": "Olá mundo!",
   "settings": "Configurações",
   "themeMode": "Tema",
   "chooseThemeModeMessage": "Escolha um tema",
@@ -15,12 +14,12 @@
   },
   "colorPallete": "Paleta de cores",
   "chooseColorPaletteMessage": "Escolha uma paleta de cores",
-  "colorPaletteName": "{colorPalette,select, blue{Azul} caramel{Caramelo} espresso_and_crema{Expresso e Creme} flutter_dash{Flutter Dash} green{Verde} indigo{Anil} pink{Rosa} vanilla{Baunilha} vivid_sky_blue{Azul celeste vívido} ultra_violet{Ultra violeta} other{Falta paleta de cores}}",
+  "colorPaletteName": "{colorPalette,select, cool_blush{Blush frio} fire_engine_red{Vermelho bombeiro} icy_lilac{Lilás gelado} misty_mint{Menta enevoada} oxford_blue{Azul Oxford} powder_blue{Azul bebê} soft_apricot{Damasco suave} vanilla{Baunilha} other{Falta tradução}}",
   "@colorPaletteName": {
     "placeholders": {
       "colorPalette": {
         "type": "String",
-        "example": "blue"
+        "example": "oxford_blue"
       }
     }
   },

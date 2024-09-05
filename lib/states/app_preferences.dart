@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/helpers/string_to_color_pallete.dart';
 import 'package:my_quotes/helpers/string_to_theme_mode.dart';
-import 'package:my_quotes/repository/user_preferences_interfaces.dart';
+import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
+import 'package:my_quotes/repository/interfaces/language_repository.dart';
+import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
+import 'package:my_quotes/repository/interfaces/user_preferences_interfaces.dart';
 
 final class AppPreferences extends ChangeNotifier {
-  AppPreferences({required UserPreferencesRepository userPreferencesRepository})
-      : _userPreferencesRepository = userPreferencesRepository,
+  AppPreferences({
+    required UserPreferencesRepository userPreferencesRepository,
+  })  : _userPreferencesRepository = userPreferencesRepository,
         _themeMode = ThemeModeRepository.defaultThemeMode,
         _colorSchemePalette =
             ColorSchemePaletteRepository.defaultColorSchemePalette,
@@ -40,13 +44,15 @@ final class AppPreferences extends ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
 
   set themeMode(ThemeMode themeMode) {
-    _themeMode = themeMode;
+    try {
+      _themeMode = themeMode;
+    } finally {
+      scheduleMicrotask(() {
+        _userPreferencesRepository.setThemeMode(_themeMode.name);
+      });
 
-    scheduleMicrotask(() {
-      _userPreferencesRepository.setThemeMode(_themeMode.name);
-    });
-
-    notifyListeners();
+      notifyListeners();
+    }
   }
 
   String _language;
@@ -54,13 +60,15 @@ final class AppPreferences extends ChangeNotifier {
   String get language => _language;
 
   set language(String language) {
-    _language = language;
+    try {
+      _language = language;
+    } finally {
+      scheduleMicrotask(() {
+        _userPreferencesRepository.setLanguage(_language);
+      });
 
-    scheduleMicrotask(() {
-      _userPreferencesRepository.setLanguage(_language);
-    });
-
-    notifyListeners();
+      notifyListeners();
+    }
   }
 
   ColorSchemePalette _colorSchemePalette;
@@ -68,13 +76,15 @@ final class AppPreferences extends ChangeNotifier {
   ColorSchemePalette get colorSchemePalette => _colorSchemePalette;
 
   set colorSchemePalette(ColorSchemePalette colorSchemePalette) {
-    _colorSchemePalette = colorSchemePalette;
+    try {
+      _colorSchemePalette = colorSchemePalette;
+    } finally {
+      scheduleMicrotask(() {
+        _userPreferencesRepository
+            .setColorSchemePalette(_colorSchemePalette.storageName);
+      });
 
-    scheduleMicrotask(() {
-      _userPreferencesRepository
-          .setColorSchemePalette(_colorSchemePalette.storageName);
-    });
-
-    notifyListeners();
+      notifyListeners();
+    }
   }
 }

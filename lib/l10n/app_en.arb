@@ -1,9 +1,5 @@
 {
   "@@locale": "en",
-  "helloWorld": "Hello world!",
-  "@helloWorld": {
-    "description": "A greeting in english"
-  },
   "settings": "Settings",
   "themeMode": "Theme mode",
   "chooseThemeModeMessage": "Choose a theme mode",
@@ -18,12 +14,12 @@
   },
   "colorPallete": "Color pallete",
   "chooseColorPaletteMessage": "Choose a color palette",
-  "colorPaletteName": "{colorPalette,select, blue{Blue} caramel{Caramel} espresso_and_crema{Espresso and Crema} flutter_dash{Flutter Dash} green{Green} indigo{Indigo} pink{Pink} vanilla{Vanilla} vivid_sky_blue{Vivid Sky Blue} ultra_violet{Ultra violet} other{Missing color palete}}",
+  "colorPaletteName": "{colorPalette,select, cool_blush{Cool blush} fire_engine_red{Fire engine red} icy_lilac{Icy lilac} misty_mint{Misty mint} oxford_blue{Oxford blue} powder_blue{Powder blue} soft_apricot{Soft apricot} vanilla{Vanilla} other{Missing color palete translation}}",
   "@colorPaletteName": {
     "placeholders": {
       "colorPalette": {
         "type": "String",
-        "example": "blue"
+        "example": "oxford_blue"
       }
     }
   },

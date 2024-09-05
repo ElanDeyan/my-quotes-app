@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/services/save_quote_image.dart';
 import 'package:my_quotes/services/share_quote_file.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';

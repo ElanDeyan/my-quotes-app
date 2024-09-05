@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/shared/widgets/quote_card/quote_icon_decoration.dart';
 
 class ShareableQuoteCard extends StatelessWidget {
   const ShareableQuoteCard({super.key, required this.quote});
@@ -15,7 +15,7 @@ class ShareableQuoteCard extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -37,16 +37,14 @@ class ShareableQuoteCard extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Flexible(
-                        child: Text(
-                          quote.content,
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize:
-                                Theme.of(context).textTheme.bodyLarge!.fontSize,
-                          ),
+                      Text(
+                        quote.content,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyLarge!.fontSize,
                         ),
                       ),
                       const SizedBox(
@@ -67,26 +65,10 @@ class ShareableQuoteCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: IconButton(
-                  onPressed: () {},
-                  iconSize: 16,
-                  icon: Icon(
-                    quote.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    size: 16,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: -15,
-                left: -10,
-                child: FaIcon(
-                  FontAwesomeIcons.quoteLeft,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 48,
-                ),
+              const Positioned(
+                top: -16.25,
+                left: -16.25,
+                child: QuoteIconDecoration(),
               ),
             ],
           ),

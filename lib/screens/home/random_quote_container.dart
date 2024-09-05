@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
-import 'package:my_quotes/shared/widgets/quote_card.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/shared/widgets/quote_card/quote_card.dart';
+import 'package:my_quotes/services/service_locator.dart';
 
 class RandomQuoteContainer extends StatefulWidget {
   const RandomQuoteContainer({super.key, required this.quotes});
@@ -41,24 +41,23 @@ class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          RepaintBoundary(
             child: QuoteCard(key: const Key('quote_card'), quote: _quote),
           ),
           const Gap.vertical(spacing: 10),
-          Row(
-            mainAxisSize: MainAxisSize.min,
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
             children: [
               OutlinedButton(
                 key: const Key('update_random_quote_button'),
                 onPressed: _updateRandomQuote,
                 child: const Icon(Icons.shuffle),
               ),
-              const Gap.horizontal(spacing: 10),
               OutlinedButton(
                 key: const Key('share_quote_button'),
                 onPressed: QuoteActions.actionCallback(
