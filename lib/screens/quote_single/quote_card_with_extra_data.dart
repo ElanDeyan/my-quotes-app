@@ -5,7 +5,7 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
-import 'package:my_quotes/shared/widgets/quote_card.dart';
+import 'package:my_quotes/shared/widgets/quote_card/quote_card.dart';
 
 class QuoteCardWithExtraData extends StatelessWidget {
   const QuoteCardWithExtraData({

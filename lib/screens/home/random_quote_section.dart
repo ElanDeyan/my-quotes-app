@@ -4,7 +4,7 @@ import 'package:my_quotes/screens/home/random_quote_container.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/no_database_connection_message.dart';
 import 'package:my_quotes/shared/widgets/no_quotes_added_yet_message.dart';
-import 'package:my_quotes/shared/widgets/quote_card_skeleton.dart';
+import 'package:my_quotes/shared/widgets/quote_card/quote_card_skeleton.dart';
 import 'package:my_quotes/states/service_locator.dart';
 
 class RandomQuoteSection extends StatelessWidget {

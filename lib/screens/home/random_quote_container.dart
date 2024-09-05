@@ -4,7 +4,7 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
-import 'package:my_quotes/shared/widgets/quote_card.dart';
+import 'package:my_quotes/shared/widgets/quote_card/quote_card.dart';
 import 'package:my_quotes/states/service_locator.dart';
 
 class RandomQuoteContainer extends StatefulWidget {

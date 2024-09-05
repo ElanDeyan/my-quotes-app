@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
+import 'package:my_quotes/shared/widgets/quote_card/quote_icon_decoration.dart';
 
 class ShareableQuoteCard extends StatelessWidget {
   const ShareableQuoteCard({super.key, required this.quote});
@@ -65,19 +65,10 @@ class ShareableQuoteCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
+              const Positioned(
                 top: -16.25,
                 left: -16.25,
-                child: CircleAvatar(
-                  radius: 21,
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                  child: FaIcon(
-                    FontAwesomeIcons.quoteLeft,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    size: 36,
-                  ),
-                ),
+                child: QuoteIconDecoration(),
               ),
             ],
           ),
