@@ -11,7 +11,7 @@ abstract interface class UserPreferencesRepository
 abstract interface class ColorSchemePaletteRepository {
   static const colorSchemePaletteKey = 'colorPalette';
 
-  static const defaultColorSchemePalette = ColorSchemePalette.blue;
+  static const defaultColorSchemePalette = ColorSchemePalette.oxfordBlue;
 
   static const values = ColorSchemePalette.values;
 
