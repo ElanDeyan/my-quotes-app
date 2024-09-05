@@ -5,7 +5,6 @@ import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
 import 'package:my_quotes/repository/interfaces/language_repository.dart';
 import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
-import 'package:my_quotes/repository/interfaces/user_preferences_interfaces.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:share_plus/share_plus.dart';
 
