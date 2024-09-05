@@ -1,9 +1,5 @@
 {
   "@@locale": "en",
-  "helloWorld": "Hello world!",
-  "@helloWorld": {
-    "description": "A greeting in english"
-  },
   "settings": "Settings",
   "themeMode": "Theme mode",
   "chooseThemeModeMessage": "Choose a theme mode",
