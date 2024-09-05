@@ -1,18 +1,14 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-mixin class SharedPreferencesMixin {
-  Future<SharedPreferences> get localPreferences async {
-    return SharedPreferences.getInstance();
-  }
+mixin class SharedPreferencesAsyncMixin {
+  static final localPreferences = SharedPreferencesAsync();
 
   Future<String> getStringPreference(
     String key, {
     required String orElse,
-  }) async {
-    return (await localPreferences).getString(key) ?? orElse;
-  }
+  }) async =>
+      await localPreferences.getString(key) ?? orElse;
 
-  Future<bool> setStringPreference(String key, String value) async {
-    return (await localPreferences).setString(key, value);
-  }
+  Future<void> setStringPreference(String key, String value) =>
+      localPreferences.setString(key, value);
 }

@@ -17,7 +17,7 @@ abstract interface class ColorSchemePaletteRepository {
 
   Future<String> get colorSchemePalette;
 
-  Future<bool> setColorSchemePalette(String colorSchemePalette);
+  Future<void> setColorSchemePalette(String colorSchemePalette);
 }
 
 abstract interface class LanguageRepository {
@@ -33,7 +33,7 @@ abstract interface class LanguageRepository {
 
   Future<String> get language;
 
-  Future<bool> setLanguage(String language);
+  Future<void> setLanguage(String language);
 }
 
 abstract interface class ThemeModeRepository {
@@ -45,5 +45,5 @@ abstract interface class ThemeModeRepository {
 
   Future<String> get themeMode;
 
-  Future<bool> setThemeMode(String themeMode);
+  Future<void> setThemeMode(String themeMode);
 }
