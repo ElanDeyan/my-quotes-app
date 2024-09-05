@@ -6,7 +6,7 @@ import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/actions/tags/show_update_tag_dialog.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/services/service_locator.dart';
 
 void updateTag(BuildContext context, Tag tag) {
   final result = showUpdateTagDialog(context, tag);

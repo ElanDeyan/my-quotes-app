@@ -6,7 +6,7 @@ import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/screens/add_quote_from_file/add_quote_from_file_form.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_skeleton.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/services/service_locator.dart';
 
 class AddQuoteFromFileProvider extends StatefulWidget {
   const AddQuoteFromFileProvider({

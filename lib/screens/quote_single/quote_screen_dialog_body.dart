@@ -4,7 +4,7 @@ import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/no_quote_with_id_message.dart';
 import 'package:my_quotes/shared/widgets/quote_data_list_view.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class QuoteScreenDialogBody extends StatelessWidget {

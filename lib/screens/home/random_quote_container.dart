@@ -5,7 +5,7 @@ import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/quote_card/quote_card.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/services/service_locator.dart';
 
 class RandomQuoteContainer extends StatefulWidget {
   const RandomQuoteContainer({super.key, required this.quotes});

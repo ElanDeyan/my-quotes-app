@@ -8,7 +8,7 @@ import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
-import 'package:my_quotes/states/service_locator.dart';
+import 'package:my_quotes/services/service_locator.dart';
 
 final class SearchQuoteDelegate extends SearchDelegate<Quote> {
   SearchQuoteDelegate({
