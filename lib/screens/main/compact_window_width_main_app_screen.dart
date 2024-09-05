@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_quotes/constants/destinations.dart';
 import 'package:my_quotes/constants/enums/parse_quote_file_errors.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';

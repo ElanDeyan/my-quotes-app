@@ -3,9 +3,12 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_quotes/constants/id_separator.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
+import 'package:my_quotes/repository/interfaces/language_repository.dart';
+import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
-import 'package:my_quotes/repository/user_preferences_interfaces.dart';
+import 'package:my_quotes/repository/interfaces/user_preferences_interfaces.dart';
 import 'package:my_quotes/services/generate_backup_file.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 

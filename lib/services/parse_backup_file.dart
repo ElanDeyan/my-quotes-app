@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/iterable_extension.dart';
-import 'package:my_quotes/repository/user_preferences_interfaces.dart';
+import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
+import 'package:my_quotes/repository/interfaces/language_repository.dart';
+import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
+import 'package:my_quotes/repository/interfaces/user_preferences_interfaces.dart';
 import 'package:share_plus/share_plus.dart';
 
 typedef UserPreferencesData = ({

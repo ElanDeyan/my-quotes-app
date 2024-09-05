@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/screens/my_quotes/_no_quotes_added_yet.dart';
 import 'package:my_quotes/screens/my_quotes/_quotes_list_error.dart';

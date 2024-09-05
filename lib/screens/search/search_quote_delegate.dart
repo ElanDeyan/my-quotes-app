@@ -5,7 +5,7 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/fuzzy_search_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/search/search_quote_results.dart';
 import 'package:my_quotes/states/service_locator.dart';

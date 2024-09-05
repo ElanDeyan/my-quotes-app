@@ -10,7 +10,7 @@ import 'package:my_quotes/constants/enums/color_scheme_palette.dart';
 import 'package:my_quotes/constants/keys.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/env/env.dart';
-import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/repository/user_preferences.dart';
 import 'package:my_quotes/routes/routes_config.dart';
 import 'package:my_quotes/screens/feedback/my_quotes_feedback.dart';
