@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final mockPreferences = <String, String>{
   ColorSchemePaletteRepository.colorSchemePaletteKey:
-      ColorSchemePalette.caramel.name,
+      ColorSchemePalette.oxfordBlue.name,
   ThemeModeRepository.themeModeKey: ThemeMode.light.name,
   LanguageRepository.languageKey: 'pt_BR',
 };
