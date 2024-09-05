@@ -10,6 +10,7 @@ import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_action_button.dart';
@@ -22,7 +23,6 @@ import 'package:my_quotes/shared/widgets/form/quote_form_source_uri_field.dart';
 import 'package:my_quotes/shared/widgets/form/update_form_data_mixin.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
-import 'package:my_quotes/services/service_locator.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class UpdateQuoteForm extends StatefulWidget {

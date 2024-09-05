@@ -14,13 +14,13 @@ import 'package:my_quotes/services/generate_backup_file.dart';
 import 'package:my_quotes/services/handle_backup_file.dart';
 import 'package:my_quotes/services/handle_quote_file.dart';
 import 'package:my_quotes/services/save_file.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_from_file_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_search.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
 import 'package:my_quotes/states/app_preferences.dart';
-import 'package:my_quotes/services/service_locator.dart';
 import 'package:provider/provider.dart';
 
 class LargeWindowWidthMainAppScreen extends StatefulWidget {

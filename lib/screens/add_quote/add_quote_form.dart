@@ -7,6 +7,7 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/map_extension.dart';
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_action_button.dart';
 import 'package:my_quotes/shared/widgets/form/quote_form_author_field.dart';
@@ -18,7 +19,6 @@ import 'package:my_quotes/shared/widgets/form/quote_form_source_uri_field.dart';
 import 'package:my_quotes/shared/widgets/form/update_form_data_mixin.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
-import 'package:my_quotes/services/service_locator.dart';
 
 class AddQuoteForm extends StatefulWidget {
   const AddQuoteForm({super.key});

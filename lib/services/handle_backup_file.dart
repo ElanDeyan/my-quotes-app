@@ -7,11 +7,11 @@ import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
 import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
 import 'package:my_quotes/services/parse_backup_file.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/actions/show_wants_to_import_dialog.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
 import 'package:my_quotes/states/app_preferences.dart';
-import 'package:my_quotes/services/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 

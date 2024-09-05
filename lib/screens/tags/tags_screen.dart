@@ -7,11 +7,11 @@ import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart
 import 'package:my_quotes/screens/search/search_tag_delegate.dart';
 import 'package:my_quotes/screens/tags/tags_list_view.dart';
 import 'package:my_quotes/screens/tags/tags_list_view_skeleton.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 import 'package:my_quotes/shared/actions/tags/show_tag_search.dart';
 import 'package:my_quotes/shared/widgets/an_error_occurred_message.dart';
 import 'package:my_quotes/shared/widgets/no_tags_added_yet_message.dart';
-import 'package:my_quotes/services/service_locator.dart';
 
 class TagsScreen extends StatelessWidget {
   const TagsScreen({super.key});

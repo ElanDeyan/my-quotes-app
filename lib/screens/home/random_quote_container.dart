@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/quote_card/quote_card.dart';
-import 'package:my_quotes/services/service_locator.dart';
 
 class RandomQuoteContainer extends StatefulWidget {
   const RandomQuoteContainer({super.key, required this.quotes});

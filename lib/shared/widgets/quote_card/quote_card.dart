@@ -3,9 +3,9 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
+import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 import 'package:my_quotes/shared/widgets/quote_card/quote_icon_decoration.dart';
-import 'package:my_quotes/services/service_locator.dart';
 
 class QuoteCard extends StatelessWidget {
   const QuoteCard({
