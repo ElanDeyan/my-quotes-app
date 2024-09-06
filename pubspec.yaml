@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   basics: ^0.10.0
+  cryptography: ^2.7.0
   diacritic: ^0.1.5
   drift: ^2.18.0
   envied: ^0.5.4+1
@@ -34,7 +35,6 @@ dependencies:
   share_plus: ^9.0.0
   shared_preferences: ^2.2.3
   skeletonizer: ^1.4.2
-  sqlcipher_flutter_libs: ^0.6.4
   sqlite3: ^2.4.3
   sqlite3_flutter_libs: ^0.5.21
   timeago: ^3.6.1
