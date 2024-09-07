@@ -7,9 +7,9 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-Future<void> saveJsonFile(XFile backupFile) async {
+Future<bool> saveBackupFile(XFile backupFile) async {
   final fileName =
-      'My-Quotes-Backup-File-${DateTime.now().millisecondsSinceEpoch}.json';
+      'My-Quotes-Backup-File-${DateTime.now().millisecondsSinceEpoch}.myquotes.txt';
 
   if (isAndroidOrIOS) {
     final directory = await getTemporaryDirectory();
@@ -17,30 +17,41 @@ Future<void> saveJsonFile(XFile backupFile) async {
 
     await fileToSave.writeAsBytes(await backupFile.readAsBytes());
 
-    await Share.shareXFiles([XFile(fileToSave.path)]);
+    final result = await Share.shareXFiles([XFile(fileToSave.path)]);
 
-    await fileToSave.delete();
+    try {
+      return result.status == ShareResultStatus.success;
+    } finally {
+      await fileToSave.delete();
+    }
   } else if (isDesktop) {
     final pathToSave = await FilePicker.platform.saveFile(
       type: FileType.custom,
-      allowedExtensions: ['json'],
+      allowedExtensions: ['myquotes.txt'],
       lockParentWindow: true,
     );
 
     if (pathToSave != null) {
-      final endsWithJsonExtension = p.extension(pathToSave) == '.json';
+      final endsWithBackupFileExtension =
+          p.extension(pathToSave, 2) == '.myquotes.txt';
       final file = await File(
-        '$pathToSave${!endsWithJsonExtension ? '.json' : ''}',
+        '$pathToSave${!endsWithBackupFileExtension ? '.myquotes.txt' : ''}',
       ).create();
       await file.writeAsBytes(
         await backupFile.readAsBytes(),
       );
+
+      return true;
     }
+
+    return false;
   } else {
     await FileSaver.instance.saveFile(
       name: fileName,
       bytes: await backupFile.readAsBytes(),
-      mimeType: MimeType.json,
+      mimeType: MimeType.text,
     );
+
+    return true;
   }
 }

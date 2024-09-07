@@ -188,6 +188,12 @@
   "quotesListViewSortingButtonTooltip": "Show menu",
   "quotesListViewSortingCreatedAtAsc": "Oldest first",
   "quotesListViewSortingCreatedAtDesc": "Newest first",
-  "quotesListViewFilteringFavorites": "Favorites"
-
+  "quotesListViewFilteringFavorites": "Favorites",
+  "passwordFieldLabel": "Password",
+  "passwordFieldMinimum8CharLength": "Should have minimum 8 characters",
+  "createPassword": "Create a password",
+  "createPasswordDescription": "This will be used in the encryption and decryption of the file.",
+  "createPasswordAdvice": "You''ll need this password to decrypt the file, without it, you should create a new backup file again.",
+  "enterPassword": "Enter file''s password",
+  "enterPasswordAdvice": "You do need this password to decrypt the file, without it, you should create a new backup file again."
 }

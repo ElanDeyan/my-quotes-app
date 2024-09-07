@@ -60,8 +60,10 @@ class QuoteCard extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontStyle: FontStyle.italic,
-                              fontSize:
-                                  Theme.of(context).textTheme.bodyLarge!.fontSize,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .fontSize,
                             ),
                           ),
                         ),
@@ -93,7 +95,8 @@ class QuoteCard extends StatelessWidget {
                         future: serviceLocator<AppRepository>()
                             .getTagsByIds(quote.tagsId),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             if (!snapshot.hasError) {
                               return Wrap(
                                 runSpacing: 5.0,

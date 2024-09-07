@@ -189,5 +189,12 @@
   "quotesListViewSortingButtonTooltip": "Ver opções",
   "quotesListViewSortingCreatedAtAsc": "Mais antigos",
   "quotesListViewSortingCreatedAtDesc": "Mais recentes",
-  "quotesListViewFilteringFavorites": "Favoritos"
+  "quotesListViewFilteringFavorites": "Favoritos",
+  "passwordFieldLabel": "Senha",
+  "passwordFieldMinimum8CharLength": "Mínimo de 8 caracteres",
+  "createPassword": "Crie uma senha",
+  "createPasswordDescription": "Essa senha será usada no processo de encriptação e decriptação.",
+  "createPasswordAdvice": "Sem essa senha, você não conseguirá recuperar o arquivo, e terá que gerar outro backup.",
+  "enterPassword": "Insira a senha",
+  "enterPasswordAdvice": "Sem essa senha, você não conseguirá recuperar o arquivo, e terá que gerar outro backup."
 }

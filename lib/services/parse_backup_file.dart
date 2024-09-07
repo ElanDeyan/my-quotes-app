@@ -5,6 +5,7 @@ import 'package:my_quotes/helpers/iterable_extension.dart';
 import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
 import 'package:my_quotes/repository/interfaces/language_repository.dart';
 import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
+import 'package:my_quotes/services/decrypt_backup_data.dart';
 import 'package:share_plus/share_plus.dart';
 
 typedef UserPreferencesData = ({
@@ -25,11 +26,22 @@ final _colorSchemePaletteValues = ColorSchemePaletteRepository.values
     .map((colorSchemePalette) => colorSchemePalette.storageName);
 final _languageValues = LanguageRepository.values;
 
-Future<BackupData?> parseBackupFile(XFile file) async {
+Future<BackupData?> parseBackupFile(
+  ({XFile file, String password}) data,
+) async {
+  late final String decryptedData;
+
+  try {
+    decryptedData =
+        decryptBackupData(data.password, await data.file.readAsBytes());
+  } catch (_) {
+    return null;
+  }
+
   late final dynamic decodedFile;
 
   try {
-    decodedFile = jsonDecode(utf8.decode(await file.readAsBytes()));
+    decodedFile = jsonDecode(decryptedData);
   } catch (_) {
     return null;
   }

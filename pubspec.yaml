@@ -8,9 +8,10 @@ environment:
 
 dependencies:
   basics: ^0.10.0
-  cryptography: ^2.7.0
+  crypto: ^3.0.5
   diacritic: ^0.1.5
   drift: ^2.18.0
+  encrypt: ^5.0.3
   envied: ^0.5.4+1
   feedback_sentry: ^3.0.1
   file_picker: ^8.0.5

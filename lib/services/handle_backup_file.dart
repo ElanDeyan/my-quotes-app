@@ -15,9 +15,14 @@ import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-Future<void> handleBackupFile(BuildContext context, XFile? file) async {
+Future<void> handleBackupFile(
+  BuildContext context,
+  XFile? file,
+  String password,
+) async {
   if (file != null) {
-    final backupData = await compute(parseBackupFile, file);
+    final backupData =
+        await compute(parseBackupFile, (file: file, password: password));
 
     if (backupData != null) {
       if (context.mounted) {
@@ -44,6 +49,15 @@ Future<void> handleBackupFile(BuildContext context, XFile? file) async {
             final (quotes, tags) = (backupData.quotes, backupData.tags);
 
             await serviceLocator<AppRepository>().restoreData(tags, quotes);
+
+            if (context.mounted) {
+              showToast(
+                context,
+                child: PillChip(
+                  label: Text(context.appLocalizations.successfulOperation),
+                ),
+              );
+            }
           }
         }
       }

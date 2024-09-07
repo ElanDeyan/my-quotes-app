@@ -10,14 +10,16 @@ import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/main/main_app_screen_app_bar.dart';
 import 'package:my_quotes/screens/my_quotes/my_quotes_screen.dart';
 import 'package:my_quotes/screens/search/search_quote_delegate.dart';
-import 'package:my_quotes/services/file_picker.dart';
 import 'package:my_quotes/services/generate_backup_file.dart';
+import 'package:my_quotes/services/get_backup_file.dart';
 import 'package:my_quotes/services/handle_backup_file.dart';
 import 'package:my_quotes/services/handle_quote_file.dart';
-import 'package:my_quotes/services/save_file.dart';
+import 'package:my_quotes/services/save_backup_file.dart';
 import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/quotes/show_add_quote_from_file_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_search.dart';
+import 'package:my_quotes/shared/actions/show_create_password_dialog.dart';
+import 'package:my_quotes/shared/actions/show_enter_password_dialog.dart';
 import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
@@ -112,15 +114,29 @@ class _CompactWindowWidthMainAppScreenState
     );
   }
 
-  Future<void> _handleGenerateBackupFile(BuildContext context) async {
+  Future<void> _generateBackupFile(BuildContext context) async {
     final appPreferences = Provider.of<AppPreferences>(context, listen: false);
 
-    final backupFile = await generateBackupFile(
-      serviceLocator<AppRepository>(),
-      appPreferences,
-    );
+    final userPassword = await showCreatePasswordDialog(context);
 
-    await saveJsonFile(backupFile);
+    if (userPassword != null) {
+      final backupFile = await generateBackupFile(
+        serviceLocator<AppRepository>(),
+        appPreferences,
+        userPassword,
+      );
+
+      final result = await saveBackupFile(backupFile);
+
+      if (result && context.mounted) {
+        showToast(
+          context,
+          child: PillChip(
+            label: Text(context.appLocalizations.successfulOperation),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _handleQuoteFile(BuildContext context) async {
@@ -182,7 +198,7 @@ class _CompactWindowWidthMainAppScreenState
       PopupMenuButton<void>(
         itemBuilder: (context) => [
           PopupMenuItem(
-            onTap: () => _handleGenerateBackupFile(context),
+            onTap: () => _generateBackupFile(context),
             child: IconWithLabel(
               icon: const Icon(Icons.backup_outlined),
               horizontalGap: 10,
@@ -196,10 +212,14 @@ class _CompactWindowWidthMainAppScreenState
               label: Text(context.appLocalizations.restoreBackup),
             ),
             onTap: () async {
-              final backupFile = await getJsonFile();
+              final backupFile = await getBackupFile();
 
-              if (context.mounted) {
-                await handleBackupFile(context, backupFile);
+              if (backupFile != null && context.mounted) {
+                final userPassword = await showEnterPasswordDialog(context);
+
+                if (userPassword != null && context.mounted) {
+                  await handleBackupFile(context, backupFile, userPassword);
+                }
               }
             },
           ),
