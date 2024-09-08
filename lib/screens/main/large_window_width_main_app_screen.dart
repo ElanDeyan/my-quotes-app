@@ -1,29 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotes/constants/enums/parse_quote_file_errors.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
-import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/main/destinations.dart';
 import 'package:my_quotes/screens/main/main_app_screen_app_bar.dart';
+import 'package:my_quotes/screens/main/main_app_screen_mixin.dart';
 import 'package:my_quotes/screens/my_quotes/my_quotes_screen.dart';
 import 'package:my_quotes/screens/search/search_quote_delegate.dart';
-import 'package:my_quotes/services/generate_backup_file.dart';
-import 'package:my_quotes/services/get_backup_file.dart';
-import 'package:my_quotes/services/handle_backup_file.dart';
-import 'package:my_quotes/services/handle_quote_file.dart';
-import 'package:my_quotes/services/save_backup_file.dart';
-import 'package:my_quotes/services/service_locator.dart';
-import 'package:my_quotes/shared/actions/quotes/show_add_quote_from_file_dialog.dart';
 import 'package:my_quotes/shared/actions/quotes/show_quote_search.dart';
-import 'package:my_quotes/shared/actions/show_create_password_dialog.dart';
-import 'package:my_quotes/shared/actions/show_enter_password_dialog.dart';
-import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/widgets/icon_with_label.dart';
-import 'package:my_quotes/shared/widgets/pill_chip.dart';
-import 'package:my_quotes/states/app_preferences.dart';
-import 'package:provider/provider.dart';
 
 class LargeWindowWidthMainAppScreen extends StatefulWidget {
   const LargeWindowWidthMainAppScreen({
@@ -39,27 +24,13 @@ class LargeWindowWidthMainAppScreen extends StatefulWidget {
 }
 
 class _LargeWindowWidthMainAppScreenState
-    extends State<LargeWindowWidthMainAppScreen> {
+    extends State<LargeWindowWidthMainAppScreen> with MainAppScreenMixin {
   late int _selectedIndex;
-  late final HomeScreen _homeScreen;
-  late final MyQuotesScreen _myQuotesScreen;
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    _homeScreen = const HomeScreen(
-      key: Key('home_screen'),
-    );
-    _myQuotesScreen = const MyQuotesScreen(
-      key: Key('my_quotes_screen'),
-    );
   }
-
-  Widget get body => switch (_selectedIndex) {
-        0 => _homeScreen,
-        1 => _myQuotesScreen,
-        _ => throw UnimplementedError(),
-      };
 
   void _updateIndex(int value) => setState(() {
         _selectedIndex = value;
@@ -117,7 +88,7 @@ class _LargeWindowWidthMainAppScreenState
               child: RepaintBoundary(
                 child: AnimatedSwitcher(
                   duration: Durations.short4,
-                  child: body,
+                  child: getBodyFrom(_selectedIndex),
                 ),
               ),
             ),
@@ -129,7 +100,7 @@ class _LargeWindowWidthMainAppScreenState
 
   List<Widget> _appBarActions(BuildContext context) {
     return <Widget>[
-      if (body is MyQuotesScreen) ...<Widget>[
+      if (getBodyFrom(_selectedIndex) is MyQuotesScreen) ...<Widget>[
         IconButton(
           tooltip: context.appLocalizations.navigationSearchQuote,
           onPressed: () => showQuoteSearch(
@@ -151,12 +122,12 @@ class _LargeWindowWidthMainAppScreenState
       IconButton(
         icon: const Icon(Icons.upload_file_outlined),
         tooltip: context.appLocalizations.addFromFile,
-        onPressed: () => _handleQuoteFile(context),
+        onPressed: () => onUploadQuoteFile(context),
       ),
       PopupMenuButton<void>(
         itemBuilder: (context) => [
           PopupMenuItem(
-            onTap: () => _generateBackupFile(context),
+            onTap: () => onGenerateBackupFile(context),
             child: IconWithLabel(
               icon: const Icon(Icons.backup_outlined),
               horizontalGap: 10,
@@ -169,74 +140,12 @@ class _LargeWindowWidthMainAppScreenState
               horizontalGap: 10,
               label: Text(context.appLocalizations.restoreBackup),
             ),
-            onTap: () async {
-              final backupFile = await getBackupFile();
-
-              if (backupFile != null && context.mounted) {
-                final userPassword = await showEnterPasswordDialog(context);
-
-                if (userPassword != null && context.mounted) {
-                  await handleBackupFile(context, backupFile, userPassword);
-                }
-              }
-            },
+            onTap: () => onRestoreBackupFile(context),
           ),
         ],
         icon: const Icon(Icons.import_export_outlined),
         tooltip: context.appLocalizations.backupOptionsTooltip,
       ),
     ];
-  }
-
-  Future<void> _generateBackupFile(BuildContext context) async {
-    final appPreferences = Provider.of<AppPreferences>(context, listen: false);
-
-    final userPassword = await showCreatePasswordDialog(context);
-
-    if (userPassword != null) {
-      final backupFile = await generateBackupFile(
-        serviceLocator<AppRepository>(),
-        appPreferences,
-        userPassword,
-      );
-
-      final result = await saveBackupFile(backupFile);
-
-      if (result && context.mounted) {
-        showToast(
-          context,
-          child: PillChip(
-            label: Text(context.appLocalizations.successfulOperation),
-          ),
-        );
-      }
-    }
-  }
-
-  Future<void> _handleQuoteFile(BuildContext context) async {
-    final result = await handleQuoteFile();
-    if (result.data != null) {
-      if (context.mounted) {
-        await showAddQuoteFromFileDialog(
-          context,
-          result.data!.quote,
-          result.data!.tags,
-        );
-      }
-    } else if (result.error != null) {
-      if (context.mounted) {
-        showToast(
-          context,
-          child: PillChip(
-            label: Text(
-              ParseQuoteFileErrors.localizedErrorMessageOf(
-                context,
-                result.error!,
-              ),
-            ),
-          ),
-        );
-      }
-    }
   }
 }
