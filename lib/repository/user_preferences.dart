@@ -2,12 +2,13 @@ import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.
 import 'package:my_quotes/repository/interfaces/language_repository.dart';
 import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
 import 'package:my_quotes/repository/interfaces/user_preferences_interfaces.dart';
-import 'package:my_quotes/services/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-final class UserPreferences
-    with SharedPreferencesAsyncMixin
+final class UserPreferencesWithSharedPreferencesAsync
     implements UserPreferencesRepository {
-  const UserPreferences();
+  const UserPreferencesWithSharedPreferencesAsync(this.sharedPreferencesAsync);
+
+  final SharedPreferencesAsync sharedPreferencesAsync;
 
   String get _defaultColorPallete =>
       ColorSchemePaletteRepository.defaultColorSchemePalette.uiName;
@@ -15,37 +16,46 @@ final class UserPreferences
   String get _defaultLanguage => LanguageRepository.defaultLanguage.toString();
 
   @override
-  Future<String> get colorSchemePalette => getStringPreference(
+  Future<String> get colorSchemePalette => _getStringPreference(
         ColorSchemePaletteRepository.colorSchemePaletteKey,
         orElse: _defaultColorPallete,
       );
 
   @override
   Future<void> setColorSchemePalette(String colorPallete) =>
-      setStringPreference(
+      _setStringPreference(
         ColorSchemePaletteRepository.colorSchemePaletteKey,
         colorPallete,
       );
 
   @override
-  Future<String> get language => getStringPreference(
+  Future<String> get language => _getStringPreference(
         LanguageRepository.languageKey,
         orElse: _defaultLanguage,
       );
 
   @override
   Future<void> setLanguage(String language) =>
-      setStringPreference(LanguageRepository.languageKey, language);
+      _setStringPreference(LanguageRepository.languageKey, language);
 
   @override
-  Future<String> get themeMode => getStringPreference(
+  Future<String> get themeMode => _getStringPreference(
         ThemeModeRepository.themeModeKey,
         orElse: _defaultThemeMode,
       );
 
   @override
-  Future<void> setThemeMode(String themeMode) => setStringPreference(
+  Future<void> setThemeMode(String themeMode) => _setStringPreference(
         ThemeModeRepository.themeModeKey,
         themeMode,
       );
+
+  Future<String> _getStringPreference(
+    String key, {
+    required String orElse,
+  }) async =>
+      await sharedPreferencesAsync.getString(key) ?? orElse;
+
+  Future<void> _setStringPreference(String key, String value) =>
+      sharedPreferencesAsync.setString(key, value);
 }
