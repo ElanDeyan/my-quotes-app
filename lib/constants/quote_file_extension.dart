@@ -1,0 +1,1 @@
+const quoteFileExtension = '.mqquote.json';

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:characters/characters.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
+import 'package:my_quotes/constants/backup_file_extension.dart';
 import 'package:my_quotes/constants/platforms.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -9,7 +11,7 @@ import 'package:share_plus/share_plus.dart';
 
 Future<bool> saveBackupFile(XFile backupFile) async {
   final fileName =
-      'My-Quotes-Backup-File-${DateTime.now().millisecondsSinceEpoch}.myquotes.txt';
+      'My-Quotes-Backup-File-${DateTime.now().millisecondsSinceEpoch}$backupFileExtension';
 
   if (isAndroidOrIOS) {
     final directory = await getTemporaryDirectory();
@@ -27,15 +29,15 @@ Future<bool> saveBackupFile(XFile backupFile) async {
   } else if (isDesktop) {
     final pathToSave = await FilePicker.platform.saveFile(
       type: FileType.custom,
-      allowedExtensions: ['myquotes.txt'],
+      allowedExtensions: [backupFileExtension.characters.skip(1).string],
       lockParentWindow: true,
     );
 
     if (pathToSave != null) {
       final endsWithBackupFileExtension =
-          p.extension(pathToSave, 2) == '.myquotes.txt';
+          p.extension(pathToSave, 2) == backupFileExtension;
       final file = await File(
-        '$pathToSave${!endsWithBackupFileExtension ? '.myquotes.txt' : ''}',
+        '$pathToSave${!endsWithBackupFileExtension ? backupFileExtension : ''}',
       ).create();
       await file.writeAsBytes(
         await backupFile.readAsBytes(),

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:my_quotes/constants/platforms.dart';
+import 'package:my_quotes/constants/quote_file_extension.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
@@ -19,7 +20,7 @@ Future<bool> shareQuoteFile(
   final quoteFileAsBytes =
       utf8.encode(await quote.toShareableJsonString(appRepository));
 
-  final fileName = 'quote-file-${quote.hashCode}.json';
+  final fileName = 'quote-file-${quote.hashCode}$quoteFileExtension';
 
   if (isAndroidOrIOS) {
     final directory = await getTemporaryDirectory();
@@ -42,9 +43,10 @@ Future<bool> shareQuoteFile(
     );
 
     if (pathToSave != null) {
-      final endsWithJsonExtension = p.extension(pathToSave) == '.json';
+      final endsWithJsonExtension =
+          p.extension(pathToSave, 2) == quoteFileExtension;
       final file = await File(
-        '$pathToSave${!endsWithJsonExtension ? '.json' : ''}',
+        '$pathToSave${!endsWithJsonExtension ? quoteFileExtension : ''}',
       ).create();
       await file.writeAsBytes(
         utf8.encode(await quote.toShareableJsonString(appRepository)),

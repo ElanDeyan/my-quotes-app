@@ -1,1 +1,1 @@
-const backupFileExtension = '.myquotes.txt';
+const backupFileExtension = '.mqbackup.txt';
