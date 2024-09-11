@@ -645,65 +645,6 @@ typedef $$QuoteTableTableUpdateCompanionBuilder = QuoteTableCompanion Function({
   Value<String?> tags,
 });
 
-class $$QuoteTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $QuoteTableTable,
-    Quote,
-    $$QuoteTableTableFilterComposer,
-    $$QuoteTableTableOrderingComposer,
-    $$QuoteTableTableCreateCompanionBuilder,
-    $$QuoteTableTableUpdateCompanionBuilder> {
-  $$QuoteTableTableTableManager(_$AppDatabase db, $QuoteTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$QuoteTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$QuoteTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int?> id = const Value.absent(),
-            Value<String> content = const Value.absent(),
-            Value<String> author = const Value.absent(),
-            Value<String?> source = const Value.absent(),
-            Value<String?> sourceUri = const Value.absent(),
-            Value<bool> isFavorite = const Value.absent(),
-            Value<DateTime?> createdAt = const Value.absent(),
-            Value<String?> tags = const Value.absent(),
-          }) =>
-              QuoteTableCompanion(
-            id: id,
-            content: content,
-            author: author,
-            source: source,
-            sourceUri: sourceUri,
-            isFavorite: isFavorite,
-            createdAt: createdAt,
-            tags: tags,
-          ),
-          createCompanionCallback: ({
-            Value<int?> id = const Value.absent(),
-            required String content,
-            required String author,
-            Value<String?> source = const Value.absent(),
-            Value<String?> sourceUri = const Value.absent(),
-            Value<bool> isFavorite = const Value.absent(),
-            Value<DateTime?> createdAt = const Value.absent(),
-            Value<String?> tags = const Value.absent(),
-          }) =>
-              QuoteTableCompanion.insert(
-            id: id,
-            content: content,
-            author: author,
-            source: source,
-            sourceUri: sourceUri,
-            isFavorite: isFavorite,
-            createdAt: createdAt,
-            tags: tags,
-          ),
-        ));
-}
-
 class $$QuoteTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $QuoteTableTable> {
   $$QuoteTableTableFilterComposer(super.$state);
@@ -792,6 +733,83 @@ class $$QuoteTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$QuoteTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $QuoteTableTable,
+    Quote,
+    $$QuoteTableTableFilterComposer,
+    $$QuoteTableTableOrderingComposer,
+    $$QuoteTableTableCreateCompanionBuilder,
+    $$QuoteTableTableUpdateCompanionBuilder,
+    (Quote, BaseReferences<_$AppDatabase, $QuoteTableTable, Quote>),
+    Quote,
+    PrefetchHooks Function()> {
+  $$QuoteTableTableTableManager(_$AppDatabase db, $QuoteTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$QuoteTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$QuoteTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<String> content = const Value.absent(),
+            Value<String> author = const Value.absent(),
+            Value<String?> source = const Value.absent(),
+            Value<String?> sourceUri = const Value.absent(),
+            Value<bool> isFavorite = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            Value<String?> tags = const Value.absent(),
+          }) =>
+              QuoteTableCompanion(
+            id: id,
+            content: content,
+            author: author,
+            source: source,
+            sourceUri: sourceUri,
+            isFavorite: isFavorite,
+            createdAt: createdAt,
+            tags: tags,
+          ),
+          createCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            required String content,
+            required String author,
+            Value<String?> source = const Value.absent(),
+            Value<String?> sourceUri = const Value.absent(),
+            Value<bool> isFavorite = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            Value<String?> tags = const Value.absent(),
+          }) =>
+              QuoteTableCompanion.insert(
+            id: id,
+            content: content,
+            author: author,
+            source: source,
+            sourceUri: sourceUri,
+            isFavorite: isFavorite,
+            createdAt: createdAt,
+            tags: tags,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$QuoteTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $QuoteTableTable,
+    Quote,
+    $$QuoteTableTableFilterComposer,
+    $$QuoteTableTableOrderingComposer,
+    $$QuoteTableTableCreateCompanionBuilder,
+    $$QuoteTableTableUpdateCompanionBuilder,
+    (Quote, BaseReferences<_$AppDatabase, $QuoteTableTable, Quote>),
+    Quote,
+    PrefetchHooks Function()>;
 typedef $$TagTableTableCreateCompanionBuilder = TagTableCompanion Function({
   Value<int?> id,
   required String name,
@@ -800,41 +818,6 @@ typedef $$TagTableTableUpdateCompanionBuilder = TagTableCompanion Function({
   Value<int?> id,
   Value<String> name,
 });
-
-class $$TagTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $TagTableTable,
-    Tag,
-    $$TagTableTableFilterComposer,
-    $$TagTableTableOrderingComposer,
-    $$TagTableTableCreateCompanionBuilder,
-    $$TagTableTableUpdateCompanionBuilder> {
-  $$TagTableTableTableManager(_$AppDatabase db, $TagTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$TagTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$TagTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int?> id = const Value.absent(),
-            Value<String> name = const Value.absent(),
-          }) =>
-              TagTableCompanion(
-            id: id,
-            name: name,
-          ),
-          createCompanionCallback: ({
-            Value<int?> id = const Value.absent(),
-            required String name,
-          }) =>
-              TagTableCompanion.insert(
-            id: id,
-            name: name,
-          ),
-        ));
-}
 
 class $$TagTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $TagTableTable> {
@@ -863,6 +846,60 @@ class $$TagTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
+
+class $$TagTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $TagTableTable,
+    Tag,
+    $$TagTableTableFilterComposer,
+    $$TagTableTableOrderingComposer,
+    $$TagTableTableCreateCompanionBuilder,
+    $$TagTableTableUpdateCompanionBuilder,
+    (Tag, BaseReferences<_$AppDatabase, $TagTableTable, Tag>),
+    Tag,
+    PrefetchHooks Function()> {
+  $$TagTableTableTableManager(_$AppDatabase db, $TagTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$TagTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$TagTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+          }) =>
+              TagTableCompanion(
+            id: id,
+            name: name,
+          ),
+          createCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            required String name,
+          }) =>
+              TagTableCompanion.insert(
+            id: id,
+            name: name,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$TagTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $TagTableTable,
+    Tag,
+    $$TagTableTableFilterComposer,
+    $$TagTableTableOrderingComposer,
+    $$TagTableTableCreateCompanionBuilder,
+    $$TagTableTableUpdateCompanionBuilder,
+    (Tag, BaseReferences<_$AppDatabase, $TagTableTable, Tag>),
+    Tag,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
