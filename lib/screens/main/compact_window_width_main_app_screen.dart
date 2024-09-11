@@ -93,7 +93,7 @@ class _CompactWindowWidthMainAppScreenState
     BuildContext context,
   ) {
     return [
-      if (getBodyFrom is MyQuotesScreen) ...[
+      if (getBodyFrom(_selectedIndex) is MyQuotesScreen) ...[
         IconButton(
           tooltip: context.appLocalizations.navigationSearchQuote,
           onPressed: () => showQuoteSearch(
