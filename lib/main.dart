@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:my_quotes/app.dart';
@@ -25,7 +26,8 @@ void main() async {
         ),
       ),
     );
-  }, (exception, stackTrace) {
-    unawaited(Sentry.captureException(exception, stackTrace: stackTrace));
+  }, (error, stackTrace) {
+    unawaited(Sentry.captureException(error, stackTrace: stackTrace));
+    log(error.toString(), name: 'Error');
   });
 }
