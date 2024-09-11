@@ -23,7 +23,7 @@ class QuoteFormSourceUriField extends StatelessWidget {
           labelText: context.appLocalizations.quoteFormFieldSourceUri,
           hintText: context.appLocalizations.quoteFormFieldSourceUriHintText,
         ),
-        validator: FormBuilderValidators.url(),
+        validator: FormBuilderValidators.url(checkNullOrEmpty: false),
         smartDashesType: SmartDashesType.enabled,
         smartQuotesType: SmartQuotesType.enabled,
         keyboardType: TextInputType.url,
