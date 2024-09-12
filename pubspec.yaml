@@ -12,7 +12,6 @@ dependencies:
   crypto: ^3.0.5
   diacritic: ^0.1.5
   drift: ^2.20.2
-  drift_flutter: ^0.2.0
   encrypt: ^5.0.3
   envied: ^0.5.4
   feedback_sentry: ^3.0.1
@@ -23,6 +22,7 @@ dependencies:
   flutter_form_builder: ^9.4.1
   flutter_localizations:
     sdk: flutter
+  flutter_secure_storage: ^9.2.2
   fluttertoast: ^8.2.8
   font_awesome_flutter: ^10.7.0
   form_builder_validators: ^11.0.0
@@ -40,7 +40,6 @@ dependencies:
   skeletonizer: ^1.4.2
   sqlcipher_flutter_libs: ^0.6.4
   sqlite3: ^2.4.6
-  sqlite3_flutter_libs: ^0.5.24
   timeago: ^3.7.0
   url_launcher: ^6.3.0
 
