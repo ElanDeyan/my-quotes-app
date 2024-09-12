@@ -14,8 +14,8 @@ final class MyAppProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => _appPreferences,
+    return ChangeNotifierProvider.value(
+      value: _appPreferences,
       child: child,
     );
   }

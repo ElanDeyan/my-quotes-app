@@ -10,24 +10,24 @@ import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:sentry/sentry.dart';
 
-void main() async {
-  runZonedGuarded(() async {
-    final sentryDsn = getSentryDsn();
+void main() => runZonedGuarded(() async {
+      final sentryDsn = getSentryDsn();
 
-    await Sentry.init((options) => options.dsn = sentryDsn);
+      await Sentry.init((options) => options.dsn = sentryDsn);
 
-    await bootstrapingApp();
+      WidgetsFlutterBinding.ensureInitialized();
 
-    runApp(
-      MyAppProvider(
-        appPreferencesProvider: serviceLocator<AppPreferences>(),
-        child: const MyQuotesFeedback(
-          child: MyApp(),
+      await bootstrapServices();
+
+      runApp(
+        MyAppProvider(
+          appPreferencesProvider: serviceLocator<AppPreferences>(),
+          child: const MyQuotesFeedback(
+            child: MyApp(),
+          ),
         ),
-      ),
-    );
-  }, (error, stackTrace) {
-    unawaited(Sentry.captureException(error, stackTrace: stackTrace));
-    log(error.toString(), name: 'Error');
-  });
-}
+      );
+    }, (error, stackTrace) {
+      unawaited(Sentry.captureException(error, stackTrace: stackTrace));
+      log(error.toString(), name: 'Error');
+    });
