@@ -7,7 +7,7 @@ import 'package:my_quotes/data/local/db/daos/tags_dao.dart';
 import 'package:my_quotes/data/tables/quote_table.dart';
 import 'package:my_quotes/data/tables/tag_table.dart';
 import 'package:my_quotes/helpers/quote_extension.dart';
-import 'package:my_quotes/repository/interfaces/app_repository.dart';
+import 'package:my_quotes/repository/app_repository.dart';
 
 part 'quotes_drift_database.g.dart';
 

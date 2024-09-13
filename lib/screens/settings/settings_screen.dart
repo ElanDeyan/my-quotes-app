@@ -2,7 +2,7 @@ import 'package:feedback_sentry/feedback_sentry.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
-import 'package:my_quotes/repository/interfaces/secure_repository.dart';
+import 'package:my_quotes/repository/secure_repository.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/settings/allow_error_reporting_tile.dart';
 import 'package:my_quotes/screens/settings/app_info_tile.dart';

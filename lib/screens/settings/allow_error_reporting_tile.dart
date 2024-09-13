@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:my_quotes/repository/interfaces/secure_repository.dart';
+import 'package:my_quotes/repository/secure_repository.dart';
 import 'package:my_quotes/screens/my_quotes/_no_database_connection_message.dart';
 import 'package:my_quotes/screens/settings/allow_error_reporting_switch.dart';
 import 'package:my_quotes/services/service_locator.dart';

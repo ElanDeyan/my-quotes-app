@@ -6,7 +6,7 @@ import 'package:my_quotes/app.dart';
 import 'package:my_quotes/bootstrap.dart';
 import 'package:my_quotes/providers/my_app_provider.dart';
 import 'package:my_quotes/providers/my_quotes_feedback.dart';
-import 'package:my_quotes/repository/interfaces/secure_repository.dart';
+import 'package:my_quotes/repository/secure_repository.dart';
 import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:sentry/sentry.dart';

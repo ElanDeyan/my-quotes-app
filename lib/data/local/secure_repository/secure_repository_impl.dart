@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'dart:math' show Random;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:my_quotes/repository/interfaces/secure_repository.dart';
+import 'package:my_quotes/repository/secure_repository.dart';
 
 final class SecureRepositoryImpl implements SecureRepository {
   SecureRepositoryImpl(this.secureStorage) {

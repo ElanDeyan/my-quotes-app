@@ -7,7 +7,7 @@ import 'package:drift/native.dart';
 import 'package:drift_dev/api/migrations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:my_quotes/constants/platforms.dart';
-import 'package:my_quotes/repository/interfaces/secure_repository.dart';
+import 'package:my_quotes/repository/secure_repository.dart';
 import 'package:my_quotes/services/service_locator.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
