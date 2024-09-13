@@ -1,7 +1,7 @@
-import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
-import 'package:my_quotes/repository/interfaces/language_repository.dart';
-import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
-import 'package:my_quotes/repository/interfaces/user_preferences_interfaces.dart';
+import 'package:my_quotes/repository/color_scheme_palette_repository.dart';
+import 'package:my_quotes/repository/language_repository.dart';
+import 'package:my_quotes/repository/theme_mode_repository.dart';
+import 'package:my_quotes/repository/user_preferences_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final class UserPreferencesWithSharedPreferencesAsync
