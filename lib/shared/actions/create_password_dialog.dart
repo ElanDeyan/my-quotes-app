@@ -64,7 +64,9 @@ class _CreatePasswordDialogState extends State<CreatePasswordDialog> {
                 validator: (value) {
                   if (value != null) {
                     if (value.isBlank) {
-                      return context.appLocalizations.nonEmptyField('Password');
+                      return context.appLocalizations.nonEmptyField(
+                        context.appLocalizations.passwordFieldLabel,
+                      );
                     }
 
                     if (value.trim().length < 8) {
