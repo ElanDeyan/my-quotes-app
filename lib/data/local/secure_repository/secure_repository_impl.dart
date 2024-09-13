@@ -6,7 +6,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:my_quotes/repository/interfaces/secure_repository.dart';
 
 final class SecureRepositoryImpl implements SecureRepository {
-  const SecureRepositoryImpl(this.secureStorage);
+  SecureRepositoryImpl(this.secureStorage) {
+    scheduleMicrotask(() async {
+      if (!(await hasAllowErrorReportingKey)) {
+        secureStorage.write(
+          key: SecureRepository.allowErrorReportingKey,
+          value: true.toString(),
+        );
+      }
+    });
+  }
 
   final FlutterSecureStorage secureStorage;
 
@@ -87,5 +96,40 @@ final class SecureRepositoryImpl implements SecureRepository {
     );
 
     return dbEncryptionPassword;
+  }
+
+  @override
+  Future<bool> get hasAllowErrorReportingKey => secureStorage
+      .read(key: SecureRepository.allowErrorReportingKey)
+      .then((value) => value != null);
+
+  @override
+  Future<bool> get allowErrorReporting async => bool.parse(
+        await secureStorage.read(
+              key: SecureRepository.allowErrorReportingKey,
+            ) ??
+            false.toString(),
+      );
+
+  @override
+  Future<void> toggleAllowErrorReporting([bool? value]) async {
+    if (value != null) {
+      await secureStorage.write(
+        key: SecureRepository.allowErrorReportingKey,
+        value: value.toString(),
+      );
+      return;
+    }
+    if (await allowErrorReporting) {
+      await secureStorage.write(
+        key: SecureRepository.allowErrorReportingKey,
+        value: false.toString(),
+      );
+    } else {
+      await secureStorage.write(
+        key: SecureRepository.allowErrorReportingKey,
+        value: true.toString(),
+      );
+    }
   }
 }

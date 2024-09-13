@@ -195,5 +195,12 @@
   "createPasswordDescription": "This will be used in the encryption and decryption of the file.",
   "createPasswordAdvice": "You''ll need this password to decrypt the file, without it, you should create a new backup file again.",
   "enterPassword": "Enter file''s password",
-  "enterPasswordAdvice": "You do need this password to decrypt the file, without it, you should create a new backup file again."
+  "enterPasswordAdvice": "You do need this password to decrypt the file, without it, you should create a new backup file again.",
+  "allowErrorReporting": "Allow error reporting",
+  "allowErrorReportingDescription": "Errors are reported to Sentry platform, and helps me to fix and improve the app",
+  "savedPreference": "Saved preference!",
+  "userPreferences": "Preferences",
+  "yourPrivacy": "Your privacy",
+  "about": "About"
+  
 }

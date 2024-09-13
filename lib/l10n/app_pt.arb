@@ -196,5 +196,11 @@
   "createPasswordDescription": "Essa senha será usada no processo de encriptação e decriptação.",
   "createPasswordAdvice": "Sem essa senha, você não conseguirá recuperar o arquivo, e terá que gerar outro backup.",
   "enterPassword": "Insira a senha",
-  "enterPasswordAdvice": "Sem essa senha, você não conseguirá recuperar o arquivo, e terá que gerar outro backup."
+  "enterPasswordAdvice": "Sem essa senha, você não conseguirá recuperar o arquivo, e terá que gerar outro backup.",
+  "allowErrorReporting": "Reportar erros",
+  "allowErrorReportingDescription": "Erros são reportados para a plataforma Sentry, e me ajudam a corrigir erros e melhorar o app",
+  "savedPreference": "Salvo!",
+  "userPreferences": "Preferências",
+  "yourPrivacy": "Sua privacidade",
+  "about": "Sobre"
 }

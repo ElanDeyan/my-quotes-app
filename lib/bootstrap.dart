@@ -29,7 +29,7 @@ Future<void> bootstrapServices() async {
   timeAgoSetup();
 
   serviceLocator.registerLazySingleton<SecureRepository>(
-    () => const SecureRepositoryImpl(FlutterSecureStorage()),
+    () => SecureRepositoryImpl(const FlutterSecureStorage()),
   );
 
   if (!isWeb) {

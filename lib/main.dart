@@ -6,6 +6,7 @@ import 'package:my_quotes/app.dart';
 import 'package:my_quotes/bootstrap.dart';
 import 'package:my_quotes/providers/my_app_provider.dart';
 import 'package:my_quotes/providers/my_quotes_feedback.dart';
+import 'package:my_quotes/repository/interfaces/secure_repository.dart';
 import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 import 'package:sentry/sentry.dart';
@@ -27,7 +28,15 @@ void main() => runZonedGuarded(() async {
           ),
         ),
       );
-    }, (error, stackTrace) {
-      unawaited(Sentry.captureException(error, stackTrace: stackTrace));
+    }, (error, stackTrace) async {
+      if (serviceLocator.isRegistered<SecureRepository>()) {
+        final allowErrorReporting =
+            await serviceLocator<SecureRepository>().allowErrorReporting;
+
+        if (allowErrorReporting) {
+          unawaited(Sentry.captureException(error, stackTrace: stackTrace));
+        }
+      }
+
       log(error.toString(), name: 'Error');
     });
