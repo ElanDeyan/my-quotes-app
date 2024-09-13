@@ -5,6 +5,7 @@ import 'package:my_quotes/helpers/string_to_color_pallete.dart';
 import 'package:my_quotes/helpers/string_to_theme_mode.dart';
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
+import 'package:my_quotes/repository/interfaces/secure_repository.dart';
 import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
 import 'package:my_quotes/services/parse_backup_file.dart';
 import 'package:my_quotes/services/service_locator.dart';
@@ -33,7 +34,7 @@ Future<void> handleBackupFile(
             final preferences =
                 Provider.of<AppPreferences>(context, listen: false);
 
-            final (:colorPalette, :language, :themeMode) =
+            final (:colorPalette, :language, :themeMode, :allowErrorReporting) =
                 backupData.userPreferencesData;
 
             preferences
@@ -49,6 +50,9 @@ Future<void> handleBackupFile(
             final (quotes, tags) = (backupData.quotes, backupData.tags);
 
             await serviceLocator<AppRepository>().restoreData(tags, quotes);
+
+            await serviceLocator<SecureRepository>()
+                .toggleAllowErrorReporting(bool.parse(allowErrorReporting));
 
             if (context.mounted) {
               showToast(

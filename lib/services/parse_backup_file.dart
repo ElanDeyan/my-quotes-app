@@ -4,6 +4,7 @@ import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/helpers/iterable_extension.dart';
 import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
 import 'package:my_quotes/repository/interfaces/language_repository.dart';
+import 'package:my_quotes/repository/interfaces/secure_repository.dart';
 import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
 import 'package:my_quotes/services/decrypt_backup_data.dart';
 import 'package:share_plus/share_plus.dart';
@@ -11,7 +12,8 @@ import 'package:share_plus/share_plus.dart';
 typedef UserPreferencesData = ({
   String themeMode,
   String colorPalette,
-  String language
+  String language,
+  String allowErrorReporting,
 });
 
 typedef BackupData = ({
@@ -58,17 +60,22 @@ Future<BackupData?> parseBackupFile(
 
     if (preferencesMap
         case {
-          "themeMode": final String themeMode,
-          "colorPalette": final String colorPalette,
-          "language": final String language,
+          ThemeModeRepository.themeModeKey: final String themeMode,
+          ColorSchemePaletteRepository.colorSchemePaletteKey: final String
+              colorPalette,
+          LanguageRepository.languageKey: final String language,
+          SecureRepository.allowErrorReportingKey: final String
+              allowErrorReporting,
         }
         when _themeModeValues.contains(themeMode) &&
             _colorSchemePaletteValues.contains(colorPalette) &&
-            _languageValues.contains(language)) {
+            _languageValues.contains(language) &&
+            bool.tryParse(allowErrorReporting) != null) {
       userPreferences = (
         themeMode: themeMode,
         colorPalette: colorPalette,
-        language: language
+        language: language,
+        allowErrorReporting: allowErrorReporting,
       );
     } else {
       return null;

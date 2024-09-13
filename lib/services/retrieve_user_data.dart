@@ -1,13 +1,16 @@
 import 'dart:async';
+
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
 import 'package:my_quotes/repository/interfaces/color_scheme_palette_repository.dart';
 import 'package:my_quotes/repository/interfaces/language_repository.dart';
+import 'package:my_quotes/repository/interfaces/secure_repository.dart';
 import 'package:my_quotes/repository/interfaces/theme_mode_repository.dart';
 import 'package:my_quotes/states/app_preferences.dart';
 
 Future<Map<String, Object?>> retrieveUserData(
   AppPreferences appPreferences,
   AppRepository appRepository,
+  SecureRepository secureRepository,
 ) async {
   final tags = await appRepository.allTags;
 
@@ -19,12 +22,15 @@ Future<Map<String, Object?>> retrieveUserData(
 
   final language = appPreferences.language;
 
+  final allowErrorReporting = await secureRepository.allowErrorReporting;
+
   final backupData = <String, dynamic>{
     "preferences": <String, String>{
       ThemeModeRepository.themeModeKey: themeMode.name,
       ColorSchemePaletteRepository.colorSchemePaletteKey:
           colorPalette.storageName,
       LanguageRepository.languageKey: language,
+      SecureRepository.allowErrorReportingKey: allowErrorReporting.toString(),
     },
     "tags": [
       for (final tag in tags) <String, String>{"${tag.id}": tag.name},

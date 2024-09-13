@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:my_quotes/constants/enums/parse_quote_file_errors.dart';
 import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/repository/interfaces/app_repository.dart';
+import 'package:my_quotes/repository/interfaces/secure_repository.dart';
 import 'package:my_quotes/screens/home/home_screen.dart';
 import 'package:my_quotes/screens/my_quotes/my_quotes_screen.dart';
 import 'package:my_quotes/services/generate_backup_file.dart';
@@ -38,6 +39,7 @@ mixin MainAppScreenMixin {
       final backupFile = await generateBackupFile(
         serviceLocator<AppRepository>(),
         appPreferences,
+        serviceLocator<SecureRepository>(),
         userPassword,
       );
 
