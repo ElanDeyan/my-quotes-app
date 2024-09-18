@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/repository/app_repository.dart';
 import 'package:my_quotes/repository/color_scheme_palette_repository.dart';
 import 'package:my_quotes/repository/language_repository.dart';
@@ -12,17 +13,21 @@ Future<Map<String, Object?>> retrieveUserData(
   AppRepository appRepository,
   SecureRepository secureRepository,
 ) async {
-  final tags = await appRepository.allTags;
-
-  final quotes = await appRepository.allQuotes;
+  final [
+    tags as List<Tag>,
+    quotes as List<Quote>,
+    allowErrorReporting as bool
+  ] = await Future.wait([
+    appRepository.allTags,
+    appRepository.allQuotes,
+    secureRepository.allowErrorReporting,
+  ]);
 
   final colorPalette = appPreferences.colorSchemePalette;
 
   final themeMode = appPreferences.themeMode;
 
   final language = appPreferences.language;
-
-  final allowErrorReporting = await secureRepository.allowErrorReporting;
 
   final backupData = <String, dynamic>{
     "preferences": <String, String>{
