@@ -20,15 +20,14 @@ import 'package:my_quotes/states/app_preferences.dart';
 import 'package:provider/provider.dart';
 
 mixin MainAppScreenMixin {
-  Widget getBodyFrom(int selectedIndex) => switch (selectedIndex) {
-        0 => const HomeScreen(
-            key: Key('home_screen'),
-          ),
-        1 => const MyQuotesScreen(
-            key: Key('my_quotes_screen'),
-          ),
-        _ => throw UnimplementedError(),
-      };
+  final screens = [
+    const HomeScreen(
+      key: Key('home_screen'),
+    ),
+    const MyQuotesScreen(
+      key: Key('my_quotes_screen'),
+    ),
+  ];
 
   Future<void> onGenerateBackupFile(BuildContext context) async {
     final appPreferences = Provider.of<AppPreferences>(context, listen: false);

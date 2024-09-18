@@ -26,15 +26,20 @@ class LargeWindowWidthMainAppScreen extends StatefulWidget {
 class _LargeWindowWidthMainAppScreenState
     extends State<LargeWindowWidthMainAppScreen> with MainAppScreenMixin {
   late int _selectedIndex;
+
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
   }
 
-  void _updateIndex(int value) => setState(() {
+  void _updateIndex(int value) {
+    if (value != _selectedIndex) {
+      setState(() {
         _selectedIndex = value;
       });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +93,7 @@ class _LargeWindowWidthMainAppScreenState
               child: RepaintBoundary(
                 child: AnimatedSwitcher(
                   duration: Durations.short4,
-                  child: getBodyFrom(_selectedIndex),
+                  child: screens[_selectedIndex],
                 ),
               ),
             ),
@@ -100,7 +105,7 @@ class _LargeWindowWidthMainAppScreenState
 
   List<Widget> _appBarActions(BuildContext context) {
     return <Widget>[
-      if (getBodyFrom(_selectedIndex) is MyQuotesScreen) ...<Widget>[
+      if (screens[_selectedIndex] is MyQuotesScreen) ...<Widget>[
         IconButton(
           tooltip: context.appLocalizations.navigationSearchQuote,
           onPressed: () => showQuoteSearch(

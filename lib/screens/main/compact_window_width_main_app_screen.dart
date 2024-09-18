@@ -59,7 +59,7 @@ class _CompactWindowWidthMainAppScreenState
       body: RepaintBoundary(
         child: AnimatedSwitcher(
           duration: Durations.short4,
-          child: getBodyFrom(_selectedIndex),
+          child: screens[_selectedIndex],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -93,7 +93,7 @@ class _CompactWindowWidthMainAppScreenState
     BuildContext context,
   ) {
     return [
-      if (getBodyFrom(_selectedIndex) is MyQuotesScreen) ...[
+      if (screens[_selectedIndex] is MyQuotesScreen) ...[
         IconButton(
           tooltip: context.appLocalizations.navigationSearchQuote,
           onPressed: () => showQuoteSearch(
