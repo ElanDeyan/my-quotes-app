@@ -1,18 +1,23 @@
-title: Titleee
-last_updated: 2024-09-13
+title: My Quotes data usage
+last_updated: 2024-10-13
 version: 1.0.0
-introduction: This text
+introduction: This text aims to explain to you, the User, how this app use data. It's important read the text below to understand this subject and, if you disagree, feel free to remove this app.
 what:
     header: What data is collected?
     content: |
         The app collects the following data:
         
-        - Quotes and tags you create.
-        - User preferences such as theme mode and language settings.
-        - Technical data for error reporting via Sentry.
+        - Quotes and tags you create, which includes:
+            - the phrase itself and its contents, like author, if it's favorite or not, source, source uri and related tags
+            - the date and time when this quote or tag was created.
+        - User preferences such as theme mode, color scheme pallete and the preferred language.
+        - whether you accepted this term or not.
+        - whether you allowed error reporting to the Sentry platform or not;
+        - Technical data for error reporting via the Sentry platform.
+
 why:
     header: Why data is collected
-    content: Content of this section
+    content: lllllllll
 how:
     header: How is data collected
     content: Content of this section
