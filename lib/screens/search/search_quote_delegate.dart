@@ -12,18 +12,18 @@ import 'package:my_quotes/services/service_locator.dart';
 
 final class SearchQuoteDelegate extends SearchDelegate<Quote> {
   SearchQuoteDelegate({
+    required this.context,
     super.searchFieldLabel,
     super.keyboardType,
     super.searchFieldDecorationTheme,
     super.searchFieldStyle,
     super.textInputAction,
-    required this.context,
   });
 
   final BuildContext context;
 
   Future<List<Quote>> get allQuotes async =>
-      await serviceLocator<AppRepository>().allQuotes;
+      serviceLocator<AppRepository>().allQuotes;
 
   @override
   List<Widget>? buildActions(BuildContext context) {

@@ -11,7 +11,8 @@ import 'package:share_plus/share_plus.dart';
 
 Future<bool> saveBackupFile(XFile backupFile) async {
   final fileName =
-      'My-Quotes-Backup-File-${DateTime.now().millisecondsSinceEpoch}$backupFileExtension';
+      'My-Quotes-Backup-File-${DateTime.now().millisecondsSinceEpoch}'
+      '$backupFileExtension';
 
   if (isAndroidOrIOS) {
     final directory = await getTemporaryDirectory();

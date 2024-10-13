@@ -86,7 +86,7 @@ class _AddQuoteFormState extends State<AddQuoteForm> with UpdateFormDataMixin {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Align(
           alignment: Alignment.topCenter,
           child: FormBuilder(

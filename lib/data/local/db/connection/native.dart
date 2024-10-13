@@ -66,16 +66,15 @@ DatabaseConnection connect() => DatabaseConnection.delayed(
 
                 if (result.isEmpty) {
                   throw UnsupportedError(
-                    'This database needs to run with SQLCipher, but that library is '
-                    'not available!',
+                    'This database needs to run with SQLCipher, '
+                    'but that library is not available!',
                   );
                 }
 
                 final escapedKey = encryptionPassword.replaceAll("'", "''");
-                database.execute("pragma key = '$escapedKey'");
-
-                // Tests that the key is correct by selecting from a table
-                database.execute('select count(*) from sqlite_master');
+                database
+                  ..execute("pragma key = '$escapedKey'")
+                  ..execute('select count(*) from sqlite_master');
               },
             );
           }

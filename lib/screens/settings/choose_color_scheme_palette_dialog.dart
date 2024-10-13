@@ -28,13 +28,13 @@ class ChooseColorSchemePaletteDialog extends StatelessWidget {
                 appPreferences.colorSchemePalette = colorSchemePalette,
             child: IconWithLabel(
               icon: CircleAvatar(
-                minRadius: 5.0,
+                minRadius: 5,
                 backgroundColor: ColorSchemePalette.primaryColor(
                   colorSchemePalette,
                   MediaQuery.platformBrightnessOf(context),
                 ),
               ),
-              horizontalGap: 5.0,
+              horizontalGap: 5,
               label: Text(
                 key: Key(
                   'color_palette_${colorSchemePalette.storageName}',

@@ -12,8 +12,8 @@ import 'package:my_quotes/shared/widgets/quote_card/quote_card_skeleton.dart';
 
 final class QuoteScreen extends StatelessWidget {
   const QuoteScreen({
-    super.key,
     required this.quoteId,
+    super.key,
   });
 
   final int quoteId;
@@ -36,8 +36,8 @@ final class QuoteScreen extends StatelessWidget {
 
 class QuoteScreenBody extends StatelessWidget {
   const QuoteScreenBody({
-    super.key,
     required this.quoteId,
+    super.key,
   });
 
   final int quoteId;

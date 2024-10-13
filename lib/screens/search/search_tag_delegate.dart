@@ -11,18 +11,18 @@ import 'package:my_quotes/services/service_locator.dart';
 
 final class SearchTagDelegate extends SearchDelegate<Tag> {
   SearchTagDelegate({
+    required this.context,
     super.searchFieldLabel,
     super.keyboardType,
     super.searchFieldDecorationTheme,
     super.searchFieldStyle,
     super.textInputAction,
-    required this.context,
   });
 
   final BuildContext context;
 
   Future<List<Tag>> get allTags async =>
-      await serviceLocator<AppRepository>().allTags;
+      serviceLocator<AppRepository>().allTags;
 
   @override
   List<Widget>? buildActions(BuildContext context) {

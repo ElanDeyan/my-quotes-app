@@ -57,7 +57,7 @@ Future<bool> shareQuoteFile(
     return false;
   } else {
     final result = await runZonedGuarded(
-      () async => await FileSaver.instance.saveFile(
+      () async => FileSaver.instance.saveFile(
         name: fileName,
         bytes: quoteFileAsBytes,
         mimeType: MimeType.json,

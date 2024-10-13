@@ -21,10 +21,10 @@ class AppInfoTile extends StatelessWidget {
         children: [
           Text(context.appLocalizations.infoDescription),
           Wrap(
-            spacing: 5.0,
+            spacing: 5,
             children: <IconButton>[
               IconButton(
-                onPressed: () async => await launchUrl(
+                onPressed: () async => launchUrl(
                   Uri.parse(
                     'https://www.linkedin.com/in/elan-almeida-a3391225b/',
                   ),
@@ -32,13 +32,13 @@ class AppInfoTile extends StatelessWidget {
                 icon: const FaIcon(FontAwesomeIcons.linkedinIn),
               ),
               IconButton(
-                onPressed: () async => await launchUrl(
+                onPressed: () async => launchUrl(
                   Uri.parse('https://github.com/ElanDeyan'),
                 ),
                 icon: const FaIcon(FontAwesomeIcons.github),
               ),
               IconButton(
-                onPressed: () async => await launchUrl(
+                onPressed: () async => launchUrl(
                   Uri.parse(
                     'https://youtube.com/@deyanwithcode?si=HB1KS0Ys3fqQBkAk',
                   ),

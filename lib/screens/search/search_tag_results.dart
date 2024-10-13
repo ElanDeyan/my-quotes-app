@@ -4,7 +4,7 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 import 'package:my_quotes/shared/actions/tags/tag_actions.dart';
 
 class SearchTagResults extends StatelessWidget {
-  const SearchTagResults({super.key, required this.searchResults});
+  const SearchTagResults({required this.searchResults, super.key});
 
   final List<Tag> searchResults;
 

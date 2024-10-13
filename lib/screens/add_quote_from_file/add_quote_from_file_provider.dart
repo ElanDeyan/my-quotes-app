@@ -10,9 +10,9 @@ import 'package:my_quotes/shared/widgets/form/quote_form_skeleton.dart';
 
 class AddQuoteFromFileProvider extends StatefulWidget {
   const AddQuoteFromFileProvider({
-    super.key,
     required this.tagsNamesFromFile,
     required this.quoteFromFile,
+    super.key,
   });
 
   final Set<String> tagsNamesFromFile;
@@ -69,7 +69,7 @@ class _AddQuoteFromFileProviderState extends State<AddQuoteFromFileProvider> {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Align(
           alignment: Alignment.topCenter,
           child: FutureBuilder(

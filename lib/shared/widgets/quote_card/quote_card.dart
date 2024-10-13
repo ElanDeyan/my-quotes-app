@@ -9,8 +9,7 @@ import 'package:my_quotes/shared/widgets/quote_card/quote_icon_decoration.dart';
 
 class QuoteCard extends StatelessWidget {
   const QuoteCard({
-    super.key,
-    required this.quote,
+    required this.quote, super.key,
     this.showActions = true,
   });
 
@@ -41,10 +40,10 @@ class QuoteCard extends StatelessWidget {
               color: Theme.of(context).colorScheme.surfaceContainerLowest,
               child: Padding(
                 padding: const EdgeInsets.only(
-                  left: 26.0,
-                  right: 26.0,
-                  top: 22.0,
-                  bottom: 11.0,
+                  left: 26,
+                  right: 26,
+                  top: 22,
+                  bottom: 11,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -70,7 +69,7 @@ class QuoteCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      height: 10.0,
+                      height: 10,
                     ),
                     AnimatedSize(
                       duration: Durations.short4,
@@ -99,8 +98,8 @@ class QuoteCard extends StatelessWidget {
                               ConnectionState.done) {
                             if (!snapshot.hasError) {
                               return Wrap(
-                                runSpacing: 5.0,
-                                spacing: 5.0,
+                                runSpacing: 5,
+                                spacing: 5,
                                 children: [
                                   for (final tag in snapshot.data!)
                                     Text(

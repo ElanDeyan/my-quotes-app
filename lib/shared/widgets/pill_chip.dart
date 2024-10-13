@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PillChip extends Chip {
-  PillChip({super.key, required super.label})
+  PillChip({required super.label, super.key})
       : super(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(99),

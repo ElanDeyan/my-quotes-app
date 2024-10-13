@@ -3,8 +3,7 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 
 class QuoteNotFoundWithIdMessage extends StatelessWidget {
   const QuoteNotFoundWithIdMessage({
-    super.key,
-    required this.quoteId,
+    required this.quoteId, super.key,
   });
 
   final int quoteId;

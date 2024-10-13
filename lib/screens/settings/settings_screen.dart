@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
         BetterFeedback.of(context).showAndUploadToSentry();
       }
     } else {
-      // TODO: Maybe use a form to the user answer some questions
+      // TODO(elan): Maybe use a form to the user answer some questions
     }
   }
 
@@ -50,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 12.0),
+            padding: const EdgeInsets.only(left: 12),
             child: Text(
               context.appLocalizations.userPreferences,
               style: Theme.of(context).textTheme.titleLarge,
@@ -61,7 +61,7 @@ class SettingsScreen extends StatelessWidget {
           const ChooseColorSchemePaletteTile(),
           const ChooseAppLanguageTile(),
           Padding(
-            padding: const EdgeInsets.only(left: 12.0),
+            padding: const EdgeInsets.only(left: 12),
             child: Text(
               context.appLocalizations.yourPrivacy,
               style: Theme.of(context).textTheme.titleLarge,
@@ -70,7 +70,7 @@ class SettingsScreen extends StatelessWidget {
           const Divider(),
           const AllowErrorReportingTile(),
           Padding(
-            padding: const EdgeInsets.only(left: 12.0),
+            padding: const EdgeInsets.only(left: 12),
             child: Text(
               context.appLocalizations.about,
               style: Theme.of(context).textTheme.titleLarge,

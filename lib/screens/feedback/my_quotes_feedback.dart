@@ -6,9 +6,9 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 final class MyQuotesFeedbackFormArea extends StatefulWidget {
   const MyQuotesFeedbackFormArea(
     this.context, {
-    super.key,
     required this.scrollController,
     required this.fn,
+    super.key,
   });
 
   final BuildContext context;
@@ -43,7 +43,7 @@ class _MyQuotesFeedbackFormAreaState extends State<MyQuotesFeedbackFormArea> {
       controller: widget.scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -9,8 +9,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class QuoteScreenDialogBody extends StatelessWidget {
   const QuoteScreenDialogBody({
-    super.key,
     required this.quoteId,
+    super.key,
   });
 
   final int quoteId;
@@ -18,7 +18,7 @@ class QuoteScreenDialogBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Center(
         child: StreamBuilder(
           stream: serviceLocator<AppRepository>().getQuoteByIdStream(quoteId),

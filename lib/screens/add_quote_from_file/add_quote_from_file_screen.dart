@@ -6,9 +6,9 @@ import 'package:my_quotes/shared/actions/tags/create_tag.dart';
 
 final class AddQuoteFromFileScreen extends StatelessWidget {
   const AddQuoteFromFileScreen({
-    super.key,
     required this.quote,
     required this.tags,
+    super.key,
   });
 
   final Quote quote;

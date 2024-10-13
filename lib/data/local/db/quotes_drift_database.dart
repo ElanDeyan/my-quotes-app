@@ -23,7 +23,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-      onCreate: (m) async => await m.createAll(),
+      onCreate: (m) async => m.createAll(),
       onUpgrade: (m, from, to) async {
         if (from < 3) {
           await m.deleteTable('tag_table');
@@ -80,21 +80,17 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<void> clearAllQuotes() async {
-    delete(quoteTable).go();
-  }
+  Future<void> clearAllQuotes() async => delete(quoteTable).go();
 
   @override
-  Future<void> restoreQuotes(List<Quote> quotes) async {
-    batch((batch) {
-      batch
-        ..deleteAll(quoteTable)
-        ..insertAll(
-          quoteTable,
-          quotes.map((quote) => quote.toCompanion(true)),
-        );
-    });
-  }
+  Future<void> restoreQuotes(List<Quote> quotes) async => batch((batch) {
+        batch
+          ..deleteAll(quoteTable)
+          ..insertAll(
+            quoteTable,
+            quotes.map((quote) => quote.toCompanion(true)),
+          );
+      });
 
   @override
   Future<List<Tag>> get allTags => tagsDao.allTags;
@@ -135,7 +131,7 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
       if (quote.tags.isNotNullOrBlank) {
         final newIdsString = quote.tags!.split(idSeparatorChar)..remove('$id');
 
-        updateQuote(
+        await updateQuote(
           quote.copyWith(tags: Value(newIdsString.join(idSeparatorChar))),
         );
       }
@@ -155,16 +151,14 @@ final class AppDatabase extends _$AppDatabase implements AppRepository {
   }
 
   @override
-  Future<void> restoreTags(List<Tag> tags) async {
-    batch((batch) {
-      batch
-        ..deleteAll(tagTable)
-        ..insertAll(
-          tagTable,
-          tags.map((tag) => tag.toCompanion(true)),
-        );
-    });
-  }
+  Future<void> restoreTags(List<Tag> tags) async => batch((batch) {
+        batch
+          ..deleteAll(tagTable)
+          ..insertAll(
+            tagTable,
+            tags.map((tag) => tag.toCompanion(true)),
+          );
+      });
 
   @override
   Future<void> restoreData(List<Tag> tags, List<Quote> quotes) async {

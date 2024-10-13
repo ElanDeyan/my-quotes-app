@@ -50,9 +50,9 @@ Future<BackupData?> parseBackupFile(
 
   if (decodedFile
       case {
-        "preferences": final Map<String, Object?> preferencesMap,
-        "tags": final List<dynamic> tags,
-        "quotes": final List<dynamic> quotes,
+        'preferences': final Map<String, Object?> preferencesMap,
+        'tags': final List<dynamic> tags,
+        'quotes': final List<dynamic> quotes,
       }) {
     late final UserPreferencesData userPreferences;
     late final List<Tag> tagsList;
@@ -137,14 +137,14 @@ bool _validateQuotesData(List<dynamic> data) {
   for (final item in data) {
     if (item
         case {
-          "id": int _,
-          "content": String _,
-          "author": String _,
-          "source": String? _,
-          "sourceUri": String? _,
-          "isFavorite": bool _,
-          "createdAt": int _,
-          "tags": String? _,
+          'id': int _,
+          'content': String _,
+          'author': String _,
+          'source': String? _,
+          'sourceUri': String? _,
+          'isFavorite': bool _,
+          'createdAt': int _,
+          'tags': String? _,
         }) {
       return true;
     }

@@ -10,8 +10,8 @@ import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 
 class QuotesListViewContainer extends StatefulWidget {
   const QuotesListViewContainer({
-    super.key,
     required this.quotes,
+    super.key,
   });
 
   final List<Quote> quotes;
@@ -50,8 +50,8 @@ class _QuotesListViewContainerState extends State<QuotesListViewContainer> {
                       .appLocalizations.quotesListViewSortingButtonTooltip,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
+                      horizontal: 8,
+                      vertical: 4,
                     ),
                     child: IconWithLabel(
                       icon: const Icon(Icons.sort_outlined),

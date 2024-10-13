@@ -4,8 +4,8 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 
 class QuoteFormActionButton extends StatelessWidget {
   const QuoteFormActionButton({
-    super.key,
     required this.onPressed,
+    super.key,
     this.formType = FormTypes.add,
   });
 

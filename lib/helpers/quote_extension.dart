@@ -21,18 +21,17 @@ extension QuoteExtension on Quote {
       tags?.split(idSeparatorChar).map(int.tryParse).nonNulls ?? const <int>[];
 
   String shareableFormatOf(AppLocalizations appLocalizations) {
-    final stringBuffer = StringBuffer();
-
-    stringBuffer.writeAll(
-      [
-        appLocalizations.quoteShareHeader,
-        '"$content"',
-        '\u2014 $author${source.isNotNullOrBlank ? ", $source" : ''}.',
-        if (sourceUri.isNotNullOrBlank)
-          appLocalizations.quoteShareSeeMore(sourceUri!),
-      ],
-      '\n',
-    );
+    final stringBuffer = StringBuffer()
+      ..writeAll(
+        [
+          appLocalizations.quoteShareHeader,
+          '"$content"',
+          '\u2014 $author${source.isNotNullOrBlank ? ", $source" : ''}.',
+          if (sourceUri.isNotNullOrBlank)
+            appLocalizations.quoteShareSeeMore(sourceUri!),
+        ],
+        '\n',
+      );
 
     return stringBuffer.toString();
   }
@@ -43,17 +42,16 @@ extension QuoteExtension on Quote {
       };
 
   String get dataForQuery {
-    final stringBuffer = StringBuffer();
-
-    stringBuffer.writeAll(
-      [
-        content,
-        author,
-        if (source.isNotNullOrBlank) source,
-        if (sourceUri.isNotNullOrBlank) sourceUri,
-      ],
-      '\n',
-    );
+    final stringBuffer = StringBuffer()
+      ..writeAll(
+        [
+          content,
+          author,
+          if (source.isNotNullOrBlank) source,
+          if (sourceUri.isNotNullOrBlank) sourceUri,
+        ],
+        '\n',
+      );
 
     return stringBuffer.toString();
   }

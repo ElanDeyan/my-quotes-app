@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 
 final class MyQuotesFeedback extends StatelessWidget {
   const MyQuotesFeedback({
-    super.key,
     required this.child,
+    super.key,
   });
 
   final Widget child;

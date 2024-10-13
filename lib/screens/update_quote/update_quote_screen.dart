@@ -13,8 +13,8 @@ import 'package:my_quotes/shared/widgets/form/quote_not_found_with_id_message.da
 
 final class UpdateQuoteScreen extends StatelessWidget {
   const UpdateQuoteScreen({
-    super.key,
     required this.quoteId,
+    super.key,
   });
 
   final int quoteId;

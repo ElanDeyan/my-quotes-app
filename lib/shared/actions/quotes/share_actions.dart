@@ -42,13 +42,16 @@ enum ShareActions {
   ) =>
       switch (action) {
         ShareActions.text => () async =>
-            await Share.share(quote.shareableFormatOf(appLocalizations)),
+            Share.share(quote.shareableFormatOf(appLocalizations)),
         ShareActions.link => () => Share.share(quote.sourceUri!),
         ShareActions.image => () async {
             final successfulOperation = await saveQuoteImage(context, quote);
 
             if (context.mounted) {
-              onSuccessfulOperation(successfulOperation, context);
+              onSuccessfulOperation(
+                successfulOperation: successfulOperation,
+                context: context,
+              );
             }
           },
         ShareActions.file => () async {
@@ -56,15 +59,18 @@ enum ShareActions {
                 await shareQuoteFile(appRepository, quote);
 
             if (context.mounted) {
-              onSuccessfulOperation(successfulOperation, context);
+              onSuccessfulOperation(
+                successfulOperation: successfulOperation,
+                context: context,
+              );
             }
           },
       };
 
-  static void onSuccessfulOperation(
-    bool successfulOperation,
-    BuildContext context,
-  ) {
+  static void onSuccessfulOperation({
+    required bool successfulOperation,
+    required BuildContext context,
+  }) {
     if (successfulOperation) {
       if (context.mounted) {
         showToast(

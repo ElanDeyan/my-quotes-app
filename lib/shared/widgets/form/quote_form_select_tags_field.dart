@@ -9,8 +9,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class QuoteFormSelectTagsField extends StatelessWidget {
   const QuoteFormSelectTagsField({
-    super.key,
-    required this.pickedItems,
+    required this.pickedItems, super.key,
     this.quoteForUpdate,
   });
 

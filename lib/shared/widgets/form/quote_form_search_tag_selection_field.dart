@@ -8,9 +8,7 @@ import 'package:my_quotes/shared/widgets/pill_chip.dart';
 
 class QuoteFormSearchTagSelectionField extends StatelessWidget {
   const QuoteFormSearchTagSelectionField({
-    super.key,
-    required this.pickedTags,
-    required this.allTags,
+    required this.pickedTags, required this.allTags, super.key,
   });
 
   final Set<Tag> pickedTags;
@@ -39,7 +37,7 @@ class QuoteFormSearchTagSelectionField extends StatelessWidget {
       ),
       fieldToCheck: (tag) => tag.name,
       itemBuilder: (tag, index, isPicked) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         child: Text(tag.name),
       ),
       clearSearchFieldOnSelect: true,
@@ -49,7 +47,7 @@ class QuoteFormSearchTagSelectionField extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Text(context.appLocalizations.noResultsFound),
         ),
       ),

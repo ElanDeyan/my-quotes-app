@@ -50,7 +50,7 @@ class TagsScreen extends StatelessWidget {
         child: const Icon(Icons.new_label),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: StreamBuilder(
           stream: serviceLocator<AppRepository>().allTagsStream,
           builder: (context, snapshot) {

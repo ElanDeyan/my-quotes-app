@@ -121,7 +121,7 @@ final class SecureRepositoryImpl implements SecureRepository {
       );
 
   @override
-  Future<void> toggleAllowErrorReporting([bool? value]) async {
+  Future<void> toggleAllowErrorReporting({bool? value}) async {
     if (value != null) {
       await secureStorage.write(
         key: SecureRepository.allowErrorReportingKey,
@@ -159,7 +159,7 @@ final class SecureRepositoryImpl implements SecureRepository {
       });
 
   @override
-  Future<void> toggleAcceptedAppDataUsage([bool? value]) async {
+  Future<void> toggleAcceptedAppDataUsage({bool? value}) async {
     late final bool valueToAssign;
 
     if (value == null) {

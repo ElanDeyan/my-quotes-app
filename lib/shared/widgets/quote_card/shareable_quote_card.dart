@@ -4,7 +4,7 @@ import 'package:my_quotes/helpers/quote_extension.dart';
 import 'package:my_quotes/shared/widgets/quote_card/quote_icon_decoration.dart';
 
 class ShareableQuoteCard extends StatelessWidget {
-  const ShareableQuoteCard({super.key, required this.quote});
+  const ShareableQuoteCard({required this.quote, super.key});
 
   final Quote quote;
 
@@ -15,7 +15,7 @@ class ShareableQuoteCard extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -29,10 +29,10 @@ class ShareableQuoteCard extends StatelessWidget {
                 color: Theme.of(context).colorScheme.surfaceContainerLowest,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 26.0,
-                    right: 26.0,
-                    top: 22.0,
-                    bottom: 11.0,
+                    left: 26,
+                    right: 26,
+                    top: 22,
+                    bottom: 11,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -48,7 +48,7 @@ class ShareableQuoteCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 10.0,
+                        height: 10,
                       ),
                       Text(
                         '\u2014 ${quote.author}'

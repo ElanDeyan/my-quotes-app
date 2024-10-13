@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Gap extends StatelessWidget {
-  const Gap({super.key, required this.spacing, this.axis = Axis.vertical});
-
-  final Axis axis;
-  final double spacing;
+  const Gap({required this.spacing, super.key, this.axis = Axis.vertical});
 
   const factory Gap.vertical({
     required double spacing,
@@ -13,6 +10,9 @@ class Gap extends StatelessWidget {
   const factory Gap.horizontal({
     required double spacing,
   }) = HorizontalGap;
+
+  final Axis axis;
+  final double spacing;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class Gap extends StatelessWidget {
 }
 
 class VerticalGap extends Gap {
-  const VerticalGap({super.key, required super.spacing})
+  const VerticalGap({required super.spacing, super.key})
       : super(axis: Axis.vertical);
 
   @override
@@ -40,7 +40,7 @@ class VerticalGap extends Gap {
 }
 
 class HorizontalGap extends Gap {
-  const HorizontalGap({super.key, required super.spacing})
+  const HorizontalGap({required super.spacing, super.key})
       : super(axis: Axis.horizontal);
 
   @override

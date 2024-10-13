@@ -13,9 +13,9 @@ abstract interface class SecureRepository {
 
   Future<bool> get hasAcceptedAppDataUsageKey;
 
-  Future<void> toggleAllowErrorReporting([bool? value]);
+  Future<void> toggleAllowErrorReporting({bool? value});
 
-  Future<void> toggleAcceptedAppDataUsage([bool? value]);
+  Future<void> toggleAcceptedAppDataUsage({bool? value});
 
   String generateRandomSecurePassword(int length);
 

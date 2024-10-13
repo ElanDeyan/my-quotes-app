@@ -16,8 +16,8 @@ Future<String?> showUpdateTagDialog(BuildContext context, Tag tag) {
 
 class UpdateTagDialog extends StatefulWidget {
   const UpdateTagDialog({
-    super.key,
     required this.tagName,
+    super.key,
   });
 
   final String tagName;

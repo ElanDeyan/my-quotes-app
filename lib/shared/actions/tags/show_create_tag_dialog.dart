@@ -7,21 +7,20 @@ import 'package:my_quotes/shared/widgets/tag_name_field.dart';
 Future<String?>? showCreateTagDialog(
   BuildContext context, [
   String? initialValue,
-]) async {
-  return await showDialog<String?>(
-    context: context,
-    builder: (context) {
-      return CreateTagDialog(
-        initialValue: initialValue,
-      );
-    },
-  );
-}
+]) async =>
+    showDialog<String?>(
+      context: context,
+      builder: (context) {
+        return CreateTagDialog(
+          initialValue: initialValue,
+        );
+      },
+    );
 
 class CreateTagDialog extends StatefulWidget {
   const CreateTagDialog({
-    super.key,
     required this.initialValue,
+    super.key,
   });
 
   final String? initialValue;

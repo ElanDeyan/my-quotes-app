@@ -5,9 +5,9 @@ import 'package:fuzzywuzzy/model/extracted_result.dart';
 
 extension FuzzySearchExtension<T extends Object> on List<T> {
   List<ExtractedResult<T>> fuzzyExtractAllSorted({
+    required String query,
     int cutoff = 0,
     String Function(T)? getter,
-    required String query,
     Applicable ratio = const WeightedRatio(),
   }) {
     return extractAllSorted(

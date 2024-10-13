@@ -9,9 +9,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class QuoteDataListView extends StatelessWidget {
   const QuoteDataListView({
-    super.key,
     required this.quote,
     required this.appRepository,
+    super.key,
   });
 
   final Quote quote;
@@ -29,18 +29,22 @@ class QuoteDataListView extends StatelessWidget {
           children: [
             Text('Id: ${quote.id}'),
             Text(
-              '${context.appLocalizations.quoteFormFieldContent}: ${quote.content}',
+              '${context.appLocalizations.quoteFormFieldContent}: '
+              '${quote.content}',
             ),
             Text(
-              '${context.appLocalizations.quoteFormFieldAuthor}: ${quote.author}',
+              '${context.appLocalizations.quoteFormFieldAuthor}: '
+              '${quote.author}',
             ),
             if (quote.source.isNotNullOrBlank)
               Text(
-                '${context.appLocalizations.quoteFormFieldSource}: ${quote.source!}',
+                '${context.appLocalizations.quoteFormFieldSource}: '
+                '${quote.source!}',
               ),
             if (quote.sourceUri.isNotNullOrBlank)
               Text(
-                '${context.appLocalizations.quoteFormFieldSourceUri}: ${quote.sourceUri}',
+                '${context.appLocalizations.quoteFormFieldSourceUri}: '
+                '${quote.sourceUri}',
               ),
             Text(
               quote

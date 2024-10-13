@@ -8,7 +8,7 @@ class QuoteCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500, maxHeight: 250),
         child: Stack(
@@ -25,10 +25,10 @@ class QuoteCardSkeleton extends StatelessWidget {
                 color: Theme.of(context).colorScheme.surfaceContainerLowest,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 26.0,
-                    right: 26.0,
-                    top: 22.0,
-                    bottom: 11.0,
+                    left: 26,
+                    right: 26,
+                    top: 22,
+                    bottom: 11,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -44,7 +44,7 @@ class QuoteCardSkeleton extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 10.0,
+                        height: 10,
                       ),
                       Bone.text(
                         words: 5,

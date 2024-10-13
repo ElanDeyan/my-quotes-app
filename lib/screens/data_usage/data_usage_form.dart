@@ -80,7 +80,7 @@ class _DataUsageFormState extends State<DataUsageForm> {
   }
 
   void _onAcceptedDataUsage() => serviceLocator<SecureRepository>()
-      .toggleAcceptedAppDataUsage(_acceptedDataUsage)
+      .toggleAcceptedAppDataUsage(value: _acceptedDataUsage)
       .then(
         (_) => mounted ? context.pushReplacementNamed(homeNavigationKey) : null,
       );

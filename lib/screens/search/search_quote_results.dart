@@ -8,7 +8,7 @@ import 'package:my_quotes/services/service_locator.dart';
 import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 
 class SearchQuoteResults extends StatelessWidget {
-  const SearchQuoteResults({super.key, required this.searchResults});
+  const SearchQuoteResults({required this.searchResults, super.key});
 
   final List<Quote> searchResults;
 

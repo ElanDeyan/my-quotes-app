@@ -4,8 +4,8 @@ import 'package:my_quotes/screens/my_quotes/_quote_tile.dart';
 
 class QuotesSliverListView extends StatelessWidget {
   const QuotesSliverListView({
-    super.key,
     required this.quotes,
+    super.key,
   });
 
   final List<Quote> quotes;

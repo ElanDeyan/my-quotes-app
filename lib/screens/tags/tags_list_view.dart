@@ -7,8 +7,8 @@ import 'package:my_quotes/shared/actions/tags/tag_actions.dart';
 
 class TagsListView extends StatelessWidget {
   const TagsListView({
-    super.key,
     required this.tags,
+    super.key,
   });
 
   final List<Tag> tags;

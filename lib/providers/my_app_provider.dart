@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 
 final class MyAppProvider extends StatelessWidget {
   const MyAppProvider({
-    super.key,
     required AppPreferences appPreferencesProvider,
     required this.child,
+    super.key,
   }) : _appPreferences = appPreferencesProvider;
 
   final AppPreferences _appPreferences;

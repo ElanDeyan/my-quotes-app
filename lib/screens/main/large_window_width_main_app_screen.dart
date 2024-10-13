@@ -12,8 +12,8 @@ import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 
 class LargeWindowWidthMainAppScreen extends StatefulWidget {
   const LargeWindowWidthMainAppScreen({
-    super.key,
     required this.initialIndex,
+    super.key,
   });
 
   final int initialIndex;

@@ -7,8 +7,8 @@ import 'package:my_quotes/shared/widgets/pill_chip.dart';
 
 class AllowErrorReportingSwitch extends StatefulWidget {
   const AllowErrorReportingSwitch({
-    super.key,
     required this.data,
+    super.key,
   });
 
   final bool data;
@@ -46,8 +46,8 @@ class _AllowErrorReportingSwitchState extends State<AllowErrorReportingSwitch> {
               _allowErrorReporting = newValue;
             });
           } finally {
-            serviceLocator<SecureRepository>()
-                .toggleAllowErrorReporting(newValue)
+            await serviceLocator<SecureRepository>()
+                .toggleAllowErrorReporting(value: newValue)
                 .then(
                   (_) => context.mounted
                       ? showToast(

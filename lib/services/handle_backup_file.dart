@@ -51,8 +51,9 @@ Future<void> handleBackupFile(
 
             await serviceLocator<AppRepository>().restoreData(tags, quotes);
 
-            await serviceLocator<SecureRepository>()
-                .toggleAllowErrorReporting(bool.parse(allowErrorReporting));
+            await serviceLocator<SecureRepository>().toggleAllowErrorReporting(
+              value: bool.parse(allowErrorReporting),
+            );
 
             if (context.mounted) {
               showToast(

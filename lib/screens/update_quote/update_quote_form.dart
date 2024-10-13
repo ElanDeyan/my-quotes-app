@@ -27,8 +27,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class UpdateQuoteForm extends StatefulWidget {
   const UpdateQuoteForm({
-    super.key,
     required this.quote,
+    super.key,
   });
 
   final Quote quote;
@@ -95,7 +95,7 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Align(
           alignment: Alignment.topCenter,
           child: FormBuilder(
@@ -156,9 +156,9 @@ class _UpdateQuoteFormState extends State<UpdateQuoteForm>
 
 class _FutureSelectedTagsField extends StatelessWidget {
   const _FutureSelectedTagsField({
-    super.key,
     required this.quote,
     required this.tagSetToUpdate,
+    super.key,
   });
 
   final Quote quote;

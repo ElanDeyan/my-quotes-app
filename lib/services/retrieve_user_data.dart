@@ -30,17 +30,17 @@ Future<Map<String, Object?>> retrieveUserData(
   final language = appPreferences.language;
 
   final backupData = <String, dynamic>{
-    "preferences": <String, String>{
+    'preferences': <String, String>{
       ThemeModeRepository.themeModeKey: themeMode.name,
       ColorSchemePaletteRepository.colorSchemePaletteKey:
           colorPalette.storageName,
       LanguageRepository.languageKey: language,
       SecureRepository.allowErrorReportingKey: allowErrorReporting.toString(),
     },
-    "tags": [
-      for (final tag in tags) <String, String>{"${tag.id}": tag.name},
+    'tags': [
+      for (final tag in tags) <String, String>{'${tag.id}': tag.name},
     ],
-    "quotes": [
+    'quotes': [
       for (final quote in quotes) quote.toJson(),
     ],
   };

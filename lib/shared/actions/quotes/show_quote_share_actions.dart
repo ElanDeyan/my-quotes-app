@@ -15,11 +15,11 @@ Future<void> showQuoteShareActions(
     builder: (context) => BottomSheet(
       onClosing: () {},
       builder: (context) => Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Wrap(
           alignment: WrapAlignment.spaceBetween,
-          spacing: 10.0,
-          runSpacing: 10.0,
+          spacing: 10,
+          runSpacing: 10,
           children: ShareActions.availableActions(quote)
               .map(
                 (action) => TextButton.icon(

@@ -13,8 +13,8 @@ import 'package:my_quotes/shared/widgets/icon_with_label.dart';
 
 class CompactWindowWidthMainAppScreen extends StatefulWidget {
   const CompactWindowWidthMainAppScreen({
-    super.key,
     required this.initialIndex,
+    super.key,
   });
 
   final int initialIndex;

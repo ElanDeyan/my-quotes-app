@@ -6,8 +6,7 @@ import 'package:my_quotes/helpers/build_context_extension.dart';
 
 class TagNameField extends StatelessWidget {
   const TagNameField({
-    super.key,
-    required this.textEditingController,
+    required this.textEditingController, super.key,
   });
 
   final TextEditingController textEditingController;

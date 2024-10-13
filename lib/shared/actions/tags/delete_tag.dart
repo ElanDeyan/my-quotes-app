@@ -7,13 +7,10 @@ import 'package:my_quotes/shared/actions/show_toast.dart';
 import 'package:my_quotes/shared/actions/tags/show_delete_tag_dialog.dart';
 import 'package:my_quotes/shared/widgets/pill_chip.dart';
 
-void deleteTag(BuildContext context, Tag tag) {
-  final result = showDeleteTagDialog(context, tag);
-
-  result.then(
-    (value) {
-      if (value == true) {
-        if (context.mounted) {
+void deleteTag(BuildContext context, Tag tag) =>
+    showDeleteTagDialog(context, tag).then(
+      (value) {
+        if (value ?? false) {
           serviceLocator<AppRepository>().deleteTag(tag.id!).then(
                 (_) => context.mounted
                     ? showToast(
@@ -25,7 +22,5 @@ void deleteTag(BuildContext context, Tag tag) {
                     : null,
               );
         }
-      }
-    },
-  );
-}
+      },
+    );

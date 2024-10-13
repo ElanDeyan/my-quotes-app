@@ -10,8 +10,8 @@ import 'package:my_quotes/shared/actions/quotes/quote_actions.dart';
 
 class QuoteTile extends StatefulWidget {
   const QuoteTile({
-    super.key,
     required this.quote,
+    super.key,
   });
 
   final Quote quote;

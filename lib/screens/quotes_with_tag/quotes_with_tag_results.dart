@@ -5,8 +5,8 @@ import 'package:my_quotes/routes/routes_names.dart';
 
 class QuotesWithTagResults extends StatelessWidget {
   const QuotesWithTagResults({
-    super.key,
     required this.quotes,
+    super.key,
   });
 
   final List<Quote> quotes;

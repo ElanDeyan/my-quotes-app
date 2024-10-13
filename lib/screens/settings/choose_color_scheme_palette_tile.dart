@@ -25,10 +25,10 @@ class ChooseColorSchemePaletteTile extends StatelessWidget {
                 colorSchemePalette,
                 MediaQuery.platformBrightnessOf(context),
               ),
-              minRadius: 5.0,
+              minRadius: 5,
             ),
             const SizedBox(
-              width: 5.0,
+              width: 5,
             ),
             Text(
               context.appLocalizations.colorPaletteName(

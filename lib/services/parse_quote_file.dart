@@ -27,20 +27,19 @@ Future<QuoteFileParsingResult> parseQuoteFile(
 
   if (decodedFile
       case {
-        "content": String _,
-        "author": String _,
-        "source": String? _,
-        "sourceUri": String? _,
-        "isFavorite": bool _,
-        "tags": final List<Object?>? tags,
+        'content': String _,
+        'author': String _,
+        'source': String? _,
+        'sourceUri': String? _,
+        'isFavorite': bool _,
+        'tags': final List<Object?>? tags,
       } when tags?.every((item) => item is String) ?? true) {
-    final jsonFile = decodedFile;
-
-    jsonFile.update(
-      "tags",
-      (value) => null,
-      ifAbsent: () => null,
-    );
+    final jsonFile = decodedFile
+      ..update(
+        'tags',
+        (value) => null,
+        ifAbsent: () => null,
+      );
 
     final jsonFileAsQuote = Quote.fromJson(jsonFile);
 

@@ -8,7 +8,7 @@ import 'package:my_quotes/shared/widgets/gap.dart';
 import 'package:my_quotes/shared/widgets/quote_card/quote_card.dart';
 
 class RandomQuoteContainer extends StatefulWidget {
-  const RandomQuoteContainer({super.key, required this.quotes});
+  const RandomQuoteContainer({required this.quotes, super.key});
 
   final List<Quote> quotes;
 
@@ -41,7 +41,7 @@ class _RandomQuoteContainerState extends State<RandomQuoteContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

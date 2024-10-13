@@ -64,7 +64,7 @@ Future<bool> saveQuoteImage(BuildContext context, Quote quote) async {
         return false;
       } else {
         final result = await runZonedGuarded(
-          () async => await FileSaver.instance.saveFile(
+          () async => FileSaver.instance.saveFile(
             name: fileName,
             bytes: image,
             mimeType: MimeType.png,

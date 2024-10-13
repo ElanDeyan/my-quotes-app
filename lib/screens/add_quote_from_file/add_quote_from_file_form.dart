@@ -22,11 +22,11 @@ import 'package:my_quotes/shared/widgets/pill_chip.dart';
 
 class AddQuoteFromFileForm extends StatelessWidget with UpdateFormDataMixin {
   const AddQuoteFromFileForm({
-    super.key,
     required GlobalKey<FormBuilderState> formKey,
     required this.tags,
     required this.quote,
     required this.formType,
+    super.key,
   }) : _formKey = formKey;
 
   final GlobalKey<FormBuilderState> _formKey;

@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
 
 Future<XFile?> getBackupFile() async {
-  final FilePickerResult? result = await FilePicker.platform.pickFiles(
+  final result = await FilePicker.platform.pickFiles(
     lockParentWindow: true,
     type: FileType.custom,
     allowedExtensions: ['txt'],

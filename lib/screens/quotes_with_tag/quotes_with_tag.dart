@@ -11,7 +11,7 @@ import 'package:my_quotes/shared/widgets/no_quotes_with_tag.dart';
 import 'package:my_quotes/shared/widgets/quotes_search_result_skeleton.dart';
 
 class QuotesWithTag extends StatelessWidget {
-  const QuotesWithTag({super.key, required this.tagId});
+  const QuotesWithTag({required this.tagId, super.key});
 
   final int tagId;
 

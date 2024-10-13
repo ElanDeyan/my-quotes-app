@@ -9,9 +9,9 @@ import 'package:my_quotes/shared/widgets/quote_card/quote_card.dart';
 
 class QuoteCardWithExtraData extends StatelessWidget {
   const QuoteCardWithExtraData({
-    super.key,
     required this.quote,
     required this.appLocalizations,
+    super.key,
   });
 
   final Quote quote;
