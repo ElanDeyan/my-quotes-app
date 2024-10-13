@@ -9,9 +9,18 @@ final class SecureRepositoryImpl implements SecureRepository {
   SecureRepositoryImpl(this.secureStorage) {
     scheduleMicrotask(() async {
       if (!(await hasAllowErrorReportingKey)) {
-        secureStorage.write(
+        await secureStorage.write(
           key: SecureRepository.allowErrorReportingKey,
-          value: true.toString(),
+          value: false.toString(),
+        );
+      }
+    });
+
+    scheduleMicrotask(() async {
+      if (!(await hasAcceptedAppDataUsageKey)) {
+        await secureStorage.write(
+          key: SecureRepository.acceptedAppDataUsageKey,
+          value: false.toString(),
         );
       }
     });
@@ -23,7 +32,7 @@ final class SecureRepositoryImpl implements SecureRepository {
   Future<void> createAndStoreDbEncryptionKey() async {
     final password = generateRandomSecurePassword(16);
     log('Created password: $password', name: 'SecureRepositoryImpl');
-    secureStorage.write(
+    await secureStorage.write(
       key: SecureRepository.dbEncryptionKey,
       value: password,
     );
@@ -40,7 +49,7 @@ final class SecureRepositoryImpl implements SecureRepository {
   Future<bool> get hasDbEncryptionKey =>
       secureStorage.read(key: SecureRepository.dbEncryptionKey).then((value) {
         log(
-          'Has db encryprion key? ${value != null}',
+          'Has db encryption key? ${value != null}',
           name: 'SecureRepositoryImpl',
         );
         return value != null;
@@ -131,5 +140,40 @@ final class SecureRepositoryImpl implements SecureRepository {
         value: true.toString(),
       );
     }
+  }
+
+  @override
+  Future<bool> get acceptedAppDataUsage => secureStorage
+          .read(key: SecureRepository.acceptedAppDataUsageKey)
+          .then((value) {
+        log('Accepted app data usage? $value', name: 'SecureRepository');
+        return bool.parse(value ?? false.toString());
+      });
+
+  @override
+  Future<bool> get hasAcceptedAppDataUsageKey => secureStorage
+          .read(key: SecureRepository.acceptedAppDataUsageKey)
+          .then((value) {
+        log('Accepted app data usage? $value', name: 'SecureRepository');
+        return value != null;
+      });
+
+  @override
+  Future<void> toggleAcceptedAppDataUsage([bool? value]) async {
+    late final bool valueToAssign;
+
+    if (value == null) {
+      final storedValue = await secureStorage.read(
+        key: SecureRepository.acceptedAppDataUsageKey,
+      );
+      valueToAssign = !(bool.tryParse(storedValue.toString()) ?? false);
+    } else {
+      valueToAssign = value;
+    }
+
+    await secureStorage.write(
+      key: SecureRepository.acceptedAppDataUsageKey,
+      value: valueToAssign.toString(),
+    );
   }
 }

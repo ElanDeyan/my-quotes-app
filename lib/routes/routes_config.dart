@@ -1,7 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
+import 'package:my_quotes/repository/secure_repository.dart';
+import 'package:my_quotes/routes/route_observer.dart';
 import 'package:my_quotes/routes/routes_names.dart';
 import 'package:my_quotes/screens/add_quote/add_quote_screen.dart';
+import 'package:my_quotes/screens/data_usage/data_usage_page.dart';
 import 'package:my_quotes/screens/error_screen.dart';
 import 'package:my_quotes/screens/main/main_app_screen.dart';
 import 'package:my_quotes/screens/quote_single/quote_screen.dart';
@@ -10,9 +13,20 @@ import 'package:my_quotes/screens/search/search_quote_results.dart';
 import 'package:my_quotes/screens/settings/settings_screen.dart';
 import 'package:my_quotes/screens/tags/tags_screen.dart';
 import 'package:my_quotes/screens/update_quote/update_quote_screen.dart';
+import 'package:my_quotes/services/service_locator.dart';
 
 final routesConfig = GoRouter(
   errorBuilder: (context, state) => const ErrorScreen(),
+  redirect: (context, state) async {
+    if (serviceLocator.isRegistered<SecureRepository>()) {
+      if (!(await serviceLocator<SecureRepository>().acceptedAppDataUsage)) {
+        return '/$dataUsageNavigationKey';
+      }
+    }
+
+    return state.matchedLocation;
+  },
+  observers: [MyQuotesRouteObserver()],
   initialLocation: '/',
   routes: <RouteBase>[
     GoRoute(
@@ -80,6 +94,11 @@ final routesConfig = GoRouter(
           builder: (context, state) => SearchQuoteResults(
             searchResults: (state.extra ?? <Quote>[]) as List<Quote>,
           ),
+        ),
+        GoRoute(
+          path: dataUsageNavigationKey,
+          name: dataUsageNavigationKey,
+          builder: (context, state) => const DataUsagePage(),
         ),
       ],
     ),

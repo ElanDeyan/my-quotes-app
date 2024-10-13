@@ -1,0 +1,26 @@
+title: Titleee
+last_updated: 2024-09-13
+version: 1.0.0
+introduction: This text
+what:
+    header: What data is collected?
+    content: >
+        The app collects the following data:
+        - Quotes and tags you create.
+        - User preferences such as theme mode and language settings.
+        - Technical data for error reporting via Sentry.
+why:
+    header: Why data is collected
+    content: Content of this section
+how:
+    header: How is data collected
+    content: Content of this section
+who:
+    header: Who has access to the data
+    content: Content of this section
+manage:
+    header: How you can manage your data
+    content: Content of this section
+changes:
+    header: Changes to this policy
+    content: Content of this section

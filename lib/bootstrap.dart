@@ -1,12 +1,15 @@
 import 'package:basics/basics.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:my_quotes/constants/keys.dart';
 import 'package:my_quotes/constants/platforms.dart';
+import 'package:my_quotes/data/local/assets/assets.dart';
 import 'package:my_quotes/data/local/db/quotes_drift_database.dart';
 import 'package:my_quotes/data/local/secure_repository/secure_repository_impl.dart';
 import 'package:my_quotes/data/local/user_preferences/user_preferences_with_shared_preferences_async.dart';
 import 'package:my_quotes/env/env.dart';
 import 'package:my_quotes/repository/app_repository.dart';
+import 'package:my_quotes/repository/assets_repository.dart';
 import 'package:my_quotes/repository/secure_repository.dart';
 import 'package:my_quotes/repository/user_preferences_repository.dart';
 import 'package:my_quotes/services/service_locator.dart';
@@ -37,21 +40,24 @@ Future<void> bootstrapServices() async {
         .createAndStoreDbEncryptionKeyIfMissing();
   }
 
-  serviceLocator.registerLazySingleton<UserPreferencesRepository>(
-    () => UserPreferencesWithSharedPreferencesAsync(
-      SharedPreferencesAsync(),
-    ),
-  );
-
-  serviceLocator.registerLazySingleton<AppPreferences>(
-    () => AppPreferences(
-      userPreferencesRepository: serviceLocator<UserPreferencesRepository>(),
-    ),
-  );
+  serviceLocator
+    ..registerLazySingleton<AssetsRepository>(
+      () => Assets(rootBundle),
+    )
+    ..registerLazySingleton<UserPreferencesRepository>(
+      () => UserPreferencesWithSharedPreferencesAsync(
+        SharedPreferencesAsync(),
+      ),
+    )
+    ..registerLazySingleton<AppPreferences>(
+      () => AppPreferences(
+        userPreferencesRepository: serviceLocator<UserPreferencesRepository>(),
+      ),
+    );
 
   await serviceLocator<AppPreferences>().loadLocalPreferences();
 
   serviceLocator.registerLazySingleton<AppRepository>(
-    () => AppDatabase(),
+    AppDatabase.new,
   );
 }
