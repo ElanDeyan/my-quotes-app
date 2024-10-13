@@ -62,8 +62,9 @@ class _DataUsageFormState extends State<DataUsageForm> {
               _acceptedDataUsage = accepted;
             }),
             title: const Text('I agree with how this app use my data'),
-            subtitle:
-                const Text('If you disagree, feel free to uninstall the app.'),
+            subtitle: const Text(
+              'If you disagree, feel free to uninstall the app.',
+            ),
           ),
           const Spacer(),
           OutlinedButton(
