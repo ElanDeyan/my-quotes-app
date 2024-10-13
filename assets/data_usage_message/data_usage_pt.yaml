@@ -4,7 +4,7 @@ version: 1.0.0
 introduction: This text
 what:
     header: What data is collected?
-    content: >
+    content: |
         The app collects the following data:
         - Quotes and tags you create.
         - User preferences such as theme mode and language settings.
